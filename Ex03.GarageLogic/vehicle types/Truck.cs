@@ -8,5 +8,8 @@ namespace Ex03.GarageLogic
 {
     internal class Truck
     {
+        private float m_CargoVolume;
+        private bool m_IsCarryingHazardousMaterials;
+
     }
 }

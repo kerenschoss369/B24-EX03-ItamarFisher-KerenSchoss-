@@ -18,6 +18,6 @@ namespace Ex03.GarageLogic
     internal class Motorcycle
     {
         private readonly eLicenseType r_LicenseType;
-
+        private readonly int r_EngineDisplacementInCc;
     }
 }
