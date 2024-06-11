@@ -12,6 +12,6 @@ namespace Ex03.GarageLogic
         protected readonly string r_LicenseNumber;
         protected float m_PercentageOfEnergyLeft;
         protected List<Wheel> m_WheelsList;
-        protected EnergySourceManager m_EnergySource; //maybe create as an object instead
+        protected EnergySourceManager m_EnergySource;
     }
 }
