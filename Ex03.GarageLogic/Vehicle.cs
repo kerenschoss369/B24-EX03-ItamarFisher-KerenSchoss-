@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    abstract class Vehicle
+    public abstract class Vehicle
     {
         protected readonly string r_ModelName;
         protected readonly string r_LicenseNumber;

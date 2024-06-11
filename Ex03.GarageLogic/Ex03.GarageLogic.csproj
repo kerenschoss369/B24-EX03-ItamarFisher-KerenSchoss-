@@ -39,6 +39,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GarageSystemFactory.cs" />
     <Compile Include="GarageSystemLogic.cs" />
     <Compile Include="vehicle types\Car.cs" />
     <Compile Include="energy source types\ElectricEnergySourceManager.cs" />

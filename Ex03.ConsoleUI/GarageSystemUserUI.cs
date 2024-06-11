@@ -8,6 +8,7 @@ namespace Ex03.ConsoleUI
 {
     internal class GarageSystemUserUI
     {
-        private  
+        private Ex03.GarageLogic.GarageSystemLogic m_systemLogic;
+        //public void FilterAndPrintVehiclesPlateNumbers()
     }
 }
