@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    internal class ElectricEnergySource : EnergySource
+    abstract class EnergySourceManager
     {
-
+        protected float m_CurrentEnergySourceAmount;
+        protected readonly float r_MaxEnergySourceAmount;
     }
 }

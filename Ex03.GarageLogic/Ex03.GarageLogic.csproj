@@ -41,9 +41,9 @@
   <ItemGroup>
     <Compile Include="GarageSystemLogic.cs" />
     <Compile Include="vehicle types\Car.cs" />
-    <Compile Include="energy source types\ElectricEnergySource.cs" />
-    <Compile Include="EnergySource.cs" />
-    <Compile Include="energy source types\GasolineEnergySource.cs" />
+    <Compile Include="energy source types\ElectricEnergySourceManager.cs" />
+    <Compile Include="EnergySourceManager.cs" />
+    <Compile Include="energy source types\GasolineEnergySourceManager.cs" />
     <Compile Include="vehicle types\Motorcycle.cs" />
     <Compile Include="vehicle types\Truck.cs" />
     <Compile Include="Vehicle.cs" />

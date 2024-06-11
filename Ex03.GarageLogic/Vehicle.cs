@@ -8,10 +8,10 @@ namespace Ex03.GarageLogic
 {
     abstract class Vehicle
     {
-        protected string m_ModelName;
-        protected string m_LicenseNumber;
+        protected readonly string r_ModelName;
+        protected readonly string r_LicenseNumber;
         protected float m_PercentageOfEnergyLeft;
         protected List<Wheel> m_WheelsList;
-        protected EnergySource m_EnergySource; //maybe create as an object instead
+        protected EnergySourceManager m_EnergySource; //maybe create as an object instead
     }
 }
