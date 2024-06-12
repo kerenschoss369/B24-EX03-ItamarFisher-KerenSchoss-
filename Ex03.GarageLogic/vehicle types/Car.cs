@@ -26,5 +26,7 @@ namespace Ex03.GarageLogic
     {
         private readonly eCarColor r_CarColor;
         private readonly eCarDoorsAmount r_CarDoorsAmount;
+        private const int k_NumberOfWheels = 5;
+        private const float k_WheelsMaxAirPressure = 31;
     }
 }

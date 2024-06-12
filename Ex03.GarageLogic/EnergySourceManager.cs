@@ -10,5 +10,10 @@ namespace Ex03.GarageLogic
     {
         protected float m_CurrentEnergySourceAmount;
         protected readonly float r_MaxEnergySourceAmount;
+
+        protected EnergySourceManager(float i_MaxEnergySourceAmount)
+        {
+            r_MaxEnergySourceAmount = i_MaxEnergySourceAmount;
+        }
     }
 }

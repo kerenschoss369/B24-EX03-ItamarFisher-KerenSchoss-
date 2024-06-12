@@ -12,6 +12,10 @@ namespace Ex03.GarageLogic
         private float m_CurrentAirPressure;
         private readonly float r_MaxAirPressureDefinedByManufacturer;
 
+        public Wheel(float i_MaxAirPressure)
+        {
+            r_MaxAirPressureDefinedByManufacturer = i_MaxAirPressure;
+        }
         private bool tryInsreaseWheelAirPressure(float i_AirToAdd)
         {
             bool isIncreasedWheelAirPressure = true;

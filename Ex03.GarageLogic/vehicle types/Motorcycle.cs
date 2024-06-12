@@ -19,5 +19,7 @@ namespace Ex03.GarageLogic
     {
         private readonly eLicenseType r_LicenseType;
         private readonly int r_EngineDisplacementInCc;
+        private const int k_NumberOfWheels = 2;
+        private const float k_WheelsMaxAirPressure = 33;
     }
 }
