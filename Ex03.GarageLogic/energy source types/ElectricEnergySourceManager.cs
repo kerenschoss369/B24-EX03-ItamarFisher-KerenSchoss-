@@ -8,6 +8,10 @@ namespace Ex03.GarageLogic
 {
     internal class ElectricEnergySourceManager : EnergySourceManager
     {
+        public ElectricEnergySourceManager(float i_MaxEnergySourceAmount)
+            : base(i_MaxEnergySourceAmount)
+        {
+        }
         private bool tryBatteryCharge(float i_HoursToAdd)
         {
             bool isBatteryCharge = true;

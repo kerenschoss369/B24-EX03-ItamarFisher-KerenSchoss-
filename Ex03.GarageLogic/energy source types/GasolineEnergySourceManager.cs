@@ -13,10 +13,16 @@ namespace Ex03.GarageLogic
         Octan96,
         Octan98
     }
+
     internal class GasolineEnergySourceManager : EnergySourceManager
     {
         private readonly eFuelType r_FuelType;
 
+        public GasolineEnergySourceManager(float i_MaxEnergySourceAmount, eFuelType i_FuelType)
+            : base(i_MaxEnergySourceAmount)
+        {
+            r_FuelType = i_FuelType;
+        }
         private bool tryRefuel(float i_LitersToAdd, eFuelType i_FuelType)
         {
             bool isRefuel = true;
@@ -27,6 +33,7 @@ namespace Ex03.GarageLogic
             }
 
             m_CurrentEnergySourceAmount += i_LitersToAdd;
+
             return isRefuel;
         }
 
