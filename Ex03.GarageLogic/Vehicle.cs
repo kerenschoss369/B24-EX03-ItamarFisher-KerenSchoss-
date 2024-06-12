@@ -11,7 +11,7 @@ namespace Ex03.GarageLogic
         protected readonly string r_ModelName;
         protected readonly string r_LicenseNumber;
         protected float m_PercentageOfEnergyLeft;
-        protected List<Wheel> m_WheelsList;
-        protected EnergySourceManager m_EnergySource;
+        internal List<Wheel> m_WheelsList;
+        internal EnergySourceManager m_EnergySourceManager;
     }
 }
