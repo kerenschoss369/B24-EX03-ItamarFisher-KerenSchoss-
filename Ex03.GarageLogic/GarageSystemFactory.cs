@@ -13,40 +13,43 @@ namespace Ex03.GarageLogic
     {
         private List<Vehicle> m_VehiclesList;
        
-        public class VehicleInGarageDetails
+       
+        public enum eVehicleType
         {
-            private readonly int m_VehiclePlateNumber;
-            private readonly string r_VehicleOwnerName;
-            private readonly string r_VehiclePhoneNumber;
-            private eVehicleState m_VehicleState;
+            Motorcycle ,
+            ElectricMotorcycle,
+            GasolineCar,
+            ElectricCar,
+            Truck
+        }
+        public static Vehicle CreateVehicle(eVehicleType i_VehicleType)
+        {
+            Vehicle vehicle = null;
 
-            public eVehicleState vehicleState
+            switch (i_VehicleType)
             {
-                get
-                {
-                    return m_VehicleState;
-                }
+                case eVehicleType.Motorcycle:
+                    vehicle = new Motorcycle();
+                    break;
+                case eVehicleType.ElectricMotorcycle:
+                    vehicle = new ElectricMotorcycle();
+                    break;
+                case eVehicleType.GasolineCar:
+                    vehicle = new GasolineCar();
+                    break;
+                case eVehicleType.ElectricCar:
+                    vehicle = new ElectricCar();
+                    break;
+                case eVehicleType.Truck:
+                    vehicle = new Truck();
+                    break;
+                default:
+                    throw new ArgumentException("Unknown vehicle type");
             }
 
+            return vehicle;
         }
-        public List<Vehicle> vehiclesList
-        {
-            get
-            { 
-
-                return m_VehiclesList; 
-            } 
-        }
-
-       
-        public enum eVehicleState
-        {
-            InMaintenance = 1,
-            Fixed,
-            PaidFor
-        }
-        //public void AddVechileToList()
-
     }
+}
 
 }
