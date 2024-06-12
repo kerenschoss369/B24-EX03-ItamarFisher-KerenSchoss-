@@ -13,7 +13,7 @@ namespace Ex03.ConsoleUI
         public enum eGarageMenuOptions
         {
             AddNewVehicle,
-            DisplayAllLicenseNumbersAndFilter,
+            DisplayAllPlateNumbersAndFilter,
             ChangeVehicleStatus,
             InflateVehicleTires,
             RefuelGasVehicle,
@@ -46,7 +46,7 @@ namespace Ex03.ConsoleUI
                 case eGarageMenuOptions.AddNewVehicle:
 
                     break;
-                case eGarageMenuOptions.DisplayAllLicenseNumbersAndFilter:
+                case eGarageMenuOptions.DisplayAllPlateNumbersAndFilter:
 
                     break;
                 case eGarageMenuOptions.ChangeVehicleStatus:
@@ -64,32 +64,40 @@ namespace Ex03.ConsoleUI
                     break;
             }
         }
+        private string getPlateNumberFromUser()
+        {
+            string plateNumber;
+            Console.Write("Please enter plate number: ");
+            plateNumber = Console.ReadLine();
+            //check that good input
+
+            return plateNumber;
+        }
+
         private void refuelGasVehicle()
         {
-            string LicenseNumber= getlLicenseNumberFromUser();
-            //fuel type
-            //amount to fill
+            string licenseNumber = getPlateNumberFromUser();
+            string fuelType;
+            float litersToAdd;
+            bool isGasolineVehicle = true; //change
 
-            /*if (!Enum.IsDefined(typeof(eFuelType), fuelType))
+            // get the car with the licence number 
+
+            if (!isGasolineVehicle)
             {
-                throw new ArgumentException("Invalid fuel type selected.", nameof(fuelType));
+                //return that cant be fueled
             }
-
-            //call the function*/
-
-
+            else
+            {
+                Console.Write("Please enter fuel type: ");
+                fuelType = Console.ReadLine();
+                //check that the input and the out from the function is the same else  throw new ArgumentException("Invalid fuel type selected.", nameof(fuelType));
+                Console.Write("Please enter amount of litters to add: ");
+                litersToAdd = float.Parse(Console.ReadLine()); //maybe add exeption for parse
+                //check that good input
+                //call the function that fuel
+            }
         }
 
-        private string getlLicenseNumberFromUser()
-        {
-            string LicenseNumber;
-            Console.Write("Please enter the requested License Number: ");
-            LicenseNumber = Console.ReadLine();
-
-     
-            //add recheck
-
-            return LicenseNumber;
-        }
     }
 }

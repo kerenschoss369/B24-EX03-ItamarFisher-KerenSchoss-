@@ -9,7 +9,7 @@ namespace Ex03.GarageLogic
     public abstract class Vehicle
     {
         protected string r_ModelName;
-        protected string r_LicenseNumber;
+        protected string r_PlateNumber;
         protected float m_PercentageOfEnergyLeft;
         internal List<Wheel> m_WheelsList;
         internal EnergySourceManager m_EnergySourceManager;
