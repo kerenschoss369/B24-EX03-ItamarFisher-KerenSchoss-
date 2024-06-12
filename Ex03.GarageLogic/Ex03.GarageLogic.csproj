@@ -39,8 +39,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GarageSystemFactory.cs" />
-    <Compile Include="GarageSystemLogic.cs" />
+    <Compile Include="garage managment\GarageOpenIssue.cs" />
+    <Compile Include="garage managment\GarageSystemFactory.cs" />
+    <Compile Include="garage managment\GarageSystemLogic.cs" />
     <Compile Include="vehicle types\Car.cs" />
     <Compile Include="energy source types\ElectricEnergySourceManager.cs" />
     <Compile Include="EnergySourceManager.cs" />
@@ -50,5 +51,6 @@
     <Compile Include="Vehicle.cs" />
     <Compile Include="Wheel.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
