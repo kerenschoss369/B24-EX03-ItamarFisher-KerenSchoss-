@@ -13,6 +13,7 @@ namespace Ex03.GarageLogic
         Octan96,
         Octan98
     }
+
     internal class GasolineEnergySourceManager : EnergySourceManager
     {
         private readonly eFuelType r_FuelType;

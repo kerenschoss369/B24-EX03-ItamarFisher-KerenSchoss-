@@ -22,11 +22,15 @@ namespace Ex03.GarageLogic
         Five = 5
     }
 
-    internal class Car
+    internal class Car : Vehicle
     {
         private readonly eCarColor r_CarColor;
         private readonly eCarDoorsAmount r_CarDoorsAmount;
         private const int k_NumberOfWheels = 5;
         private const float k_WheelsMaxAirPressure = 31;
+        public Car(float i_MaxEnergySourceAmount, EnergySourceManager i_EnergySourceManager, eFuelType i_FuelType)
+            : base(k_NumberOfWheels, k_WheelsMaxAirPressure, i_EnergySourceManager, i_FuelType)
+        {
+        }
     }
 }
