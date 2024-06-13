@@ -9,7 +9,7 @@ namespace Ex03.GarageLogic
     public abstract class Vehicle
     {
         protected string r_ModelName;
-        protected string r_LicenseNumber;
+        protected string r_PlateNumber;
         protected float m_PercentageOfEnergyLeft;
         internal List<Wheel> m_WheelsList;
         internal EnergySourceManager m_EnergySourceManager;
@@ -22,13 +22,20 @@ namespace Ex03.GarageLogic
                 m_WheelsList.Add(new Wheel(i_MaxAirPressure));
             }
 
-            if(i_EnergySourceManager is ElectricEnergySourceManager)
+            if(i_EnergySourceManager is GasolineEnergySourceManager)
             {
                 m_EnergySourceManager = new GasolineEnergySourceManager(i_MaxEnergySourceAmount, i_FuelType);
             }
             else
             {
                 m_EnergySourceManager = new ElectricEnergySourceManager(i_MaxEnergySourceAmount);
+            }
+        }
+        public string plateNumber
+        {
+            get
+            {
+                return r_PlateNumber;
             }
         }
     }

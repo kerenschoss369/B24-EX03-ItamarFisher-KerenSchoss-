@@ -11,7 +11,8 @@ namespace Ex03.GarageLogic
         Soler,
         Octan95,
         Octan96,
-        Octan98
+        Octan98,
+        None
     }
 
     internal class GasolineEnergySourceManager : EnergySourceManager
@@ -35,6 +36,13 @@ namespace Ex03.GarageLogic
             m_CurrentEnergySourceAmount += i_LitersToAdd;
 
             return isRefuel;
+        }
+        public eFuelType fuelType
+        {
+            get
+            {
+                return r_FuelType;
+            }
         }
 
     }

@@ -27,6 +27,14 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public int vehiclePlateNumber
+        {
+            get
+            {
+                return m_VehiclePlateNumber;
+            }
+        }
+
     }
 
 }

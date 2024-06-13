@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Ex03.GarageLogic
 {
-    public static class VehicleFactory
+    public class VehicleFactory
     {
         public enum eVehicleType
         {
@@ -14,7 +14,7 @@ namespace Ex03.GarageLogic
             Truck
         }
 
-        public static Vehicle CreateVehicle(eVehicleType i_VehicleType)
+        public Vehicle CreateVehicle(eVehicleType i_VehicleType)
         {
             Vehicle vehicle = null;
             GasolineEnergySourceManager gasolineEnergySourceManager = null;
@@ -26,13 +26,13 @@ namespace Ex03.GarageLogic
                     vehicle = new Motorcycle(gasolineEnergySourceManager, (float)5.5, eFuelType.Octan98);
                     break;
                 case eVehicleType.ElectricMotorcycle:
-                    vehicle = new Motorcycle(electricEnergySourceManager, (float)2.5, eFuelType.Octan96);
+                    vehicle = new Motorcycle(electricEnergySourceManager, (float)2.5, eFuelType.None);//octan96 is a placeholder for nothing
                     break;
                 case eVehicleType.GasolineCar:
                     vehicle = new Car(gasolineEnergySourceManager, (float)45, eFuelType.Octan95);
                     break;
                 case eVehicleType.ElectricCar:
-                    vehicle = new Car(electricEnergySourceManager, (float)3.5, eFuelType.Octan95);
+                    vehicle = new Car(electricEnergySourceManager, (float)3.5, eFuelType.None);
                     break;
                 case eVehicleType.Truck:
                     vehicle = new Truck();
