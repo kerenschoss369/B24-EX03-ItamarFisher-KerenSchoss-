@@ -44,32 +44,41 @@ namespace Ex03.ConsoleUI
             switch ((eGarageMenuOptions)userChoiceOfAction)
             {
                 case eGarageMenuOptions.AddNewVehicle:
-
+                    //addNewVehicle();
                     break;
                 case eGarageMenuOptions.DisplayAllPlateNumbersAndFilter:
-
+                    //displayAllPlateNumbersAndFilter();
                     break;
                 case eGarageMenuOptions.ChangeVehicleStatus:
-
+                    //changeVehicleStatus();
                     break;
                 case eGarageMenuOptions.InflateVehicleTires:
-
+                    //inflateVehicleTires();
                     break;
                 case eGarageMenuOptions.RefuelGasVehicle:
                     refuelGasVehicle();
                     break;
                 case eGarageMenuOptions.ChargeElectricVehicle:
+                    //chargeElectricVehicle();
                     break;
                 case eGarageMenuOptions.DisplayVehicleDetails:
+                    //displayVehicleDetails();
                     break;
             }
         }
         private string getPlateNumberFromUser()
         {
+            bool isValidPlateNumber = false;
             string plateNumber;
-            Console.Write("Please enter plate number: ");
-            plateNumber = Console.ReadLine();
+
             //check that good input
+            do
+            {
+                Console.Write("Please enter plate number in the requested format (xxx-xx-xxx), should contain numbers only: ");
+                plateNumber = Console.ReadLine();
+                //if (plateNumber)
+            }
+            while (!isValidPlateNumber);
 
             return plateNumber;
         }
