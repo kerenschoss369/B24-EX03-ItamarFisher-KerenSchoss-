@@ -75,7 +75,6 @@ namespace Ex03.GarageLogic
              eFuelType fuelType = gasolineEnergySourceManager.fuelType;
              return fuelType.ToString();
          }*/
-        public float chargeBatteryToVehicle(Vehicle i_Vehicle, float i_AmountOfEnergyToAdd)
         private void changeVehicleState(GarageOpenIssue i_OpenIssue, eVehicleState i_NewVehicleState)
         {
             i_OpenIssue.vehicleState = i_NewVehicleState;
