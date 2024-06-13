@@ -26,18 +26,18 @@ namespace Ex03.GarageLogic
                     vehicle = new Motorcycle(gasolineEnergySourceManager, (float)5.5, eFuelType.Octan98);
                     break;
                 case eVehicleType.ElectricMotorcycle:
-                    vehicle = new Motorcycle(electricEnergySourceManager, (float)2.5, eFuelType.None);//octan96 is a placeholder for nothing
+                    vehicle = new Motorcycle(electricEnergySourceManager, (float)2.5);
                     break;
                 case eVehicleType.GasolineCar:
                     vehicle = new Car(gasolineEnergySourceManager, (float)45, eFuelType.Octan95);
                     break;
                 case eVehicleType.ElectricCar:
-                    vehicle = new Car(electricEnergySourceManager, (float)3.5, eFuelType.None);
+                    vehicle = new Car(electricEnergySourceManager, (float)3.5);
                     break;
                 case eVehicleType.Truck:
                     vehicle = new Truck();
                     break;
-                default:
+                default://execption shel keren ;d:D:D:D:D:D:D:D:D
                     throw new ArgumentException("Unknown vehicle type");
             }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,19 +48,36 @@ namespace Ex03.GarageLogic
 
             return vehicleExists;
         }
-        private bool CheckIfVehicleIsGasAndSetGasType(Vehicle vehicle, out eFuelType fuelType)
+        private bool checkIfVehicleIsGasPowered(Vehicle i_Vehicle)
         {
-            fuelType = eFuelType.None;
-            bool isVehicleGas = true;
-            if (vehicle.m_EnergySourceManager is GasolineEnergySourceManager)
-            {
-                GasolineEnergySourceManager currentGasolineEnergyManager = (GasolineEnergySourceManager)vehicle.m_EnergySourceManager;
-                fuelType = currentGasolineEnergyManager.fuelType;
-            }
-            else
-            {
-                isVehicleGas = false;
-            }
+
+            return (i_Vehicle.m_EnergySourceManager is GasolineEnergySourceManager);
+        }
+
+
+        /* private string getFuelTypeForGasVehicleAsString(Vehicle i_Vehicle) // prob not needed
+         {
+             GasolineEnergySourceManager gasolineEnergySourceManager = (GasolineEnergySourceManager)i_Vehicle.m_EnergySourceManager;
+             eFuelType fuelType = gasolineEnergySourceManager.fuelType;
+             return fuelType.ToString();
+         }*/
+
+        private float chargeBatteryToVehicle(Vehicle i_Vehicle, float i_AmountOfEnergyToAdd)
+        {
+            ElectricEnergySourceManager electricEnergySourceManagar = (ElectricEnergySourceManager)i_Vehicle.m_EnergySourceManager;
+            float hoursCharged = electricEnergySourceManagar.ChargeBatteryUntillFullOrHoursToAdd(i_AmountOfEnergyToAdd);
+
+            return hoursCharged;
+        }
+        private float addFuel(Vehicle i_Vehicle, float i_AmountOfLittersToFill, eFuelType fuelType)
+        {
+            GasolineEnergySourceManager gasolineEnergySourceManagar = (GasolineEnergySourceManager)i_Vehicle.m_EnergySourceManager;
+            float littersFilled;
+
+            gasolineEnergySourceManagar.RefuelVehicleUntillFullOrLitersToAdd(i_AmountOfLittersToFill, fuelType, out littersFilled);
+            
+            return littersFilled;
+        }
 
             return isVehicleGas;
         }

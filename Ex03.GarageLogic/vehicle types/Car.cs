@@ -32,5 +32,9 @@ namespace Ex03.GarageLogic
             : base(k_NumberOfWheels, k_WheelsMaxAirPressure, i_EnergySourceManager, i_MaxEnergySourceAmount, i_FuelType)
         {
         }
+        public Car(EnergySourceManager i_EnergySourceManager, float i_MaxEnergySourceAmount)
+            : base(k_NumberOfWheels, k_WheelsMaxAirPressure, i_EnergySourceManager, i_MaxEnergySourceAmount)
+        {
+        }
     }
 }
