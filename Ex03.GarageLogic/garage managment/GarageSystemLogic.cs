@@ -33,7 +33,7 @@ namespace Ex03.GarageLogic
     }
     //public bool CheckIfPlateNumberInSystem()*/
 
-        public bool getVehicleUsingPlateNumber(string i_PlateNumber, out Vehicle o_WantedVehicle)
+        public bool getVehicleUsingPlateNumberIfExist(string i_PlateNumber, out Vehicle o_WantedVehicle)
         {
             o_WantedVehicle = null;
             bool vehicleExists = false;
@@ -75,9 +75,38 @@ namespace Ex03.GarageLogic
             float littersFilled;
 
             gasolineEnergySourceManagar.RefuelVehicleUntillFullOrLitersToAdd(i_AmountOfLittersToFill, fuelType, out littersFilled);
-            
+
             return littersFilled;
         }
+        public bool validatePlateNumber(string i_plateNumber)
+        {
+            bool isValidatePlateNumber = true;
+            if (i_plateNumber.Length != 11)
+            {
+                isValidatePlateNumber = false;
+            }
 
-    } 
+            for (int i = 0; i < i_plateNumber.Length; i++)
+            {
+                if (i == 3 || i == 6)
+                {
+                    if (i_plateNumber[i] != '-')
+                    {
+                        isValidatePlateNumber = false;
+                    }
+                }
+                else
+                {
+                    if (!char.IsDigit(i_plateNumber[i]))
+                    {
+                        isValidatePlateNumber = false;
+                    }
+                }
+            }
+
+            return isValidatePlateNumber;
+        }
+
+    }
 }
+
