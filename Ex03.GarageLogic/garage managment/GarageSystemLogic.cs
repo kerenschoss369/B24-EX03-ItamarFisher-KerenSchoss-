@@ -65,26 +65,31 @@ namespace Ex03.GarageLogic
         }
         public bool validatePlateNumber(string i_plateNumber)
         {
-            bool isValidatePlateNumber= false;
+            bool isValidatePlateNumber= true;
+            if (i_plateNumber.Length != 11)
+            {
+                isValidatePlateNumber= false;
+            }
+
             for (int i = 0; i < i_plateNumber.Length; i++)
             {
                 if (i == 3 || i == 6)
                 {
-                    if (i_plateNumber[i] == '-')
+                    if (i_plateNumber[i] != '-')
                     {
-                        return false;
+                        isValidatePlateNumber= false;
                     }
                 }
                 else
                 {
                     if (!char.IsDigit(i_plateNumber[i]))
                     {
-                        return false;
+                        isValidatePlateNumber= false;
                     }
                 }
             }
 
-            return true;
+            return isValidatePlateNumber;
         }
 
     }
