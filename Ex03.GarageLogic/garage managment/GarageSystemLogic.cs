@@ -12,6 +12,7 @@ namespace Ex03.GarageLogic
         GarageSystemLogic m_GarageSystemLogic;
         List<GarageOpenIssue> m_GarageOpenIssues = new List<GarageOpenIssue>();
         List<Vehicle> m_VehicleList = new List<Vehicle>();
+
         /*public List<Vehicle> FilterAndPrintVehiclesPlateNumbers(GarageSystemFactory.eVehicleState i_FilterByVehicleState, bool i_FetchAllVehicles)
         {
             List<Vehicle> filteredVehicleList = new List<Vehicle>();
@@ -32,7 +33,6 @@ namespace Ex03.GarageLogic
         }
     }
     //public bool CheckIfPlateNumberInSystem()*/
-
         public bool getVehicleUsingPlateNumberIfExist(string i_PlateNumber, out Vehicle o_WantedVehicle)
         {
             o_WantedVehicle = null;
@@ -48,12 +48,11 @@ namespace Ex03.GarageLogic
 
             return vehicleExists;
         }
-        private bool checkIfVehicleIsGasPowered(Vehicle i_Vehicle)
+        public bool checkIfVehicleIsGasPowered(Vehicle i_Vehicle)
         {
 
             return (i_Vehicle.m_EnergySourceManager is GasolineEnergySourceManager);
         }
-
 
         /* private string getFuelTypeForGasVehicleAsString(Vehicle i_Vehicle) // prob not needed
          {
@@ -61,15 +60,14 @@ namespace Ex03.GarageLogic
              eFuelType fuelType = gasolineEnergySourceManager.fuelType;
              return fuelType.ToString();
          }*/
-
-        private float chargeBatteryToVehicle(Vehicle i_Vehicle, float i_AmountOfEnergyToAdd)
+        public float chargeBatteryToVehicle(Vehicle i_Vehicle, float i_AmountOfEnergyToAdd)
         {
             ElectricEnergySourceManager electricEnergySourceManagar = (ElectricEnergySourceManager)i_Vehicle.m_EnergySourceManager;
             float hoursCharged = electricEnergySourceManagar.ChargeBatteryUntillFullOrHoursToAdd(i_AmountOfEnergyToAdd);
 
             return hoursCharged;
         }
-        private float addFuelToVehicle(Vehicle i_Vehicle, float i_AmountOfLittersToFill, eFuelType fuelType)
+        public float addFuelToVehicle(Vehicle i_Vehicle, float i_AmountOfLittersToFill, eFuelType fuelType)
         {
             GasolineEnergySourceManager gasolineEnergySourceManagar = (GasolineEnergySourceManager)i_Vehicle.m_EnergySourceManager;
             float littersFilled;
