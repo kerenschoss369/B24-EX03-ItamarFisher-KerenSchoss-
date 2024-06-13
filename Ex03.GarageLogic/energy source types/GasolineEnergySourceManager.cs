@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    internal enum eFuelType
+    public enum eFuelType
     {
         Soler,
         Octan95,

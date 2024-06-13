@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ex03.GarageLogic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
@@ -59,56 +60,129 @@ namespace Ex03.ConsoleUI
                     refuelGasVehicle();
                     break;
                 case eGarageMenuOptions.ChargeElectricVehicle:
-                    //chargeElectricVehicle();
+                    chargeElectricVehicle();
                     break;
                 case eGarageMenuOptions.DisplayVehicleDetails:
                     //displayVehicleDetails();
                     break;
             }
         }
-        private string getPlateNumberFromUser()
+        private string getPlateNumberFromUserAndTheMatchingVehicle(out Vehicle o_WantedVehicle)
         {
             bool isValidPlateNumber = false;
-            string plateNumber;
+            bool isPlateNumberBelongsToExistingCar = false;
+            string plateNumber = "";
+            o_WantedVehicle = null;
 
-            do
+            while (!isPlateNumberBelongsToExistingCar)
             {
-                Console.Write("Please enter plate number in the requested format (xxx-xx-xxx), should contain numbers only: ");
-                plateNumber = Console.ReadLine();
-                if (m_systemLogic.validatePlateNumber(plateNumber))
+                do
                 {
-                    isValidPlateNumber = true;
+                    Console.Write("Please enter plate number in the requested format (xxx-xx-xxx), should contain numbers only. \nYour input:");
+                    plateNumber = Console.ReadLine();
+                    if (m_systemLogic.validatePlateNumber(plateNumber))
+                    {
+                        isValidPlateNumber = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalidplate number. Please try again.");
+                    }
+                }
+                while (!isValidPlateNumber);
+
+                if (m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out o_WantedVehicle))
+                {
+                    isPlateNumberBelongsToExistingCar= true;
                 }
             }
-            while (!isValidPlateNumber);
 
             return plateNumber;
         }
 
+        private eFuelType getFuelTypeFromUser()
+        {
+            string fuelTypeInput;
+            eFuelType fuelType;
+            bool isValidFuelType = false;
 
+            do
+            {
+                Console.Write("Please enter the fuel type (Soler, Octan95, Octan96, Octan98): ");
+                fuelTypeInput = Console.ReadLine();
 
+                if (Enum.TryParse(fuelTypeInput, true, out fuelType) && Enum.IsDefined(typeof(eFuelType), fuelType))
+                {
+                    isValidFuelType = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid fuel type. Please try again.");
+                }
+
+            }
+            while (!isValidFuelType);
+            
+            return fuelType;
+        }
+
+        private float getEnergyAmountToAddFromUser()
+        {
+            float energyToAdd;
+            bool isValidInput = false;
+
+            do
+            {
+                Console.Write("Please enter amount of energy to add: ");
+                string input = Console.ReadLine();
+
+                if (float.TryParse(input, out energyToAdd))
+                {
+                    isValidInput = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid float number.");
+                }
+
+            } while (!isValidInput);
+
+            return energyToAdd;
+        }
         private void refuelGasVehicle()
         {
-            string licenseNumber = getPlateNumberFromUser();
-            string fuelType;
+            Vehicle vehicleToRefuel;
+            string licenseNumber;
+            eFuelType fuelType;
             float litersToAdd;
-            bool isGasolineVehicle = true; //change
 
-            // get the car with the licence number 
-
-            if (!isGasolineVehicle)
+            licenseNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToRefuel);
+            fuelType = getFuelTypeFromUser();
+            litersToAdd = getEnergyAmountToAddFromUser();
+            if (m_systemLogic.checkIfVehicleIsGasPowered(vehicleToRefuel))
             {
-                //return that cant be fueled
+                m_systemLogic.addFuelToVehicle(vehicleToRefuel,litersToAdd,fuelType);
             }
             else
             {
-                Console.Write("Please enter fuel type: ");
-                fuelType = Console.ReadLine();
-                //check that the input and the out from the function is the same else  throw new ArgumentException("Invalid fuel type selected.", nameof(fuelType));
-                Console.Write("Please enter amount of litters to add: ");
-                litersToAdd = float.Parse(Console.ReadLine()); //maybe add exeption for parse
-                //check that good input
-                //call the function that fuel
+                Console.WriteLine("Cannot refuel an electric powerd car.");
+            }
+        }
+        private void chargeElectricVehicle()
+        {
+            Vehicle vehicleToCharge;
+            string licenseNumber;
+            float hoursToAdd;
+
+            licenseNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToCharge);
+            hoursToAdd = getEnergyAmountToAddFromUser();
+            if (m_systemLogic.checkIfVehicleIsGasPowered(vehicleToCharge))
+            {
+                Console.WriteLine("Cannot refuel a gasoline powerd car.");
+            }
+            else
+            {
+                m_systemLogic.chargeBatteryToVehicle(vehicleToCharge, hoursToAdd);
             }
         }
 
