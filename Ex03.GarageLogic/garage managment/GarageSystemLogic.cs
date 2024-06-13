@@ -32,13 +32,13 @@ namespace Ex03.GarageLogic
     }
     //public bool CheckIfPlateNumberInSystem()*/
 
-        public bool getVehicleUsingPlateNumber(string i_PlateNumber, out Vehicle o_WantedVehicle)
+        public bool getVehicleUsingPlateNumberIfExist(string i_PlateNumber, out Vehicle o_WantedVehicle)
         {
             o_WantedVehicle = null;
             bool vehicleExists = false;
             foreach (Vehicle vehicle in m_VehicleList)
             {
-                if(i_PlateNumber.Equals(vehicle.plateNumber))
+                if (i_PlateNumber.Equals(vehicle.plateNumber))
                 {
                     o_WantedVehicle = vehicle;
                     vehicleExists = true;
@@ -51,10 +51,10 @@ namespace Ex03.GarageLogic
         {
             fuelType = eFuelType.None;
             bool isVehicleGas = true;
-            if(vehicle.m_EnergySourceManager is GasolineEnergySourceManager)
+            if (vehicle.m_EnergySourceManager is GasolineEnergySourceManager)
             {
-                GasolineEnergySourceManager currentGasolineEnergyManagar = (GasolineEnergySourceManager)vehicle.m_EnergySourceManager;
-                fuelType = currentGasolineEnergyManagar.fuelType;
+                GasolineEnergySourceManager currentGasolineEnergyManager = (GasolineEnergySourceManager)vehicle.m_EnergySourceManager;
+                fuelType = currentGasolineEnergyManager.fuelType;
             }
             else
             {
@@ -63,6 +63,30 @@ namespace Ex03.GarageLogic
 
             return isVehicleGas;
         }
+        public bool validatePlateNumber(string i_plateNumber)
+        {
+            bool isValidatePlateNumber= false;
+            for (int i = 0; i < i_plateNumber.Length; i++)
+            {
+                if (i == 3 || i == 6)
+                {
+                    if (i_plateNumber[i] == '-')
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (!char.IsDigit(i_plateNumber[i]))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
     }
-   
+
 }

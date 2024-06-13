@@ -71,17 +71,21 @@ namespace Ex03.ConsoleUI
             bool isValidPlateNumber = false;
             string plateNumber;
 
-            //check that good input
             do
             {
                 Console.Write("Please enter plate number in the requested format (xxx-xx-xxx), should contain numbers only: ");
                 plateNumber = Console.ReadLine();
-                //if (plateNumber)
+                if (m_systemLogic.validatePlateNumber(plateNumber))
+                {
+                    isValidPlateNumber = true;
+                }
             }
             while (!isValidPlateNumber);
 
             return plateNumber;
         }
+
+
 
         private void refuelGasVehicle()
         {

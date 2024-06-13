@@ -24,16 +24,11 @@ namespace Ex03.GarageLogic
         {
             r_FuelType = i_FuelType;
         }
-        private bool tryRefuel(float i_LitersToAdd, eFuelType i_FuelType)
+        public bool RefuelVehicleUntillFullOrLitersToAdd(float i_LitersToAdd, eFuelType i_FuelType, out float o_AmountOfFuelFilled)
         {
-            bool isRefuel = true;
-
-            if ((i_FuelType != r_FuelType) || (m_CurrentEnergySourceAmount + i_LitersToAdd > r_MaxEnergySourceAmount)) //make sure that this is the right check
-            {
-                isRefuel= !isRefuel; 
-            }
-
-            m_CurrentEnergySourceAmount += i_LitersToAdd;
+            bool isRefuel = i_FuelType == r_FuelType;
+            o_AmountOfFuelFilled = r_MaxEnergySourceAmount - i_LitersToAdd;
+            m_CurrentEnergySourceAmount += o_AmountOfFuelFilled;
 
             return isRefuel;
         }
