@@ -29,8 +29,8 @@ namespace Ex03.GarageLogic
             }
 
             return filteredVehicleList;
-        }
-    }
+        }*/
+    
     //public bool CheckIfPlateNumberInSystem()*/
 
         public bool getVehicleUsingPlateNumberIfExist(string i_PlateNumber, out Vehicle o_WantedVehicle)
