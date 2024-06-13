@@ -69,7 +69,7 @@ namespace Ex03.GarageLogic
 
             return hoursCharged;
         }
-        private float addFuel(Vehicle i_Vehicle, float i_AmountOfLittersToFill, eFuelType fuelType)
+        private float addFuelToVehicle(Vehicle i_Vehicle, float i_AmountOfLittersToFill, eFuelType fuelType)
         {
             GasolineEnergySourceManager gasolineEnergySourceManagar = (GasolineEnergySourceManager)i_Vehicle.m_EnergySourceManager;
             float littersFilled;
