@@ -24,7 +24,7 @@ namespace Ex03.GarageLogic
 
             m_EnergySourceManager = new ElectricEnergySourceManager(i_MaxEnergySourceAmount);
         }
-        internal Vehicle(int i_NumberOfWheels, float i_MaxAirPressure, EnergySourceManager i_EnergySourceManager, float i_MaxEnergySourceAmount, eFuelType i_FuelType)
+        internal Vehicle(int i_NumberOfWheels, float i_MaxAirPressure, EnergySourceManager i_EnergySourceManager, float i_MaxEnergySourceAmount, GasolineEnergySourceManager.eFuelType i_FuelType)
         {
             m_WheelsList = new List<Wheel>(i_NumberOfWheels);
             for (int i = 0; i < i_NumberOfWheels; i++)
