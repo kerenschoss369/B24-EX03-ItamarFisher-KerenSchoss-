@@ -14,7 +14,6 @@ namespace Ex03.GarageLogic
         B1
     }
 
-
     internal class Motorcycle : Vehicle
     {
         private readonly eLicenseType r_LicenseType;
