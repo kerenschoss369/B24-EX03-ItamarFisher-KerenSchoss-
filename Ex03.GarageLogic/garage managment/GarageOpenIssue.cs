@@ -17,7 +17,7 @@ namespace Ex03.GarageLogic
         private readonly string r_VehicleOwnerName;
         private readonly string r_VehiclePhoneNumber;
         private eVehicleState m_VehicleState;
-        private readonly int m_VehiclePlateNumber;
+        private readonly string m_VehiclePlateNumber;
 
         public eVehicleState vehicleState
         {
@@ -25,9 +25,13 @@ namespace Ex03.GarageLogic
             {
                 return m_VehicleState;
             }
+            set
+            {
+                m_VehicleState = value;
+            }
         }
 
-        public int vehiclePlateNumber
+        public string vehiclePlateNumber
         {
             get
             {

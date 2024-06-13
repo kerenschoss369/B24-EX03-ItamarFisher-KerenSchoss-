@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,7 +17,7 @@ namespace Ex03.GarageLogic
         {
             r_MaxAirPressureDefinedByManufacturer = i_MaxAirPressure;
         }
-        private bool tryInsreaseWheelAirPressure(float i_AirToAdd)
+        public bool tryInsreaseWheelAirPressure(float i_AirToAdd)
         {
             bool isIncreasedWheelAirPressure = true;
 
@@ -27,6 +28,25 @@ namespace Ex03.GarageLogic
 
             m_CurrentAirPressure += i_AirToAdd;
             return isIncreasedWheelAirPressure;
+        }
+        public float currentAirPressure
+        {
+            get
+            {
+                return m_CurrentAirPressure;
+            }
+            
+            set
+            {
+               m_CurrentAirPressure = value;
+            }
+        }
+        public float maxAirPressureDefinedByManufacturer
+        {
+            get
+            {
+                return r_MaxAirPressureDefinedByManufacturer;
+            }
         }
     }
 }

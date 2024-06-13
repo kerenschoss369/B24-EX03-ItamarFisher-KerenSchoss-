@@ -48,6 +48,21 @@ namespace Ex03.GarageLogic
 
             return vehicleExists;
         }
+        private bool getOpenIssueUsingPlateNumberIfExist(string i_PlateNumber, out GarageOpenIssue o_GarageOpenIssue)
+        {
+            o_GarageOpenIssue = null;
+            bool vehicleExists = false;
+            foreach (GarageOpenIssue openIssue in m_GarageOpenIssues)
+            {
+                if (i_PlateNumber.Equals(openIssue.vehiclePlateNumber))
+                {
+                    o_GarageOpenIssue = openIssue;
+                    vehicleExists = true;
+                }
+            }
+
+            return vehicleExists;
+        }
         private bool checkIfVehicleIsGasPowered(Vehicle i_Vehicle)
         {
 
@@ -61,7 +76,19 @@ namespace Ex03.GarageLogic
              eFuelType fuelType = gasolineEnergySourceManager.fuelType;
              return fuelType.ToString();
          }*/
-
+        private void changeVehicleState(GarageOpenIssue i_OpenIssue, eVehicleState i_NewVehicleState)
+        {
+            i_OpenIssue.vehicleState = i_NewVehicleState;
+        }
+        public void FillAllWheelsAirPressureToMax(Vehicle i_Vehicle)
+        {
+            float amountOfAirToFill;
+            foreach (Wheel wheel in i_Vehicle.m_WheelsList)
+            {
+                amountOfAirToFill = wheel.maxAirPressureDefinedByManufacturer - wheel.currentAirPressure;
+                wheel.tryInsreaseWheelAirPressure(amountOfAirToFill);
+            }
+        }
         private float chargeBatteryToVehicle(Vehicle i_Vehicle, float i_AmountOfEnergyToAdd)
         {
             ElectricEnergySourceManager electricEnergySourceManagar = (ElectricEnergySourceManager)i_Vehicle.m_EnergySourceManager;
