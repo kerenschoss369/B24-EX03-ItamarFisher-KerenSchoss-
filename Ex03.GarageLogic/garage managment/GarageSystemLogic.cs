@@ -69,24 +69,21 @@ namespace Ex03.GarageLogic
 
             return hoursCharged;
         }
-        private float addFuel(Vehicle i_Vehicle, float i_AmountOfLittersToFill, eFuelType fuelType)
+        private float addFuelToVehicle(Vehicle i_Vehicle, float i_AmountOfLittersToFill, eFuelType fuelType)
         {
             GasolineEnergySourceManager gasolineEnergySourceManagar = (GasolineEnergySourceManager)i_Vehicle.m_EnergySourceManager;
             float littersFilled;
 
             gasolineEnergySourceManagar.RefuelVehicleUntillFullOrLitersToAdd(i_AmountOfLittersToFill, fuelType, out littersFilled);
-            
-            return littersFilled;
-        }
 
-            return isVehicleGas;
+            return littersFilled;
         }
         public bool validatePlateNumber(string i_plateNumber)
         {
-            bool isValidatePlateNumber= true;
+            bool isValidatePlateNumber = true;
             if (i_plateNumber.Length != 11)
             {
-                isValidatePlateNumber= false;
+                isValidatePlateNumber = false;
             }
 
             for (int i = 0; i < i_plateNumber.Length; i++)
@@ -95,14 +92,14 @@ namespace Ex03.GarageLogic
                 {
                     if (i_plateNumber[i] != '-')
                     {
-                        isValidatePlateNumber= false;
+                        isValidatePlateNumber = false;
                     }
                 }
                 else
                 {
                     if (!char.IsDigit(i_plateNumber[i]))
                     {
-                        isValidatePlateNumber= false;
+                        isValidatePlateNumber = false;
                     }
                 }
             }
@@ -111,5 +108,5 @@ namespace Ex03.GarageLogic
         }
 
     }
-
 }
+
