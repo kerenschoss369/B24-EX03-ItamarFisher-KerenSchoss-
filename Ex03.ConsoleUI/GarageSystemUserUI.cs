@@ -92,28 +92,28 @@ namespace Ex03.ConsoleUI
             }
             else
             {
-                Console.WriteLine("Owner name ");
+                Console.Write("Owner name: ");
                 ownerName = Console.ReadLine();
-                Console.WriteLine("owner phone name ");
+                Console.Write("owner phone name: ");
                 ownerPhoneNumber = Console.ReadLine();
 
                 m_systemLogic.AddNewOpenIssue(ownerName, ownerPhoneNumber, GarageOpenIssue.eVehicleState.InMaintenance, plateNumber);
 
-                Console.WriteLine("vehicle type");
+                Console.Write("vehicle type: ");
                 vehicleType = Console.ReadLine();
 
-                Console.WriteLine("energy amount");
+                Console.Write("energy amount: ");
                 fuelType = float.Parse(Console.ReadLine());
 
-                Console.WriteLine("wheel air pressure");
+                Console.Write("wheel air pressure: ");
                 existingAirPressure = float.Parse(Console.ReadLine());
 
-                Console.WriteLine("gas or electric");
+                Console.Write("gas or electric: ");
                 energyType = Console.ReadLine();
 
                 if (vehicleType == "car")
                 {
-                    Console.WriteLine("car colour");
+                    Console.Write("car colour: ");
                     carColor = Console.ReadLine();
                     if (energyType == "gas")
                     {

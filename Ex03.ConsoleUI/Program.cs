@@ -12,7 +12,7 @@ namespace Ex03.ConsoleUI
         {
             GarageSystemUserUI garageSystemUserUI = new GarageSystemUserUI();
             garageSystemUserUI.printMenu();
+
         }
-    
     }
 }
