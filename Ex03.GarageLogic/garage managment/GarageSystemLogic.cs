@@ -142,7 +142,7 @@ namespace Ex03.GarageLogic
         public bool validatePlateNumber(string i_plateNumber)
         {
             bool isValidatePlateNumber = true;
-            if (i_plateNumber.Length != 11)
+            if (i_plateNumber.Length != 10)
             {
                 isValidatePlateNumber = false;
             }

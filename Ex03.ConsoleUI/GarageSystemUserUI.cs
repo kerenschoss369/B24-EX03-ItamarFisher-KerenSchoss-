@@ -15,7 +15,7 @@ namespace Ex03.ConsoleUI
     {
         public enum eGarageMenuOptions
         {
-            AddNewVehicle,
+            AddNewVehicle = 1,
             DisplayAllPlateNumbersAndFilter,
             ChangeVehicleStatus,
             InflateVehicleTires,
@@ -24,81 +24,178 @@ namespace Ex03.ConsoleUI
             DisplayVehicleDetails
         }
 
-        private Ex03.GarageLogic.GarageSystemLogic m_systemLogic;
+        private Ex03.GarageLogic.GarageSystemLogic m_systemLogic = new GarageSystemLogic();
         public void printMenu()
         {
             int userChoiceOfAction;
-
-            Console.Write("Please select an action:\n" +
-                "1. Add a new vehicle to the garage\n" +
-                "2. Display list of license numbers of vehicles in the garage and filter them by condition\n" +
-                "3. Change the status of a vehicle in the garage\n" +
-                "4. fill tires of vehicle in the garage\n" +
-                "5. Refuel a gasoline-powered vehicle in the garage\n" +
-                "6. Charge an electric vehicle in the garage\n" +
-                "7. Display vehicle details by license number\n\n" +
-                "Type your selection here: ");
-
-            while (!int.TryParse(Console.ReadLine(), out userChoiceOfAction) || (userChoiceOfAction < 1) || (userChoiceOfAction > 7)) //FIX INVALID VALUES MAYBE WITH ERRORS
+            while(true)
             {
-                Console.Write("Invalid input. Please make sure that you enter a number between 1 and 7.");
-            }
+                Console.Write("Please select an action:\n" +
+                                "1. Add a new vehicle to the garage\n" +
+                                "2. Display list of license numbers of vehicles in the garage and filter them by condition\n" +
+                                "3. Change the status of a vehicle in the garage\n" +
+                                "4. fill tires of vehicle in the garage\n" +
+                                "5. Refuel a gasoline-powered vehicle in the garage\n" +
+                                "6. Charge an electric vehicle in the garage\n" +
+                                "7. Display vehicle details by license number\n\n" +
+                                "Type your selection here: ");
 
-            switch ((eGarageMenuOptions)userChoiceOfAction)
-            {
-                case eGarageMenuOptions.AddNewVehicle:
-                    //addNewVehicle();
-                    break;
-                case eGarageMenuOptions.DisplayAllPlateNumbersAndFilter:
-                    displayAllPlateNumbersAndFilter();
-                    break;
-                case eGarageMenuOptions.ChangeVehicleStatus:
-                    changeVehicleStatus();
-                    break;
-                case eGarageMenuOptions.InflateVehicleTires:
-                    inflateVehicleTires();
-                    break;
-                case eGarageMenuOptions.RefuelGasVehicle:
-                    refuelGasVehicle();
-                    break;
-                case eGarageMenuOptions.ChargeElectricVehicle:
-                    chargeElectricVehicle();
-                    break;
-                case eGarageMenuOptions.DisplayVehicleDetails:
-                    displayVehicleDetails();
-                    break;
+                while (!int.TryParse(Console.ReadLine(), out userChoiceOfAction) || (userChoiceOfAction < 1) || (userChoiceOfAction > 7)) //FIX INVALID VALUES MAYBE WITH ERRORS
+                {
+                    Console.Write("Invalid input. Please make sure that you enter a number between 1 and 7.");
+                }
+
+                switch ((eGarageMenuOptions)userChoiceOfAction)
+                {
+                    case eGarageMenuOptions.AddNewVehicle:
+                        addNewVehicle();
+                        break;
+                    case eGarageMenuOptions.DisplayAllPlateNumbersAndFilter:
+                        displayAllPlateNumbersAndFilter();
+                        break;
+                    case eGarageMenuOptions.ChangeVehicleStatus:
+                        changeVehicleStatus();
+                        break;
+                    case eGarageMenuOptions.InflateVehicleTires:
+                        inflateVehicleTires();
+                        break;
+                    case eGarageMenuOptions.RefuelGasVehicle:
+                        refuelGasVehicle();
+                        break;
+                    case eGarageMenuOptions.ChargeElectricVehicle:
+                        chargeElectricVehicle();
+                        break;
+                    case eGarageMenuOptions.DisplayVehicleDetails:
+                        displayVehicleDetails();
+                        break;
+                }
             }
         }
-        private string getPlateNumberFromUserAndTheMatchingVehicle(out Vehicle o_WantedVehicle)
+            
+
+        private void addNewVehicle()
+        {
+            Vehicle vehicleToAddOrUpdate;
+            GarageOpenIssue issueToAddOrUpdate = null;
+            string plateNumber;
+            GarageOpenIssue.eVehicleState stateToChangeTo;
+            string vehicleType, carColor, licenceType, ownerName, ownerPhoneNumber, energyType;
+            float fuelType, existingAirPressure, cargoVolume;
+            int cc;
+
+            plateNumber = getValidatePlateNumberFromUser();
+            if (m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate))
+            {
+                Console.WriteLine("Car has been already in the garage. the state will be changed to in maintenance.");
+                m_systemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out issueToAddOrUpdate);
+                m_systemLogic.changeVehicleState(issueToAddOrUpdate, GarageOpenIssue.eVehicleState.InMaintenance);
+            }
+            else
+            {
+                Console.WriteLine("Owner name ");
+                ownerName = Console.ReadLine();
+                Console.WriteLine("owner phone name ");
+                ownerPhoneNumber = Console.ReadLine();
+
+                m_systemLogic.AddNewOpenIssue(ownerName, ownerPhoneNumber, GarageOpenIssue.eVehicleState.InMaintenance, plateNumber);
+
+                Console.WriteLine("vehicle type");
+                vehicleType = Console.ReadLine();
+
+                Console.WriteLine("energy amount");
+                fuelType = float.Parse(Console.ReadLine());
+
+                Console.WriteLine("wheel air pressure");
+                existingAirPressure = float.Parse(Console.ReadLine());
+
+                Console.WriteLine("gas or electric");
+                energyType = Console.ReadLine();
+
+                if (vehicleType == "car")
+                {
+                    Console.WriteLine("car colour");
+                    carColor = Console.ReadLine();
+                    if (energyType == "gas")
+                    {
+                        m_systemLogic.CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType.GasolineCar, plateNumber);
+                    }
+                    else
+                    {
+                        m_systemLogic.CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType.ElectricCar, plateNumber);
+                    }
+                    m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate);
+                    m_systemLogic.SetCarInputParameters((Car)vehicleToAddOrUpdate, Car.eCarColor.Black, Car.eCarDoorsAmount.Four);
+
+                }
+
+                if (vehicleType == "motorcycle")
+                {
+                    Console.WriteLine(" סוג רישיון אם אופנוע");
+                    licenceType = Console.ReadLine();
+                    Console.WriteLine(" נפח מנוע אם אופנוע");
+                    cc = int.Parse(Console.ReadLine());
+                    if (energyType == "gas")
+                    {
+                        m_systemLogic.CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType.GasolineMotorcycle, plateNumber);
+                    }
+                    else
+                    {
+                        m_systemLogic.CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType.ElectricMotorcycle, plateNumber);
+                    }
+                    m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate);
+                    m_systemLogic.SetMotorcycleInputParameters((Motorcycle)vehicleToAddOrUpdate, Motorcycle.eLicenseType.B1, cc);
+                }
+
+                if (vehicleType == "truck")
+                {
+                    Console.WriteLine(" cargo volume");
+                    cargoVolume = float.Parse(Console.ReadLine());
+                    m_systemLogic.CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType.Truck, plateNumber);
+                    m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate);
+                    m_systemLogic.SetTruckcycleInputParameters((Truck)vehicleToAddOrUpdate, cargoVolume, false);
+
+                }
+
+            }
+
+        }
+        private string getValidatePlateNumberFromUser()
         {
             bool isValidPlateNumber = false;
-            bool isPlateNumberBelongsToExistingCar = false;
             string plateNumber = "";
+
+            do
+            {
+                Console.Write("Please enter plate number in the requested format (xxx-xx-xxx), should contain numbers only. \nYour input:");
+                plateNumber = Console.ReadLine();
+                if (m_systemLogic.validatePlateNumber(plateNumber))
+                {
+                    isValidPlateNumber = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid plate number. Please try again.");
+                }
+            }
+            while (!isValidPlateNumber);
+
+            return plateNumber;
+        }
+
+        private string getPlateNumberFromUserAndTheMatchingVehicle(out Vehicle o_WantedVehicle)
+        {
+            string plateNumber = "";
+            bool isPlateNumberBelongsToExistingCar = false;
             o_WantedVehicle = null;
 
             while (!isPlateNumberBelongsToExistingCar)
             {
-                do
-                {
-                    Console.Write("Please enter plate number in the requested format (xxx-xx-xxx), should contain numbers only. \nYour input:");
-                    plateNumber = Console.ReadLine();
-                    if (m_systemLogic.validatePlateNumber(plateNumber))
-                    {
-                        isValidPlateNumber = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Invalidplate number. Please try again.");
-                    }
-                }
-                while (!isValidPlateNumber);
-
+                plateNumber = getValidatePlateNumberFromUser();
                 if (m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out o_WantedVehicle))
                 {
                     isPlateNumberBelongsToExistingCar = true;
                 }
             }
-
             return plateNumber;
         }
 
@@ -350,4 +447,3 @@ namespace Ex03.ConsoleUI
         }
     }
 }
-
