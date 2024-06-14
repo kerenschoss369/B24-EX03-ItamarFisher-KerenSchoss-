@@ -99,10 +99,11 @@ namespace Ex03.ConsoleUI
 
             return plateNumber;
         }
-        private eFuelType getFuelTypeFromUser()
+
+        private GasolineEnergySourceManager.eFuelType getFuelTypeFromUser()
         {
             string fuelTypeInput;
-            eFuelType fuelType;
+            GasolineEnergySourceManager.eFuelType fuelType;
             bool isValidFuelType = false;
 
             do
@@ -110,7 +111,7 @@ namespace Ex03.ConsoleUI
                 Console.Write("Please enter the fuel type (Soler, Octan95, Octan96, Octan98): ");
                 fuelTypeInput = Console.ReadLine();
 
-                if (Enum.TryParse(fuelTypeInput, true, out fuelType) && Enum.IsDefined(typeof(eFuelType), fuelType))
+                if (Enum.TryParse(fuelTypeInput, true, out fuelType) && Enum.IsDefined(typeof(GasolineEnergySourceManager.eFuelType), fuelType))
                 {
                     isValidFuelType = true;
                 }
@@ -151,15 +152,15 @@ namespace Ex03.ConsoleUI
         {
             Vehicle vehicleToRefuel;
             string plateNumber;
-            eFuelType fuelType;
+            GasolineEnergySourceManager.eFuelType fuelType;
             float litersToAdd;
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToRefuel);
             fuelType = getFuelTypeFromUser();
             litersToAdd = getEnergyAmountToAddFromUser();
-            if (m_systemLogic.checkIfVehicleIsGasPowered(vehicleToRefuel))
+            if (m_systemLogic.CheckIfVehicleIsGasPowered(vehicleToRefuel))
             {
-                m_systemLogic.addFuelToVehicle(vehicleToRefuel,litersToAdd,fuelType);
+                m_systemLogic.addFuelToVehicle(vehicleToRefuel,litersToAdd, fuelType);
             }
             else
             {
@@ -174,7 +175,7 @@ namespace Ex03.ConsoleUI
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToCharge);
             hoursToAdd = getEnergyAmountToAddFromUser();
-            if (m_systemLogic.checkIfVehicleIsGasPowered(vehicleToCharge))
+            if (m_systemLogic.CheckIfVehicleIsGasPowered(vehicleToCharge))
             {
                 Console.WriteLine("Cannot refuel a gasoline powerd car.");
             }

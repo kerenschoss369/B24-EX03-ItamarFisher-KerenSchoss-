@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    public enum eFuelType
-    {
-        Soler,
-        Octan95,
-        Octan96,
-        Octan98
-    }
+    
 
-    internal class GasolineEnergySourceManager : EnergySourceManager
+    public class GasolineEnergySourceManager : EnergySourceManager
     {
         private readonly eFuelType r_FuelType;
+
+        public enum eFuelType
+        {
+            Soler,
+            Octan95,
+            Octan96,
+            Octan98
+        }
 
         public GasolineEnergySourceManager(float i_MaxEnergySourceAmount, eFuelType i_FuelType)
             : base(i_MaxEnergySourceAmount)
@@ -31,6 +33,7 @@ namespace Ex03.GarageLogic
 
             return isRefuel;
         }
+
 
         public eFuelType fuelType
         {

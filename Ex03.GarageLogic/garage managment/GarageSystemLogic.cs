@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static Ex03.GarageLogic.VehicleFactory;
 
 namespace Ex03.GarageLogic
 {
@@ -12,27 +13,52 @@ namespace Ex03.GarageLogic
         GarageSystemLogic m_GarageSystemLogic;
         List<GarageOpenIssue> m_GarageOpenIssues = new List<GarageOpenIssue>();
         List<Vehicle> m_VehicleList = new List<Vehicle>();
+        VehicleFactory garageSystemFactory = new VehicleFactory();
 
-        /*public List<Vehicle> FilterAndPrintVehiclesPlateNumbers(GarageSystemFactory.eVehicleState i_FilterByVehicleState, bool i_FetchAllVehicles)
+        public void CreateNewVehicleAndSetParamters(VehicleFactory.eVehicleType i_VehicleType)
+        {
+            garageSystemFactory.CreateVehicle(i_VehicleType);
+            switch (i_VehicleType)
+            {
+                case eVehicleType.GasolineMotorcycle:
+                    break;
+                case eVehicleType.ElectricMotorcycle:
+                    break;
+                case eVehicleType.GasolineCar:
+                    break;
+                case eVehicleType.ElectricCar:
+                    break;
+                case eVehicleType.Truck:
+                    break;
+                default://execption shel keren ;d:D:D:D:D:D:D:D:D
+                    throw new ArgumentException("Unknown vehicle type");
+            }
+        }
+
+        public List<Vehicle> FilterAndPrintVehiclesPlateNumbers(GarageOpenIssue.eVehicleState i_VehicleStateFilter, bool i_FetchAllVehicles)
         {
             List<Vehicle> filteredVehicleList = new List<Vehicle>();
+            Vehicle vehicleToAddToList;
+
             if (i_FetchAllVehicles == true)
             {
-                filteredVehicleList = m_GarageFactory.vehiclesList;
+                filteredVehicleList = m_VehicleList;
             }
             else
             {
-                foreach (Vehicle vehicle in m_GarageFactory.vehiclesList)
+                foreach (GarageOpenIssue openIssue in m_GarageOpenIssues)
                 {
-                    if(vehicle.)
-                    filteredVehicleList.Add(vehicle);
+                    if (openIssue.vehicleState == i_VehicleStateFilter)
+                    {
+                        getVehicleUsingPlateNumberIfExist(openIssue.vehiclePlateNumber, out vehicleToAddToList);
+                        filteredVehicleList.Add(vehicleToAddToList);
+                    }
                 }
             }
 
             return filteredVehicleList;
-        }*/
+        }
     
-    //public bool CheckIfPlateNumberInSystem()*/
         public bool getVehicleUsingPlateNumberIfExist(string i_PlateNumber, out Vehicle o_WantedVehicle)
         {
             o_WantedVehicle = null;
@@ -63,7 +89,7 @@ namespace Ex03.GarageLogic
 
             return vehicleExists;
         }
-        public bool checkIfVehicleIsGasPowered(Vehicle i_Vehicle)
+        public bool CheckIfVehicleIsGasPowered(Vehicle i_Vehicle)
         {
 
             return (i_Vehicle.m_EnergySourceManager is GasolineEnergySourceManager);
@@ -75,7 +101,7 @@ namespace Ex03.GarageLogic
              eFuelType fuelType = gasolineEnergySourceManager.fuelType;
              return fuelType.ToString();
          }*/
-        public void changeVehicleState(GarageOpenIssue i_OpenIssue, eVehicleState i_NewVehicleState)
+        private void changeVehicleState(GarageOpenIssue i_OpenIssue, GarageOpenIssue.eVehicleState i_NewVehicleState)
         {
             i_OpenIssue.vehicleState = i_NewVehicleState;
         }
@@ -95,7 +121,7 @@ namespace Ex03.GarageLogic
 
             return hoursCharged;
         }
-        public float addFuelToVehicle(Vehicle i_Vehicle, float i_AmountOfLittersToFill, eFuelType fuelType)
+        public float addFuelToVehicle(Vehicle i_Vehicle, float i_AmountOfLittersToFill, GasolineEnergySourceManager.eFuelType fuelType)
         {
             GasolineEnergySourceManager gasolineEnergySourceManagar = (GasolineEnergySourceManager)i_Vehicle.m_EnergySourceManager;
             float littersFilled;
