@@ -48,7 +48,7 @@ namespace Ex03.GarageLogic
 
             return vehicleExists;
         }
-        private bool getOpenIssueUsingPlateNumberIfExist(string i_PlateNumber, out GarageOpenIssue o_GarageOpenIssue)
+        public bool getOpenIssueUsingPlateNumberIfExist(string i_PlateNumber, out GarageOpenIssue o_GarageOpenIssue)
         {
             o_GarageOpenIssue = null;
             bool vehicleExists = false;
@@ -63,7 +63,7 @@ namespace Ex03.GarageLogic
 
             return vehicleExists;
         }
-        private bool checkIfVehicleIsGasPowered(Vehicle i_Vehicle)
+        public bool checkIfVehicleIsGasPowered(Vehicle i_Vehicle)
         {
 
             return (i_Vehicle.m_EnergySourceManager is GasolineEnergySourceManager);
@@ -75,7 +75,7 @@ namespace Ex03.GarageLogic
              eFuelType fuelType = gasolineEnergySourceManager.fuelType;
              return fuelType.ToString();
          }*/
-        private void changeVehicleState(GarageOpenIssue i_OpenIssue, eVehicleState i_NewVehicleState)
+        public void changeVehicleState(GarageOpenIssue i_OpenIssue, eVehicleState i_NewVehicleState)
         {
             i_OpenIssue.vehicleState = i_NewVehicleState;
         }

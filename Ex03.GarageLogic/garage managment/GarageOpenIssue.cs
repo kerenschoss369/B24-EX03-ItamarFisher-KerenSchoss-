@@ -12,7 +12,7 @@ namespace Ex03.GarageLogic
         Fixed,
         PaidFor
     }
-    internal class GarageOpenIssue
+    public class GarageOpenIssue
     {
         private readonly string r_VehicleOwnerName;
         private readonly string r_VehiclePhoneNumber;
