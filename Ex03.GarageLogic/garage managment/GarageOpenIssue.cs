@@ -33,6 +33,22 @@ namespace Ex03.GarageLogic
             }
         }
 
+        public string vehicleOwnerName
+        {
+            get
+            {
+                return r_VehicleOwnerName;
+            }
+        }
+
+        public string vehiclePhoneNumber
+        {
+            get
+            {
+                return r_VehiclePhoneNumber;
+            }
+        }
+
         public string vehiclePlateNumber
         {
             get

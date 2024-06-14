@@ -34,11 +34,35 @@ namespace Ex03.GarageLogic
 
             m_EnergySourceManager = new GasolineEnergySourceManager(i_MaxEnergySourceAmount, i_FuelType);
         }
+        public string modelName
+        {
+            get
+            {
+                return r_ModelName;
+            }
+        }
+
         public string plateNumber
         {
             get
             {
                 return r_PlateNumber;
+            }
+        }
+
+        public float percentageOfEnergyLeft
+        {
+            get
+            {
+                return m_PercentageOfEnergyLeft;
+            }
+        }
+
+        public List<Wheel> wheelsList
+        {
+            get 
+            {
+                return m_WheelsList;
             }
         }
     }

@@ -14,7 +14,7 @@ namespace Ex03.GarageLogic
         B1
     }
 
-    internal class Motorcycle : Vehicle
+    public class Motorcycle : Vehicle
     {
         private readonly eLicenseType r_LicenseType;
         private readonly int r_EngineDisplacementInCc;
@@ -27,6 +27,22 @@ namespace Ex03.GarageLogic
         public Motorcycle(EnergySourceManager i_EnergySourceManager, float i_MaxEnergySourceAmount)
             : base(k_NumberOfWheels, k_WheelsMaxAirPressure, i_EnergySourceManager, i_MaxEnergySourceAmount)
         {
+        }
+
+        public eLicenseType licenseType
+        {
+            get
+            {
+                return r_LicenseType;
+            }
+        }
+
+        public int engineDisplacementInCc
+        {
+            get
+            {
+                return r_EngineDisplacementInCc;
+            }
         }
     }
 }

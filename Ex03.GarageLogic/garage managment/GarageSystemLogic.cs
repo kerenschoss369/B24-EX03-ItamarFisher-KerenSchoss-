@@ -34,31 +34,28 @@ namespace Ex03.GarageLogic
                     throw new ArgumentException("Unknown vehicle type");
             }
         }
-
-        public List<Vehicle> FilterAndPrintVehiclesPlateNumbers(GarageOpenIssue.eVehicleState i_VehicleStateFilter, bool i_FetchAllVehicles)
+        public List<String> FilterVehiclesPlateNumbersByRequestedState(GarageOpenIssue.eVehicleState i_VehicleStateFilter, bool i_FetchAllVehicles)
         {
-            List<Vehicle> filteredVehicleList = new List<Vehicle>();
-            Vehicle vehicleToAddToList;
+            List<String> filteredPlateNumberList = new List<String>();
 
-            if (i_FetchAllVehicles == true)
+            foreach (GarageOpenIssue openIssue in m_GarageOpenIssues)
             {
-                filteredVehicleList = m_VehicleList;
-            }
-            else
-            {
-                foreach (GarageOpenIssue openIssue in m_GarageOpenIssues)
+
+                if (i_FetchAllVehicles == true)
+                {
+                    filteredPlateNumberList.Add(openIssue.vehiclePlateNumber);
+                }
+                else
                 {
                     if (openIssue.vehicleState == i_VehicleStateFilter)
                     {
-                        getVehicleUsingPlateNumberIfExist(openIssue.vehiclePlateNumber, out vehicleToAddToList);
-                        filteredVehicleList.Add(vehicleToAddToList);
+                        filteredPlateNumberList.Add(openIssue.vehiclePlateNumber);
                     }
                 }
             }
 
-            return filteredVehicleList;
+            return filteredPlateNumberList;
         }
-    
         public bool getVehicleUsingPlateNumberIfExist(string i_PlateNumber, out Vehicle o_WantedVehicle)
         {
             o_WantedVehicle = null;

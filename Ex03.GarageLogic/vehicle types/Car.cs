@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Ex03.GarageLogic.GarageOpenIssue;
 
 namespace Ex03.GarageLogic
 {
@@ -22,7 +23,7 @@ namespace Ex03.GarageLogic
         Five = 5
     }
 
-    internal class Car : Vehicle
+    public class Car : Vehicle
     {
         private eCarColor r_CarColor;
         private readonly eCarDoorsAmount r_CarDoorsAmount;
@@ -36,5 +37,38 @@ namespace Ex03.GarageLogic
             : base(k_NumberOfWheels, k_WheelsMaxAirPressure, i_EnergySourceManager, i_MaxEnergySourceAmount)
         {
         }
+
+        public eCarColor carColor
+        {
+            get
+            {
+                return r_CarColor;
+            }
+        }
+
+        public eCarDoorsAmount carDoorsAmount
+        {
+            get
+            {
+                return r_CarDoorsAmount;
+            }
+        }
+
+        public int numberOfWheels
+        {
+            get
+            {
+                return k_NumberOfWheels;
+            }
+        }
+
+        public float wheelsMaxAirPressure
+        {
+            get
+            {
+                return k_WheelsMaxAirPressure;
+            }
+        }
+
     }
 }
