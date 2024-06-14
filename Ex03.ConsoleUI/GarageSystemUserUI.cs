@@ -28,17 +28,18 @@ namespace Ex03.ConsoleUI
         public void printMenu()
         {
             int userChoiceOfAction;
-            while(true)
+            while (true)
             {
-                Console.Write("Please select an action:\n" +
-                                "1. Add a new vehicle to the garage\n" +
-                                "2. Display list of license numbers of vehicles in the garage and filter them by condition\n" +
-                                "3. Change the status of a vehicle in the garage\n" +
-                                "4. fill tires of vehicle in the garage\n" +
-                                "5. Refuel a gasoline-powered vehicle in the garage\n" +
-                                "6. Charge an electric vehicle in the garage\n" +
-                                "7. Display vehicle details by license number\n\n" +
-                                "Type your selection here: ");
+                Console.Write("\n___________________________________________________________________________\n" +
+                    "Please select an action:\n" +
+                    "1. Add a new vehicle to the garage\n" +
+                    "2. Display list of license numbers of vehicles in the garage and filter them by condition\n" +
+                    "3. Change the status of a vehicle in the garage\n" +
+                    "4. fill tires of vehicle in the garage\n" +
+                    "5. Refuel a gasoline-powered vehicle in the garage\n" +
+                    "6. Charge an electric vehicle in the garage\n" +
+                    "7. Display vehicle details by license number\n\n" +
+                    "Type your selection here: ");
 
                 while (!int.TryParse(Console.ReadLine(), out userChoiceOfAction) || (userChoiceOfAction < 1) || (userChoiceOfAction > 7)) //FIX INVALID VALUES MAYBE WITH ERRORS
                 {
@@ -71,7 +72,7 @@ namespace Ex03.ConsoleUI
                 }
             }
         }
-            
+
 
         private void addNewVehicle()
         {
