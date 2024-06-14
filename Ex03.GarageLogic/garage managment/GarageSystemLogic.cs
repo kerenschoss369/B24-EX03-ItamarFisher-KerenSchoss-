@@ -15,26 +15,11 @@ namespace Ex03.GarageLogic
         List<Vehicle> m_VehicleList = new List<Vehicle>();
         VehicleFactory garageSystemFactory = new VehicleFactory();
 
-        public void CreateNewVehicleAndSetParamters(VehicleFactory.eVehicleType i_VehicleType)
+        public void CreateNewVehicle(VehicleFactory.eVehicleType i_VehicleType)
         {
             garageSystemFactory.CreateVehicle(i_VehicleType);
-            switch (i_VehicleType)
-            {
-                case eVehicleType.GasolineMotorcycle:
-                    break;
-                case eVehicleType.ElectricMotorcycle:
-                    break;
-                case eVehicleType.GasolineCar:
-                    break;
-                case eVehicleType.ElectricCar:
-                    break;
-                case eVehicleType.Truck:
-                    break;
-                default://execption shel keren ;d:D:D:D:D:D:D:D:D
-                    throw new ArgumentException("Unknown vehicle type");
-            }
         }
-
+        public void Set
         public List<Vehicle> FilterAndPrintVehiclesPlateNumbers(GarageOpenIssue.eVehicleState i_VehicleStateFilter, bool i_FetchAllVehicles)
         {
             List<Vehicle> filteredVehicleList = new List<Vehicle>();
