@@ -8,25 +8,14 @@ namespace Ex03.GarageLogic
 {
     
 
+
+
+    
+
     public class Motorcycle : Vehicle
     {
         private eLicenseType m_LicenseType;
         private int m_EngineDisplacementInCc;
-        private const int k_NumberOfWheels = 2;
-        private const float k_WheelsMaxAirPressure = 33;
-
-        public enum eLicenseType
-        {
-            A,
-            A1,
-            AA,
-            B1
-        }
-
-    public class Motorcycle : Vehicle
-    {
-        private readonly eLicenseType r_LicenseType;
-        private readonly int r_EngineDisplacementInCc;
         private const int k_NumberOfWheels = 2;
         private const float k_WheelsMaxAirPressure = 33;
         public Motorcycle(EnergySourceManager i_EnergySourceManager, float i_MaxEnergySourceAmount, GasolineEnergySourceManager.eFuelType i_FuelType)
@@ -37,9 +26,15 @@ namespace Ex03.GarageLogic
             : base(k_NumberOfWheels, k_WheelsMaxAirPressure, i_EnergySourceManager, i_MaxEnergySourceAmount)
         {
         }
-       
+        public enum eLicenseType
+        {
+            A,
+            A1,
+            AA,
+            B1
+        }
 
-        public eLicenseType LicenseType
+        public eLicenseType licenseType
         {
             get
             {
@@ -51,7 +46,7 @@ namespace Ex03.GarageLogic
             }
         }
 
-        public int EngineDisplacementInCc
+        public int engineDisplacementInCc
         {
             get
             {

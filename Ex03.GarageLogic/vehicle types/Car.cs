@@ -7,26 +7,11 @@ using static Ex03.GarageLogic.GarageOpenIssue;
 
 namespace Ex03.GarageLogic
 {
-    public enum eCarColor
-    {
-        Yellow,
-        White,
-        Red,
-        Black
-    }
-
-    public enum eCarDoorsAmount
-    {
-        Two = 2,
-        Three = 3,
-        Four = 4,
-        Five = 5
-    }
-
+   
     public class Car : Vehicle
     {
         private eCarColor r_CarColor;
-        private readonly eCarDoorsAmount r_CarDoorsAmount;
+        private eCarDoorsAmount r_CarDoorsAmount;
         private const int k_NumberOfWheels = 5;
         private const float k_WheelsMaxAirPressure = 31;
         public Car(EnergySourceManager i_EnergySourceManager, float i_MaxEnergySourceAmount, GasolineEnergySourceManager.eFuelType i_FuelType)
@@ -38,11 +23,31 @@ namespace Ex03.GarageLogic
         {
         }
 
+        public enum eCarColor
+        {
+            Yellow,
+            White,
+            Red,
+            Black
+        }
+
+        public enum eCarDoorsAmount
+        {
+            Two = 2,
+            Three = 3,
+            Four = 4,
+            Five = 5
+        }
+
         public eCarColor carColor
         {
             get
             {
                 return r_CarColor;
+            }
+            set
+            {
+                r_CarColor = value;
             }
         }
 
@@ -51,6 +56,10 @@ namespace Ex03.GarageLogic
             get
             {
                 return r_CarDoorsAmount;
+            }
+            set
+            {
+                r_CarDoorsAmount = value;
             }
         }
 

@@ -32,13 +32,13 @@ namespace Ex03.GarageLogic
         public void SetCarInputParameters(Car io_Car, Car.eCarColor i_CarColor, Car.eCarDoorsAmount i_CarDoorsAmount)
         {
             io_Car.carColor = i_CarColor;
-            io_Car.CarDoorsAmount = i_CarDoorsAmount;
+            io_Car.carDoorsAmount = i_CarDoorsAmount;
         }
 
         public void SetMotorcycleInputParameters(Motorcycle io_Motorcycle, Motorcycle.eLicenseType i_LicenseType, int i_EngineDisplacementCc)
         {
-            io_Motorcycle.LicenseType = i_LicenseType;
-            io_Motorcycle.EngineDisplacementInCc = i_EngineDisplacementCc;
+            io_Motorcycle.licenseType = i_LicenseType;
+            io_Motorcycle.engineDisplacementInCc = i_EngineDisplacementCc;
         }
 
         public void SetTruckcycleInputParameters(Truck io_Truck, float i_CargoVolume, bool i_IsCarryingHazardousMaterials)
