@@ -19,7 +19,25 @@ namespace Ex03.GarageLogic
         {
             garageSystemFactory.CreateVehicle(i_VehicleType);
         }
-        public void Set
+
+        public void SetCarInputParameters(Car io_Car,Car.eCarColor i_CarColor, Car.eCarDoorsAmount i_CarDoorsAmount)
+        {
+            io_Car.carColor = i_CarColor;
+            io_Car.CarDoorsAmount = i_CarDoorsAmount;
+        }
+
+        public void SetMotorcycleInputParameters(Motorcycle io_Motorcycle, Motorcycle.eLicenseType i_LicenseType, int i_EngineDisplacementCc)
+        {
+            io_Motorcycle.LicenseType = i_LicenseType;
+            io_Motorcycle.EngineDisplacementInCc = i_EngineDisplacementCc;
+        }
+
+        public void SetTruckcycleInputParameters(Truck io_Truck, float i_CargoVolume, bool i_IsCarryingHazardousMaterials)
+        {
+            io_Truck.cargoVolume = i_CargoVolume;
+            io_Truck.isCarryingHazardousMaterials = i_IsCarryingHazardousMaterials;
+        }
+
         public List<Vehicle> FilterAndPrintVehiclesPlateNumbers(GarageOpenIssue.eVehicleState i_VehicleStateFilter, bool i_FetchAllVehicles)
         {
             List<Vehicle> filteredVehicleList = new List<Vehicle>();
