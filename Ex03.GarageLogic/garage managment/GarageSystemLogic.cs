@@ -101,7 +101,7 @@ namespace Ex03.GarageLogic
              eFuelType fuelType = gasolineEnergySourceManager.fuelType;
              return fuelType.ToString();
          }*/
-        private void changeVehicleState(GarageOpenIssue i_OpenIssue, GarageOpenIssue.eVehicleState i_NewVehicleState)
+        public void changeVehicleState(GarageOpenIssue i_OpenIssue, GarageOpenIssue.eVehicleState i_NewVehicleState)
         {
             i_OpenIssue.vehicleState = i_NewVehicleState;
         }

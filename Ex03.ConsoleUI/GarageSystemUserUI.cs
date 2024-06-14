@@ -185,9 +185,9 @@ namespace Ex03.ConsoleUI
             }
         }
 
-        private eVehicleState getStateToChangeToFromUser()
+        private GarageOpenIssue.eVehicleState getStateToChangeToFromUser()
         {
-            eVehicleState stateToChangeTo ;
+            GarageOpenIssue.eVehicleState stateToChangeTo ;
             bool isValidState = false;
 
             do
@@ -195,7 +195,7 @@ namespace Ex03.ConsoleUI
                 Console.Write("Please enter the state to change to (InMaintenance, Fixed, PaidFor): ");
                 string input = Console.ReadLine();
 
-                if (Enum.TryParse(input, true, out stateToChangeTo) && Enum.IsDefined(typeof(eVehicleState), stateToChangeTo))
+                if (Enum.TryParse(input, true, out stateToChangeTo) && Enum.IsDefined(typeof(GarageOpenIssue.eVehicleState), stateToChangeTo))
                 {
                     isValidState = true;
 
@@ -215,7 +215,7 @@ namespace Ex03.ConsoleUI
             Vehicle vehicleToChangeStateTo;
             GarageOpenIssue issueToChangeStateTo;
             string plateNumber;
-            eVehicleState stateToChangeTo;
+            GarageOpenIssue.eVehicleState stateToChangeTo;
             bool isPlateNumberHasOpenIssue = false;  
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToChangeStateTo);
