@@ -24,7 +24,7 @@ namespace Ex03.GarageLogic
 
     internal class Car : Vehicle
     {
-        private readonly eCarColor r_CarColor;
+        private eCarColor r_CarColor;
         private readonly eCarDoorsAmount r_CarDoorsAmount;
         private const int k_NumberOfWheels = 5;
         private const float k_WheelsMaxAirPressure = 31;

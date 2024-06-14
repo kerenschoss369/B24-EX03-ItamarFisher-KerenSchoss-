@@ -12,7 +12,7 @@ namespace Ex03.GarageLogic
         private bool m_IsCarryingHazardousMaterials;
         private const int k_NumberOfWheels = 12;
         private const float k_WheelsMaxAirPressure = 28;
-        private const eFuelType k_FuelType = eFuelType.Soler;
+        private const GasolineEnergySourceManager.eFuelType k_FuelType = GasolineEnergySourceManager.eFuelType.Soler;
         private const float k_TankFuelCapacity = 120;
         private GasolineEnergySourceManager m_TruckGasolineEnergyManagaer;
         public Truck()
