@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    internal class Wheel
+    public class Wheel
     {
         private readonly string r_ManufacturerName;
         private float m_CurrentAirPressure;
@@ -46,6 +46,14 @@ namespace Ex03.GarageLogic
             get
             {
                 return r_MaxAirPressureDefinedByManufacturer;
+            }
+        }
+
+        public string manufacturerName
+        {
+            get
+            {
+                return r_ManufacturerName;
             }
         }
     }

@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using static Ex03.ConsoleUI.GarageSystemUserUI;
+using static Ex03.GarageLogic.GarageOpenIssue;
 
 namespace Ex03.ConsoleUI
 {
@@ -48,7 +50,7 @@ namespace Ex03.ConsoleUI
                     //addNewVehicle();
                     break;
                 case eGarageMenuOptions.DisplayAllPlateNumbersAndFilter:
-                    //displayAllPlateNumbersAndFilter();
+                    displayAllPlateNumbersAndFilter();
                     break;
                 case eGarageMenuOptions.ChangeVehicleStatus:
                     changeVehicleStatus();
@@ -63,7 +65,7 @@ namespace Ex03.ConsoleUI
                     chargeElectricVehicle();
                     break;
                 case eGarageMenuOptions.DisplayVehicleDetails:
-                    //displayVehicleDetails();
+                    displayVehicleDetails();
                     break;
             }
         }
@@ -93,7 +95,7 @@ namespace Ex03.ConsoleUI
 
                 if (m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out o_WantedVehicle))
                 {
-                    isPlateNumberBelongsToExistingCar= true;
+                    isPlateNumberBelongsToExistingCar = true;
                 }
             }
 
@@ -122,7 +124,7 @@ namespace Ex03.ConsoleUI
 
             }
             while (!isValidFuelType);
-            
+
             return fuelType;
         }
         private float getEnergyAmountToAddFromUser()
@@ -160,7 +162,7 @@ namespace Ex03.ConsoleUI
             litersToAdd = getEnergyAmountToAddFromUser();
             if (m_systemLogic.CheckIfVehicleIsGasPowered(vehicleToRefuel))
             {
-                m_systemLogic.addFuelToVehicle(vehicleToRefuel,litersToAdd, fuelType);
+                m_systemLogic.addFuelToVehicle(vehicleToRefuel, litersToAdd, fuelType);
             }
             else
             {
@@ -187,7 +189,7 @@ namespace Ex03.ConsoleUI
 
         private GarageOpenIssue.eVehicleState getStateToChangeToFromUser()
         {
-            GarageOpenIssue.eVehicleState stateToChangeTo ;
+            GarageOpenIssue.eVehicleState stateToChangeTo;
             bool isValidState = false;
 
             do
@@ -205,7 +207,7 @@ namespace Ex03.ConsoleUI
                     Console.WriteLine("Invalid input. Please enter a valid state.");
                 }
 
-            } 
+            }
             while (!isValidState);
 
             return stateToChangeTo;
@@ -216,7 +218,7 @@ namespace Ex03.ConsoleUI
             GarageOpenIssue issueToChangeStateTo;
             string plateNumber;
             GarageOpenIssue.eVehicleState stateToChangeTo;
-            bool isPlateNumberHasOpenIssue = false;  
+            bool isPlateNumberHasOpenIssue = false;
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToChangeStateTo);
             stateToChangeTo = getStateToChangeToFromUser();
@@ -246,5 +248,106 @@ namespace Ex03.ConsoleUI
             m_systemLogic.FillAllWheelsAirPressureToMax(vehicleToFlateTiresTo);
 
         }
+
+        private void displayAllPlateNumbersAndFilter()
+        {
+            string stateChosenByUser;
+            eVehicleState stateToFilterBy;
+            List<string> vehicleToPrint;
+            bool fetchAllVehicles = true;
+
+            do
+            {
+                Console.Write("Please select the requested state to filter the plate numbers by,\n"
+                + "to view all the existing vehicles in the garage Please type ''all''\n" +
+                "Your Input: ");
+                stateChosenByUser = Console.ReadLine();
+            }
+            while ((stateChosenByUser == "all") || (Enum.TryParse(stateChosenByUser, true, out stateToFilterBy) && Enum.IsDefined(typeof(eVehicleState), stateToFilterBy)));
+
+            if (stateChosenByUser != "all")
+            {
+                fetchAllVehicles = false;
+            }
+            vehicleToPrint = m_systemLogic.FilterVehiclesPlateNumbersByRequestedState(stateToFilterBy, !fetchAllVehicles);
+
+            printPlateNumbersList(vehicleToPrint);
+        }
+
+        private void printPlateNumbersList(List<string> i_VehicleToPrint)
+        {
+            if (i_VehicleToPrint == null || i_VehicleToPrint.Count == 0)
+            {
+                Console.WriteLine("No vehicles to display.");
+            }
+            else
+            {
+                Console.WriteLine("List of plate numbers:");
+                foreach (string plateNumber in i_VehicleToPrint)
+                {
+                    Console.WriteLine(plateNumber);
+                }
+            }
+        }
+
+        private void displayVehicleDetails()
+        {
+            Vehicle vehicleToDisplayDetailsOf;
+            GarageOpenIssue openIssueToDisplayDetailsOf;
+            string plateNumber;
+            GarageOpenIssue.eVehicleState stateToChangeTo;
+            bool isPlateNumberHasOpenIssue = false;
+
+            plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToDisplayDetailsOf);
+            stateToChangeTo = getStateToChangeToFromUser();
+            do
+            {
+                if (m_systemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out openIssueToDisplayDetailsOf))
+                {
+                    isPlateNumberHasOpenIssue = true;
+                }
+                else
+                {
+                    Console.WriteLine("Sorry, this plate Number does not have an open issue in our garage. \nPlease enter a valid state.");
+                    plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToDisplayDetailsOf);
+                }
+            }
+            while (!isPlateNumberHasOpenIssue);
+
+            printVehicleDetails(vehicleToDisplayDetailsOf, openIssueToDisplayDetailsOf);
+        }
+
+        private void printVehicleDetails(Vehicle i_VehicleToDisplayDetailsOf, GarageOpenIssue i_OpenIssueToDisplayDetailsOf)
+        {
+            Console.WriteLine(string.Format("Plate Number: {0}", i_VehicleToDisplayDetailsOf.plateNumber));
+            Console.WriteLine(string.Format("Model Name: {0}", i_VehicleToDisplayDetailsOf.modelName));
+            Console.WriteLine(string.Format("Owner Name: {0}", i_OpenIssueToDisplayDetailsOf.vehicleOwnerName));
+            Console.WriteLine(string.Format("Owner Phone Number: {0}", i_OpenIssueToDisplayDetailsOf.vehiclePhoneNumber));
+            Console.WriteLine(string.Format("Energy Percentage Left: {0}%", i_VehicleToDisplayDetailsOf.percentageOfEnergyLeft));
+
+            if (i_VehicleToDisplayDetailsOf is Car car)
+            {
+                Console.WriteLine(string.Format("Car Color: {0}", car.carColor));
+                Console.WriteLine(string.Format("Number of Doors: {0}", car.carDoorsAmount));
+            }
+            else if (i_VehicleToDisplayDetailsOf is Motorcycle motorcycle)
+            {
+                Console.WriteLine(string.Format("License Type: {0}", motorcycle.licenseType));
+                Console.WriteLine(string.Format("Engine Displacement (cc): {0}", motorcycle.engineDisplacementInCc));
+            }
+            else if (i_VehicleToDisplayDetailsOf is Truck truck)
+            {
+                Console.WriteLine(string.Format("Cargo Volume: {0}", truck.cargoVolume));
+                Console.WriteLine(string.Format("Carrying Hazardous Materials: {0}", truck.isCarryingHazardousMaterials));
+            }
+
+            Console.WriteLine("Wheels Info:");
+            foreach (var wheel in i_VehicleToDisplayDetailsOf.wheelsList)
+            {
+                Console.WriteLine(string.Format("Manufacturer: {0}, Current Air Pressure: {1}, Max Air Pressure: {2}", wheel.manufacturerName, wheel.currentAirPressure, wheel.maxAirPressureDefinedByManufacturer));
+            }
+
+        }
     }
 }
+

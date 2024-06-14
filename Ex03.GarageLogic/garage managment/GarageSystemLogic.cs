@@ -46,14 +46,13 @@ namespace Ex03.GarageLogic
             io_Truck.cargoVolume = i_CargoVolume;
             io_Truck.isCarryingHazardousMaterials = i_IsCarryingHazardousMaterials;
         }
-
         public List<String> FilterVehiclesPlateNumbersByRequestedState(GarageOpenIssue.eVehicleState i_VehicleStateFilter, bool i_FetchAllVehicles)
         {
             List<String> filteredPlateNumberList = new List<String>();
 
             foreach (GarageOpenIssue openIssue in m_GarageOpenIssues)
             {
-                
+
                 if (i_FetchAllVehicles == true)
                 {
                     filteredPlateNumberList.Add(openIssue.vehiclePlateNumber);
@@ -69,7 +68,6 @@ namespace Ex03.GarageLogic
 
             return filteredPlateNumberList;
         }
-
         public bool getVehicleUsingPlateNumberIfExist(string i_PlateNumber, out Vehicle o_WantedVehicle)
         {
             o_WantedVehicle = null;
