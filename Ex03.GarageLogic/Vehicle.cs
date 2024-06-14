@@ -40,6 +40,10 @@ namespace Ex03.GarageLogic
             {
                 return r_PlateNumber;
             }
+            set
+            {
+                r_PlateNumber = value;
+            }
         }
     }
 }

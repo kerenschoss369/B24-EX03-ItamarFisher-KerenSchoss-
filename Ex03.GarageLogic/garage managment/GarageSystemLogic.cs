@@ -15,12 +15,21 @@ namespace Ex03.GarageLogic
         List<Vehicle> m_VehicleList = new List<Vehicle>();
         VehicleFactory garageSystemFactory = new VehicleFactory();
 
-        public void CreateNewVehicle(VehicleFactory.eVehicleType i_VehicleType)
+        public void CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType i_VehicleType, string i_VehiclePlateNumber)
         {
-            garageSystemFactory.CreateVehicle(i_VehicleType);
+            Vehicle vehicle = garageSystemFactory.CreateVehicle(i_VehicleType);
+            vehicle.plateNumber = i_VehiclePlateNumber;
+            m_VehicleList.Add(vehicle);
+
+        }
+        public void AddNewOpenIssue(string i_OwnerName, string i_OwnerPhoneNumber, GarageOpenIssue.eVehicleState i_VehicleState, string i_VehiclePlateNumber)
+        {
+            GarageOpenIssue issue = new GarageOpenIssue(i_OwnerName, i_OwnerPhoneNumber, i_VehicleState, i_VehiclePlateNumber);
+            m_GarageOpenIssues.Add(issue);
+
         }
 
-        public void SetCarInputParameters(Car io_Car,Car.eCarColor i_CarColor, Car.eCarDoorsAmount i_CarDoorsAmount)
+        public void SetCarInputParameters(Car io_Car, Car.eCarColor i_CarColor, Car.eCarDoorsAmount i_CarDoorsAmount)
         {
             io_Car.carColor = i_CarColor;
             io_Car.CarDoorsAmount = i_CarDoorsAmount;
@@ -38,30 +47,29 @@ namespace Ex03.GarageLogic
             io_Truck.isCarryingHazardousMaterials = i_IsCarryingHazardousMaterials;
         }
 
-        public List<Vehicle> FilterAndPrintVehiclesPlateNumbers(GarageOpenIssue.eVehicleState i_VehicleStateFilter, bool i_FetchAllVehicles)
+        public List<String> FilterVehiclesPlateNumbersByRequestedState(GarageOpenIssue.eVehicleState i_VehicleStateFilter, bool i_FetchAllVehicles)
         {
-            List<Vehicle> filteredVehicleList = new List<Vehicle>();
-            Vehicle vehicleToAddToList;
+            List<String> filteredPlateNumberList = new List<String>();
 
-            if (i_FetchAllVehicles == true)
+            foreach (GarageOpenIssue openIssue in m_GarageOpenIssues)
             {
-                filteredVehicleList = m_VehicleList;
-            }
-            else
-            {
-                foreach (GarageOpenIssue openIssue in m_GarageOpenIssues)
+                
+                if (i_FetchAllVehicles == true)
+                {
+                    filteredPlateNumberList.Add(openIssue.vehiclePlateNumber);
+                }
+                else
                 {
                     if (openIssue.vehicleState == i_VehicleStateFilter)
                     {
-                        getVehicleUsingPlateNumberIfExist(openIssue.vehiclePlateNumber, out vehicleToAddToList);
-                        filteredVehicleList.Add(vehicleToAddToList);
+                        filteredPlateNumberList.Add(openIssue.vehiclePlateNumber);
                     }
                 }
             }
 
-            return filteredVehicleList;
+            return filteredPlateNumberList;
         }
-    
+
         public bool getVehicleUsingPlateNumberIfExist(string i_PlateNumber, out Vehicle o_WantedVehicle)
         {
             o_WantedVehicle = null;

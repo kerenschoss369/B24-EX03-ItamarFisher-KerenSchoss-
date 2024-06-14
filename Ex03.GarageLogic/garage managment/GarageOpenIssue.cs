@@ -10,7 +10,7 @@ namespace Ex03.GarageLogic
     public class GarageOpenIssue
     {
         private readonly string r_VehicleOwnerName;
-        private readonly string r_VehiclePhoneNumber;
+        private readonly string r_OwnerPhoneNumber;
         private eVehicleState m_VehicleState;
         private readonly string m_VehiclePlateNumber;
 
@@ -19,6 +19,15 @@ namespace Ex03.GarageLogic
             InMaintenance,
             Fixed,
             PaidFor
+        }
+
+        public GarageOpenIssue(string r_VehicleOwnerName, string r_VehiclePhoneNumber, eVehicleState vehicleState, string vehiclePlateNumber)
+        {
+            this.r_VehicleOwnerName = r_VehicleOwnerName;
+            this.r_OwnerPhoneNumber = r_VehiclePhoneNumber;
+            this.vehicleState = vehicleState;
+            m_VehiclePlateNumber = vehiclePlateNumber;
+            this.vehicleState = vehicleState;
         }
 
         public eVehicleState vehicleState

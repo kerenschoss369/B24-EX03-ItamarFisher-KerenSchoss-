@@ -8,5 +8,11 @@ namespace Ex03.ConsoleUI
 {
     internal class Program
     {
+        private static void Main()
+        {
+            GarageSystemUserUI garageSystemUserUI = new GarageSystemUserUI();
+            garageSystemUserUI.printMenu();
+        }
+    
     }
 }
