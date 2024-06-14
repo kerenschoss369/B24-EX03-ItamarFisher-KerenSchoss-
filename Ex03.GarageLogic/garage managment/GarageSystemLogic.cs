@@ -120,7 +120,7 @@ namespace Ex03.GarageLogic
             foreach (Wheel wheel in i_Vehicle.m_WheelsList)
             {
                 amountOfAirToFill = wheel.maxAirPressureDefinedByManufacturer - wheel.currentAirPressure;
-                wheel.tryInsreaseWheelAirPressure(amountOfAirToFill);
+                wheel.tryIncreaseWheelAirPressure(amountOfAirToFill);
             }
         }
         public float chargeBatteryToVehicle(Vehicle i_Vehicle, float i_AmountOfEnergyToAdd)
@@ -138,6 +138,16 @@ namespace Ex03.GarageLogic
             gasolineEnergySourceManagar.RefuelVehicleUntillFullOrLitersToAdd(i_AmountOfLittersToFill, fuelType, out littersFilled);
 
             return littersFilled;
+        }
+        public bool SetWheelManufacturerAndWheelAirPressure(ref Wheel io_Wheel, string i_ManufacturerName, float i_WheelCurrentAirPressure)
+        {
+            bool isValidCurrentAirPressure = isValidCurrentAirPressure = io_Wheel.tryIncreaseWheelAirPressure(i_WheelCurrentAirPressure);
+            if (isValidCurrentAirPressure == true)
+            {
+                io_Wheel.manufacturerName = i_ManufacturerName;
+            }
+
+            return isValidCurrentAirPressure;
         }
         public bool validatePlateNumber(string i_plateNumber)
         {
