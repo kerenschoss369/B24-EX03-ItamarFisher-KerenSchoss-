@@ -15,24 +15,27 @@ namespace Ex03.GarageLogic
         List<Vehicle> m_VehicleList = new List<Vehicle>();
         VehicleFactory garageSystemFactory = new VehicleFactory();
 
-        public void CreateNewVehicleAndSetParamters(VehicleFactory.eVehicleType i_VehicleType)
+        public void CreateNewVehicle(VehicleFactory.eVehicleType i_VehicleType)
         {
             garageSystemFactory.CreateVehicle(i_VehicleType);
-            switch (i_VehicleType)
-            {
-                case eVehicleType.GasolineMotorcycle:
-                    break;
-                case eVehicleType.ElectricMotorcycle:
-                    break;
-                case eVehicleType.GasolineCar:
-                    break;
-                case eVehicleType.ElectricCar:
-                    break;
-                case eVehicleType.Truck:
-                    break;
-                default://execption shel keren ;d:D:D:D:D:D:D:D:D
-                    throw new ArgumentException("Unknown vehicle type");
-            }
+        }
+
+        public void SetCarInputParameters(Car io_Car,Car.eCarColor i_CarColor, Car.eCarDoorsAmount i_CarDoorsAmount)
+        {
+            io_Car.carColor = i_CarColor;
+            io_Car.CarDoorsAmount = i_CarDoorsAmount;
+        }
+
+        public void SetMotorcycleInputParameters(Motorcycle io_Motorcycle, Motorcycle.eLicenseType i_LicenseType, int i_EngineDisplacementCc)
+        {
+            io_Motorcycle.LicenseType = i_LicenseType;
+            io_Motorcycle.EngineDisplacementInCc = i_EngineDisplacementCc;
+        }
+
+        public void SetTruckcycleInputParameters(Truck io_Truck, float i_CargoVolume, bool i_IsCarryingHazardousMaterials)
+        {
+            io_Truck.cargoVolume = i_CargoVolume;
+            io_Truck.isCarryingHazardousMaterials = i_IsCarryingHazardousMaterials;
         }
         public List<String> FilterVehiclesPlateNumbersByRequestedState(GarageOpenIssue.eVehicleState i_VehicleStateFilter, bool i_FetchAllVehicles)
         {

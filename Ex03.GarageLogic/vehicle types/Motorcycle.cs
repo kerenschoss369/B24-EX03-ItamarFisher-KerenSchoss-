@@ -6,13 +6,22 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    public enum eLicenseType
+    
+
+    public class Motorcycle : Vehicle
     {
-        A,
-        A1,
-        AA,
-        B1
-    }
+        private eLicenseType m_LicenseType;
+        private int m_EngineDisplacementInCc;
+        private const int k_NumberOfWheels = 2;
+        private const float k_WheelsMaxAirPressure = 33;
+
+        public enum eLicenseType
+        {
+            A,
+            A1,
+            AA,
+            B1
+        }
 
     public class Motorcycle : Vehicle
     {
@@ -28,20 +37,29 @@ namespace Ex03.GarageLogic
             : base(k_NumberOfWheels, k_WheelsMaxAirPressure, i_EnergySourceManager, i_MaxEnergySourceAmount)
         {
         }
+       
 
-        public eLicenseType licenseType
+        public eLicenseType LicenseType
         {
             get
             {
-                return r_LicenseType;
+                return m_LicenseType;
+            }
+            set
+            {
+                m_LicenseType = value;
             }
         }
 
-        public int engineDisplacementInCc
+        public int EngineDisplacementInCc
         {
             get
             {
-                return r_EngineDisplacementInCc;
+                return m_EngineDisplacementInCc;
+            }
+            set
+            {
+                m_EngineDisplacementInCc = value;
             }
         }
     }

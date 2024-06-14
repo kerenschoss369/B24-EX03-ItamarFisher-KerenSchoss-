@@ -19,12 +19,15 @@ namespace Ex03.GarageLogic
             : base(k_NumberOfWheels, k_WheelsMaxAirPressure, new GasolineEnergySourceManager(k_TankFuelCapacity, k_FuelType), k_TankFuelCapacity, k_FuelType)//Maybe 2 ctors could go along better
         {
         }
-
         public float cargoVolume
         {
             get
             {
                 return m_CargoVolume;
+            }
+            set
+            {
+                m_CargoVolume = value;
             }
         }
 
@@ -34,6 +37,11 @@ namespace Ex03.GarageLogic
             {
                 return m_IsCarryingHazardousMaterials;
             }
+            set
+            {
+                m_IsCarryingHazardousMaterials = value;
+            }
         }
     }
 }
+
