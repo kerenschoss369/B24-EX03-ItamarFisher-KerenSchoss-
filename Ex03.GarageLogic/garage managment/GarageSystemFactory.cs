@@ -7,7 +7,7 @@ namespace Ex03.GarageLogic
     {
         public enum eVehicleType
         {
-            GasolineMotorcycle,
+            GasolineMotorcycle=1,
             ElectricMotorcycle,
             GasolineCar,
             ElectricCar,

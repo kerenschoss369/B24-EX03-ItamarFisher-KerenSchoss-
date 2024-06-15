@@ -60,6 +60,11 @@ namespace Ex03.GarageLogic
             {
                 return m_PercentageOfEnergyLeft;
             }
+            set
+            {
+                m_PercentageOfEnergyLeft= value;
+            }
+
         }
 
         public List<Wheel> wheelsList

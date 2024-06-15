@@ -7,7 +7,11 @@ using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using static Ex03.ConsoleUI.GarageSystemUserUI;
+using static Ex03.GarageLogic.Car;
 using static Ex03.GarageLogic.GarageOpenIssue;
+using static Ex03.GarageLogic.GasolineEnergySourceManager;
+using static Ex03.GarageLogic.Motorcycle;
+using static Ex03.GarageLogic.VehicleFactory;
 
 namespace Ex03.ConsoleUI
 {
@@ -50,7 +54,7 @@ namespace Ex03.ConsoleUI
                 switch ((eGarageMenuOptions)userChoiceOfAction)
                 {
                     case eGarageMenuOptions.AddNewVehicle:
-                        addNewVehicle();
+                        addNewVehicleToTheGarage();
                         break;
                     case eGarageMenuOptions.DisplayAllPlateNumbersAndFilter:
                         displayAllPlateNumbersAndFilter();
@@ -73,18 +77,11 @@ namespace Ex03.ConsoleUI
                 }
             }
         }
-
-
-        private void addNewVehicle()
+        private void addNewVehicleToTheGarage()
         {
             Vehicle vehicleToAddOrUpdate;
             GarageOpenIssue issueToAddOrUpdate = null;
             string plateNumber;
-            GarageOpenIssue.eVehicleState stateToChangeTo;
-            string vehicleType, carColor, licenceType, ownerName, ownerPhoneNumber, energyType, WheelsSetUpOptionInput, doorsAmount;
-            float fuelType, existingAirPressure, cargoVolume;
-            int cc;
-            bool isValidWheelsSetUpOptionInput= false;
 
             plateNumber = getValidatePlateNumberFromUser();
             if (m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate))
@@ -95,100 +92,321 @@ namespace Ex03.ConsoleUI
             }
             else
             {
-                Console.Write("Owner name: ");
-                ownerName = Console.ReadLine();
-                Console.Write("owner phone name: ");
-                ownerPhoneNumber = Console.ReadLine();
+                getCarDetailsFromUserAndAddToGarage(plateNumber, vehicleToAddOrUpdate);
+                getOpenIssueDetailsFromUserAndAddToGarage(plateNumber);
+            }
+        }
+        private void getCarDetailsFromUserAndAddToGarage(string i_PlateNumber, Vehicle vehicleToAdd)
+        {
+            eCarColor carColor;
+            eCarDoorsAmount doorsAmount;
+            eVehicleType vehicleType;
+            eLicenseType licenceType;
+            string wheelsSetUpOptionInput;
+            float energyAmount, existingAirPressure, cargoVolume;
+            int engineCapacityInCc;
+            bool isCarryingHazardousMaterials;
 
-                m_systemLogic.AddNewOpenIssue(ownerName, ownerPhoneNumber, GarageOpenIssue.eVehicleState.InMaintenance, plateNumber);
+            Console.WriteLine("\nLet's beggin with adding the new car by getting the requested details:\n");
+            vehicleType = getVehicleTypeFromUser();
+            m_systemLogic.CreateNewVehicleAndAddToVehicleList(vehicleType, i_PlateNumber);
+            m_systemLogic.getVehicleUsingPlateNumberIfExist(i_PlateNumber, out vehicleToAdd);
+            wheelsSetUpOptionInput = getWheelsSetUpOptioneFromUser();
+            setWheelsCondition(wheelsSetUpOptionInput, vehicleToAdd);
+            setExsitingEnergyAmountFromUserInput(vehicleToAdd);
 
-                Console.Write("vehicle type: ");
-                vehicleType = Console.ReadLine();
+            switch (vehicleType)
+            {
+                case eVehicleType.GasolineCar:
+                case eVehicleType.ElectricCar:
+                    carColor = getCarColorFromUser();
+                    doorsAmount = getCarDoorsAmountFromUser();
+                    m_systemLogic.SetCarInputParameters((Car)vehicleToAdd, carColor, doorsAmount);
+                    break;
 
-                Console.Write("energy amount: ");
-                fuelType = float.Parse(Console.ReadLine());
+                case eVehicleType.GasolineMotorcycle:
+                case eVehicleType.ElectricMotorcycle:
+                    licenceType = getLicenseTypeFromUser();
+                    engineCapacityInCc = getEngineCapacityInCcFromUser();
+                    m_systemLogic.SetMotorcycleInputParameters((Motorcycle)vehicleToAdd, licenceType, engineCapacityInCc);
+                    break;
 
-                Console.Write("wheel air pressure: ");
-                existingAirPressure = float.Parse(Console.ReadLine());
-
-                Console.Write("gas or electric: ");
-                energyType = Console.ReadLine();
-
-                Console.Write("doors amount in word and not a number: ");
-                doorsAmount = Console.ReadLine();
-
-                do
-                {
-                    Console.Write("Wheels set up: \n" +
-                    "press 1 to add wheels one by one or 2 ot add all in once\n" +
-                    "Your input here:");
-                    WheelsSetUpOptionInput=Console.ReadLine();
-
-                    if (WheelsSetUpOptionInput=="1"|| WheelsSetUpOptionInput=="2")
-                    {
-                        isValidWheelsSetUpOptionInput=true;
-                    }
-                }
-                while (!isValidWheelsSetUpOptionInput);
-
-                //complete here
-
-                if (vehicleType == "car")
-                {
-                    Console.Write("car colour: ");
-                    carColor = Console.ReadLine();
-                    if (energyType == "gas")
-                    {
-                        m_systemLogic.CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType.GasolineCar, plateNumber);
-                    }
-                    else
-                    {
-                        m_systemLogic.CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType.ElectricCar, plateNumber);
-                    }
-                    m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate);
-                    m_systemLogic.SetCarInputParameters((Car)vehicleToAddOrUpdate,
-                        (Car.eCarColor)Enum.Parse(typeof(Car.eCarColor), carColor, true),
-                        (Car.eCarDoorsAmount)Enum.Parse(typeof(Car.eCarDoorsAmount), doorsAmount, true));
-
-                }
-
-                if (vehicleType == "motorcycle")
-                {
-                    Console.WriteLine("licence type: ");
-                    licenceType = Console.ReadLine();
-                    Console.WriteLine("cc: ");
-                    cc = int.Parse(Console.ReadLine());
-                    if (energyType == "gas")
-                    {
-                        m_systemLogic.CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType.GasolineMotorcycle, plateNumber);
-                    }
-                    else
-                    {
-                        m_systemLogic.CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType.ElectricMotorcycle, plateNumber);
-                    }
-                    m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate);
-                    m_systemLogic.SetMotorcycleInputParameters((Motorcycle)vehicleToAddOrUpdate,
-                       (Motorcycle.eLicenseType)Enum.Parse(typeof(Motorcycle.eLicenseType), licenceType, true),
-                        cc);
-                }
-
-                if (vehicleType == "truck")
-                {
-                    Console.WriteLine("cargo volume: ");
-                    cargoVolume = float.Parse(Console.ReadLine());
-                    m_systemLogic.CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType.Truck, plateNumber);
-                    m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate);
-                    m_systemLogic.SetTruckcycleInputParameters((Truck)vehicleToAddOrUpdate, cargoVolume, false);
-
-                }
-
-                Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-                    "Congratulations! Your car has been added successfully to the garage.\n" +
-                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
-
+                case eVehicleType.Truck:
+                    isCarryingHazardousMaterials = getIsCarryingHazardousMaterialsFromUser();
+                    cargoVolume = getCargoVolumeFromUser();
+                    m_systemLogic.SetTruckcycleInputParameters((Truck)vehicleToAdd, cargoVolume, isCarryingHazardousMaterials);
+                    break;
+                default:
+                    break;
             }
 
+            Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+        "Congratulations! Your car has been added successfully to the garage.\n" +
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        }
+        private void setWheelsCondition(string i_WheelsSetUpOptionInput, Vehicle i_VehicleToAdd)
+        {
+            int wheelIndex = 1;
+
+            if(i_WheelsSetUpOptionInput=="1")
+            {
+                foreach (Wheel wheel in i_VehicleToAdd.wheelsList)
+                {
+                    
+                    Console.Write("wheel no.{0}", wheelIndex);
+                    setWheelCurrentAirPressure(wheel);
+                    wheelIndex++;
+
+                }
+            }
+            else if (i_WheelsSetUpOptionInput == "2")
+            {
+
+            }
+            else 
+            {
+                ;
+            }
+        }
+
+        private void setWheelCurrentAirPressure(Wheel i_wheel)
+        {
+
+        }
+
+        private string getWheelsSetUpOptioneFromUser()
+        {
+            string WheelsSetUpOptionInput;
+            bool isValidWheelsSetUpOptionInput=false;
+
+            do
+            {
+                Console.Write("Wheels set up: \n" +
+                "1. Add wheels one by one\n"+
+                "2. Add all wheels at once\n" +
+                "Your input here:");
+                WheelsSetUpOptionInput = Console.ReadLine();
+                if (WheelsSetUpOptionInput == "1" || WheelsSetUpOptionInput == "2")
+                {
+                    isValidWheelsSetUpOptionInput = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a '1' or '2'.");
+                }
+            }
+            while (!isValidWheelsSetUpOptionInput);
+            return WheelsSetUpOptionInput;
+        }
+        private void setExsitingEnergyAmountFromUserInput(Vehicle i_VehicleToUpdate)
+        {
+            string existingEnergyAmountFromUser;
+            float existingEnergyAmount;
+
+            do
+            {
+                Console.Write("Existing energy amount (fuel amount or hours left in the battery): ");
+                existingEnergyAmount = float.Parse(Console.ReadLine());
+            }
+            while (true);
+
+        }
+
+
+        private float getCargoVolumeFromUser()
+        {
+            float cargoVolume;
+            string userInput;
+            bool isValidInput = false;
+
+            do
+            {
+                Console.Write("Enter the cargo volume: ");
+                userInput = Console.ReadLine();
+                if (float.TryParse(userInput, out cargoVolume))
+                {
+                    isValidInput = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid number for the cargo volume.");
+                }
+            }
+            while (!isValidInput);
+
+            return cargoVolume;
+        }
+        private bool getIsCarryingHazardousMaterialsFromUser()
+        {
+            string userInput;
+            bool isValidInput = false;
+            bool isCarryingHazardousMaterials = false;
+
+            do
+            {
+                Console.Write("Is the vehicle carrying hazardous materials? (y/n): ");
+                userInput = Console.ReadLine().Trim().ToLower();
+                if (userInput == "yes" || userInput == "y" || userInput == "no" || userInput == "n")
+                {
+                    isValidInput = true;
+                    if (userInput == "yes" || userInput == "y")
+                    {
+                        isCarryingHazardousMaterials = true;
+                    }
+                    else
+                    {
+                        isCarryingHazardousMaterials = false;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter 'y' or 'n' (or 'yes' or 'no').");
+                }
+            }
+            while (!isValidInput);
+
+            return isCarryingHazardousMaterials;
+        }
+
+        private int getEngineCapacityInCcFromUser()
+        {
+            int engineCapacityInCc;
+            string engineCapacityFromUser;
+            bool isValidInput = false;
+
+            do
+            {
+                Console.Write("Engine capacity (in cc): ");
+                engineCapacityFromUser = Console.ReadLine();
+                if (int.TryParse(engineCapacityFromUser, out engineCapacityInCc))
+                {
+                    isValidInput = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid integer for the engine capacity.");
+                }
+            }
+            while (!isValidInput);
+
+            return engineCapacityInCc;
+        }
+        private eLicenseType getLicenseTypeFromUser()
+        {
+            eLicenseType licenseType;
+            string licenseTypeFromUser;
+            do
+            {
+                Console.Write("Choose the license type:\n" +
+                    "1. A\n" +
+                    "2. A1\n" +
+                    "3. AA\n" +
+                    "4. B1\n" +
+                    "Your choice: ");
+                licenseTypeFromUser = Console.ReadLine();
+            }
+            while (!isValidLicenseTypeAndConvertToELicenseType(licenseTypeFromUser, out licenseType));
+
+            return licenseType;
+        }
+
+        private bool isValidLicenseTypeAndConvertToELicenseType(string i_LicenseTypeFromUser, out eLicenseType o_LicenseType)
+        {
+            return Enum.TryParse(i_LicenseTypeFromUser, true, out o_LicenseType) && Enum.IsDefined(typeof(eLicenseType), o_LicenseType);
+        }
+
+        private eCarDoorsAmount getCarDoorsAmountFromUser()
+        {
+            eCarDoorsAmount carDoorsAmount;
+            string carDoorsAmountFromUser;
+            do
+            {
+                Console.Write("Choose the car doors amount:\n" +
+                    "2. Two\n" +
+                    "3. Three\n" +
+                    "4. Four\n" +
+                    "5. Five\n" +
+                    "Your choice: ");
+                carDoorsAmountFromUser = Console.ReadLine();
+            }
+            while (!isValidCarDoorsAmountAndConvertToECarDoorsAmount(carDoorsAmountFromUser, out carDoorsAmount));
+
+            return carDoorsAmount;
+        }
+
+        private bool isValidCarDoorsAmountAndConvertToECarDoorsAmount(string i_CarDoorsAmountFromUser, out eCarDoorsAmount o_CarDoorsAmount)
+        {
+            return Enum.TryParse(i_CarDoorsAmountFromUser, true, out o_CarDoorsAmount) && Enum.IsDefined(typeof(eCarDoorsAmount), o_CarDoorsAmount);
+        }
+        private eCarColor getCarColorFromUser()
+        {
+            eCarColor carColor;
+            string carColorFromUser;
+            do
+            {
+                Console.Write("Choose the car color:\n" +
+                    "1. Yellow\n" +
+                    "2. White\n" +
+                    "3. Red\n" +
+                    "4. Black\n" +
+                    "Your choise: ");
+                carColorFromUser = Console.ReadLine();
+            }
+            while (!isValidCarColorAndConvertToECarColor(carColorFromUser, out carColor));
+
+            return carColor;
+        }
+
+        private bool isValidCarColorAndConvertToECarColor(string i_CarColorFromUser, out eCarColor o_CarColor)
+        {
+            return Enum.TryParse(i_CarColorFromUser, true, out o_CarColor) && Enum.IsDefined(typeof(eCarColor), o_CarColor);
+        }
+        private eVehicleType getVehicleTypeFromUser()
+        {
+            eVehicleType vehicleType;
+            string vehicleTypeFromUser;
+            do
+            {
+                Console.Write("Choose the vehicle type:\n" +
+                    "1. Gasoline motorcycle\n" +
+                    "2. Electric motorcycle\n" +
+                    "3. Gasoline car\n" +
+                    "4.Electric car\n" +
+                    "5. Truck\n" +
+                    "Your choise: ");
+                vehicleTypeFromUser = Console.ReadLine();
+            }
+            while (!isValidVehicleTypeAndConvertToEVehicleType(vehicleTypeFromUser, out vehicleType));
+
+            return vehicleType;
+        }
+
+        private bool isValidVehicleTypeAndConvertToEVehicleType(string i_VehicleTypeFromUser, out eVehicleType o_VehicleType)
+        {
+
+            return Enum.TryParse(i_VehicleTypeFromUser, true, out o_VehicleType) && Enum.IsDefined(typeof(eVehicleType), o_VehicleType);
+        }
+
+        private void getOpenIssueDetailsFromUserAndAddToGarage(string i_PlateNumber)
+        {
+            string ownerName, ownerPhoneNumber;
+            Console.WriteLine("\nPlease enter the owner details that we will be able to notify you whenever your car will be fixed!");
+            Console.Write("Owner's full name: ");
+            ownerName = Console.ReadLine();
+            ownerPhoneNumber = getValidatePhoneNumberFromUser();
+            m_systemLogic.AddNewOpenIssue(ownerName, ownerPhoneNumber, GarageOpenIssue.eVehicleState.InMaintenance, i_PlateNumber);
+        }
+        private string getValidatePhoneNumberFromUser()
+        {
+            string phoneNumber;
+            do
+            {
+                Console.Write("Owner's phone number (format should be XXX-XXXXXXX): ");
+                phoneNumber = Console.ReadLine();
+            }
+            while (!(m_systemLogic.ValidatePhoneNumber(phoneNumber)));
+
+            return phoneNumber;
         }
         private string getValidatePlateNumberFromUser()
         {
@@ -229,7 +447,6 @@ namespace Ex03.ConsoleUI
             }
             return plateNumber;
         }
-
         private GasolineEnergySourceManager.eFuelType getFuelTypeFromUser()
         {
             string fuelTypeInput;

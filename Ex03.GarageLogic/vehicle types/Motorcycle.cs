@@ -6,13 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ex03.GarageLogic
 {
-    
-
-
-
-    
-
-    public class Motorcycle : Vehicle
+   public class Motorcycle : Vehicle
     {
         private eLicenseType m_LicenseType;
         private int m_EngineDisplacementInCc;

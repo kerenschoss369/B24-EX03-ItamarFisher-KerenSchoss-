@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using static Ex03.GarageLogic.VehicleFactory;
@@ -149,26 +148,64 @@ namespace Ex03.GarageLogic
 
             return isValidCurrentAirPressure;
         }
-        public bool validatePlateNumber(string i_plateNumber)
+        public bool ValidatePhoneNumber(string i_PhoneNumber)
+        {
+            bool isValidatePhoneNumber = true;
+            if (i_PhoneNumber.Length != 11)
+            {
+                isValidatePhoneNumber = false;
+            }
+
+            for (int i = 0; i < i_PhoneNumber.Length; i++)
+            {
+                if (i==0)
+                {
+                    if (i_PhoneNumber[i]!= '0')
+                        isValidatePhoneNumber=false;
+                }
+                if (i == 1)
+                {
+                    if (i_PhoneNumber[i] != '5')
+                        isValidatePhoneNumber = false;
+                }
+                if (i == 3)
+                {
+                    if (i_PhoneNumber[i] != '-')
+                    {
+                        isValidatePhoneNumber = false;
+                    }
+                }
+                else
+                {
+                    if (!char.IsDigit(i_PhoneNumber[i]))
+                    {
+                        isValidatePhoneNumber = false;
+                    }
+                }
+            }
+
+            return isValidatePhoneNumber;
+        }
+        public bool validatePlateNumber(string i_PlateNumber)
         {
             bool isValidatePlateNumber = true;
-            if (i_plateNumber.Length != 10)
+            if (i_PlateNumber.Length != 10)
             {
                 isValidatePlateNumber = false;
             }
 
-            for (int i = 0; i < i_plateNumber.Length; i++)
+            for (int i = 0; i < i_PlateNumber.Length; i++)
             {
                 if (i == 3 || i == 6)
                 {
-                    if (i_plateNumber[i] != '-')
+                    if (i_PlateNumber[i] != '-')
                     {
                         isValidatePlateNumber = false;
                     }
                 }
                 else
                 {
-                    if (!char.IsDigit(i_plateNumber[i]))
+                    if (!char.IsDigit(i_PlateNumber[i]))
                     {
                         isValidatePlateNumber = false;
                     }
