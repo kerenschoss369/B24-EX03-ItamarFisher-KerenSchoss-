@@ -15,5 +15,24 @@ namespace Ex03.GarageLogic
         {
             r_MaxEnergySourceAmount = i_MaxEnergySourceAmount;
         }
+
+        public float currentEnergySourceAmount
+        {
+            get
+            {
+                return m_CurrentEnergySourceAmount;
+            }
+            set
+            {
+                m_CurrentEnergySourceAmount = value;
+            }
+        }
+        public float maxEnergySourceAmount
+        {
+            get
+            {
+                return r_MaxEnergySourceAmount;
+            }
+        }
     }
 }

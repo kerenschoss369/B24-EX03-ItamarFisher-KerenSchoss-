@@ -13,6 +13,7 @@ using static Ex03.GarageLogic.GasolineEnergySourceManager;
 using static Ex03.GarageLogic.Motorcycle;
 using static Ex03.GarageLogic.VehicleFactory;
 
+
 namespace Ex03.ConsoleUI
 {
     internal class GarageSystemUserUI
@@ -107,7 +108,7 @@ namespace Ex03.ConsoleUI
             int engineCapacityInCc;
             bool isCarryingHazardousMaterials;
 
-            Console.WriteLine("\nLet's beggin with adding the new car by getting the requested details:\n");
+            Console.WriteLine("\nLet's beggin with adding the new car by getting the requested details:");
             vehicleType = getVehicleTypeFromUser();
             m_systemLogic.CreateNewVehicleAndAddToVehicleList(vehicleType, i_PlateNumber);
             m_systemLogic.getVehicleUsingPlateNumberIfExist(i_PlateNumber, out vehicleToAdd);
@@ -147,42 +148,58 @@ namespace Ex03.ConsoleUI
         private void setWheelsCondition(string i_WheelsSetUpOptionInput, Vehicle i_VehicleToAdd)
         {
             int wheelIndex = 1;
+            float validateAirPressure;
 
-            if(i_WheelsSetUpOptionInput=="1")
+            if (i_WheelsSetUpOptionInput == "1")
             {
                 foreach (Wheel wheel in i_VehicleToAdd.wheelsList)
                 {
-                    
-                    Console.Write("wheel no.{0}", wheelIndex);
-                    setWheelCurrentAirPressure(wheel);
+                    Console.Write("\nwheel no.{0} - ", wheelIndex);
+                    setWheelCurrentAirPressure(wheel, out validateAirPressure);
+                    wheel.currentAirPressure = validateAirPressure;
                     wheelIndex++;
-
                 }
             }
             else if (i_WheelsSetUpOptionInput == "2")
             {
-
+                setWheelCurrentAirPressure(i_VehicleToAdd.wheelsList[0], out validateAirPressure);
+                foreach (Wheel wheel in i_VehicleToAdd.wheelsList)
+                {
+                    wheel.currentAirPressure = validateAirPressure;
+                }
             }
-            else 
+            else
             {
                 ;
             }
         }
 
-        private void setWheelCurrentAirPressure(Wheel i_wheel)
+        private void setWheelCurrentAirPressure(Wheel i_wheel, out float o_ValidateAirPressure)
         {
+            float airPressureInput;
 
+            do
+            {
+                Console.Write("Air pressure: ");
+                airPressureInput = float.Parse(Console.ReadLine());
+                if (airPressureInput > i_wheel.maxAirPressureDefinedByManufacturer)
+                {
+                    Console.WriteLine("Invalid input. The pressure should not be higher than the maximum that has been defined by the manufacturer");
+                }
+            }
+            while (airPressureInput > i_wheel.maxAirPressureDefinedByManufacturer);
+            o_ValidateAirPressure = airPressureInput;
         }
 
         private string getWheelsSetUpOptioneFromUser()
         {
             string WheelsSetUpOptionInput;
-            bool isValidWheelsSetUpOptionInput=false;
+            bool isValidWheelsSetUpOptionInput = false;
 
             do
             {
-                Console.Write("Wheels set up: \n" +
-                "1. Add wheels one by one\n"+
+                Console.Write("\nWheels set up: \n" +
+                "1. Add wheels one by one\n" +
                 "2. Add all wheels at once\n" +
                 "Your input here:");
                 WheelsSetUpOptionInput = Console.ReadLine();
@@ -205,13 +222,17 @@ namespace Ex03.ConsoleUI
 
             do
             {
-                Console.Write("Existing energy amount (fuel amount or hours left in the battery): ");
+                Console.Write("\nExisting energy amount (fuel amount or hours left in the battery): ");
                 existingEnergyAmount = float.Parse(Console.ReadLine());
+                if (existingEnergyAmount > i_VehicleToUpdate.energySourceManager.maxEnergySourceAmount)
+                {
+                    Console.WriteLine("Invalid input.The existing energy amount should not be higher than the maximum that has been defined by the manufacturer");
+                }
             }
-            while (true);
+            while (existingEnergyAmount > i_VehicleToUpdate.energySourceManager.maxEnergySourceAmount);
 
+            i_VehicleToUpdate.energySourceManager.currentEnergySourceAmount = existingEnergyAmount;
         }
-
 
         private float getCargoVolumeFromUser()
         {
@@ -297,7 +318,7 @@ namespace Ex03.ConsoleUI
             string licenseTypeFromUser;
             do
             {
-                Console.Write("Choose the license type:\n" +
+                Console.Write("\nChoose the license type:\n" +
                     "1. A\n" +
                     "2. A1\n" +
                     "3. AA\n" +
@@ -321,7 +342,7 @@ namespace Ex03.ConsoleUI
             string carDoorsAmountFromUser;
             do
             {
-                Console.Write("Choose the car doors amount:\n" +
+                Console.Write("\nChoose the car doors amount:\n" +
                     "2. Two\n" +
                     "3. Three\n" +
                     "4. Four\n" +
@@ -344,7 +365,7 @@ namespace Ex03.ConsoleUI
             string carColorFromUser;
             do
             {
-                Console.Write("Choose the car color:\n" +
+                Console.Write("\nChoose the car color:\n" +
                     "1. Yellow\n" +
                     "2. White\n" +
                     "3. Red\n" +
@@ -367,7 +388,7 @@ namespace Ex03.ConsoleUI
             string vehicleTypeFromUser;
             do
             {
-                Console.Write("Choose the vehicle type:\n" +
+                Console.Write("\nChoose the vehicle type:\n" +
                     "1. Gasoline motorcycle\n" +
                     "2. Electric motorcycle\n" +
                     "3. Gasoline car\n" +
@@ -395,6 +416,9 @@ namespace Ex03.ConsoleUI
             ownerName = Console.ReadLine();
             ownerPhoneNumber = getValidatePhoneNumberFromUser();
             m_systemLogic.AddNewOpenIssue(ownerName, ownerPhoneNumber, GarageOpenIssue.eVehicleState.InMaintenance, i_PlateNumber);
+            Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                "Congratulations! Your personal details has been added successfully.\n" +
+                "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
         private string getValidatePhoneNumberFromUser()
         {
@@ -534,26 +558,31 @@ namespace Ex03.ConsoleUI
 
         private GarageOpenIssue.eVehicleState getStateToChangeToFromUser()
         {
-            GarageOpenIssue.eVehicleState stateToChangeTo;
+            GarageOpenIssue.eVehicleState stateToChangeTo = eVehicleState.Fixed;
             bool isValidState = false;
 
             do
             {
-                Console.Write("Please enter the state to change to (InMaintenance, Fixed, PaidFor): ");
-                string input = Console.ReadLine();
-
-                if (Enum.TryParse(input, true, out stateToChangeTo) && Enum.IsDefined(typeof(GarageOpenIssue.eVehicleState), stateToChangeTo))
+                Console.WriteLine("Please select the state to change to:");
+                foreach (eVehicleState state in Enum.GetValues(typeof(eVehicleState)))
                 {
-                    isValidState = true;
+                    Console.WriteLine($"Press {(int)state} for {state.ToString()}");
+                }
 
+                string input = Console.ReadLine();
+                if (eVehicleState.TryParse(input, out stateToChangeTo))
+                {
+
+                    isValidState = true;
                 }
                 else
                 {
-                    Console.WriteLine("Invalid input. Please enter a valid state.");
+                    Console.WriteLine("Invalid input. Please enter a valid number corresponding to the state.");
                 }
-
             }
             while (!isValidState);
+
+            Console.WriteLine($"State changed to: {stateToChangeTo}");
 
             return stateToChangeTo;
         }
@@ -566,7 +595,6 @@ namespace Ex03.ConsoleUI
             bool isPlateNumberHasOpenIssue = false;
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToChangeStateTo);
-            stateToChangeTo = getStateToChangeToFromUser();
             do
             {
                 if (m_systemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out issueToChangeStateTo))
@@ -580,7 +608,8 @@ namespace Ex03.ConsoleUI
                 }
             }
             while (!isPlateNumberHasOpenIssue);
-
+            Console.WriteLine("Current vehicle state is: " + issueToChangeStateTo.vehicleState);
+            stateToChangeTo = getStateToChangeToFromUser();
             m_systemLogic.changeVehicleState(issueToChangeStateTo, stateToChangeTo);
         }
 
@@ -591,11 +620,13 @@ namespace Ex03.ConsoleUI
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToFlateTiresTo);
             m_systemLogic.FillAllWheelsAirPressureToMax(vehicleToFlateTiresTo);
+            Console.WriteLine("The air pressure in your wheels got filled to the max");
 
         }
 
         private void displayAllPlateNumbersAndFilter()
         {
+            int stateChosenByUserIntegered = -1;
             string stateChosenByUser;
             eVehicleState stateToFilterBy;
             List<string> vehicleToPrint;
@@ -603,16 +634,25 @@ namespace Ex03.ConsoleUI
 
             do
             {
-                Console.Write("\nPlease select the requested state to filter the plate numbers by,\n"
-                + "to view all the existing vehicles in the garage Please type \"all\"\n" +
-                "Your Input: ");
+                foreach (eVehicleState state in Enum.GetValues(typeof(eVehicleState)))
+                {
+                    Console.WriteLine($"Press {(int)state} for {state.ToString()}");
+                }
+
+                Console.WriteLine($"Press {Enum.GetValues(typeof(eVehicleState)).Length} for all");
                 stateChosenByUser = Console.ReadLine();
             }
-            while ((!(string.Equals(stateChosenByUser, "all", StringComparison.OrdinalIgnoreCase))) || (Enum.TryParse(stateChosenByUser, true, out stateToFilterBy) && Enum.IsDefined(typeof(eVehicleState), stateToFilterBy)));
+            while ((!int.TryParse(stateChosenByUser, out stateChosenByUserIntegered)) && (stateChosenByUserIntegered >= 0 &&
+            stateChosenByUserIntegered <= Enum.GetValues(typeof(eVehicleState)).Length));
 
-            if (!(string.Equals(stateChosenByUser, "all", StringComparison.OrdinalIgnoreCase)))
+            if (stateChosenByUserIntegered == Enum.GetValues(typeof(eVehicleState)).Length)
             {
                 fetchAllVehicles = false;
+                stateToFilterBy = eVehicleState.InMaintenance;
+            }
+            else
+            {
+                eVehicleState.TryParse(stateChosenByUser, out stateToFilterBy);
             }
             vehicleToPrint = m_systemLogic.FilterVehiclesPlateNumbersByRequestedState(stateToFilterBy, !fetchAllVehicles);
 
@@ -630,7 +670,8 @@ namespace Ex03.ConsoleUI
             else
             {
                 Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-                    "List of plate numbers:\n");
+                    "List of plate numbers:\n"+
+                    "----------------------\n");
                 foreach (string plateNumber in i_VehicleToPrint)
                 {
                     Console.WriteLine("[ {0} ]\n", plateNumber);
