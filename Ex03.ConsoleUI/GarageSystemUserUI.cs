@@ -30,8 +30,8 @@ namespace Ex03.ConsoleUI
             int userChoiceOfAction;
             while (true)
             {
-                Console.Write("\n___________________________________________________________________________\n" +
-                    "Please select an action:\n" +
+                Console.Write("\n--------------------------------------------------------------------------\n\n" +
+                    "Please select an action:\n\n" +
                     "1. Add a new vehicle to the garage\n" +
                     "2. Display list of license numbers of vehicles in the garage and filter them by condition\n" +
                     "3. Change the status of a vehicle in the garage\n" +
@@ -39,6 +39,7 @@ namespace Ex03.ConsoleUI
                     "5. Refuel a gasoline-powered vehicle in the garage\n" +
                     "6. Charge an electric vehicle in the garage\n" +
                     "7. Display vehicle details by license number\n\n" +
+                    "--------------------------------------------------------------------------\n\n" +
                     "Type your selection here: ");
 
                 while (!int.TryParse(Console.ReadLine(), out userChoiceOfAction) || (userChoiceOfAction < 1) || (userChoiceOfAction > 7)) //FIX INVALID VALUES MAYBE WITH ERRORS
@@ -157,6 +158,11 @@ namespace Ex03.ConsoleUI
 
                 }
 
+                Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                    "Congratulations! Your car has been added successfully to the garage.\n" +
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+
             }
 
         }
@@ -167,7 +173,7 @@ namespace Ex03.ConsoleUI
 
             do
             {
-                Console.Write("Please enter plate number in the requested format (xxx-xx-xxx), should contain numbers only. \nYour input:");
+                Console.Write("\nPlease enter plate number in the requested format (xxx-xx-xxx), should contain numbers only. \nYour input:");
                 plateNumber = Console.ReadLine();
                 if (m_systemLogic.validatePlateNumber(plateNumber))
                 {
@@ -356,14 +362,14 @@ namespace Ex03.ConsoleUI
 
             do
             {
-                Console.Write("Please select the requested state to filter the plate numbers by,\n"
-                + "to view all the existing vehicles in the garage Please type ''all''\n" +
+                Console.Write("\nPlease select the requested state to filter the plate numbers by,\n"
+                + "to view all the existing vehicles in the garage Please type \"all\"\n" +
                 "Your Input: ");
                 stateChosenByUser = Console.ReadLine();
             }
-            while ((stateChosenByUser == "all") || (Enum.TryParse(stateChosenByUser, true, out stateToFilterBy) && Enum.IsDefined(typeof(eVehicleState), stateToFilterBy)));
+            while ((!(string.Equals(stateChosenByUser, "all", StringComparison.OrdinalIgnoreCase))) || (Enum.TryParse(stateChosenByUser, true, out stateToFilterBy) && Enum.IsDefined(typeof(eVehicleState), stateToFilterBy)));
 
-            if (stateChosenByUser != "all")
+            if (!(string.Equals(stateChosenByUser, "all", StringComparison.OrdinalIgnoreCase)))
             {
                 fetchAllVehicles = false;
             }
@@ -376,15 +382,19 @@ namespace Ex03.ConsoleUI
         {
             if (i_VehicleToPrint == null || i_VehicleToPrint.Count == 0)
             {
-                Console.WriteLine("No vehicles to display.");
+                Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                    "Sorry! no vehicles to display.\n" +
+                    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             }
             else
             {
-                Console.WriteLine("List of plate numbers:");
+                Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                    "List of plate numbers:\n");
                 foreach (string plateNumber in i_VehicleToPrint)
                 {
-                    Console.WriteLine(plateNumber);
+                    Console.WriteLine("[ {0} ]\n", plateNumber);
                 }
+                Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
             }
         }
 
