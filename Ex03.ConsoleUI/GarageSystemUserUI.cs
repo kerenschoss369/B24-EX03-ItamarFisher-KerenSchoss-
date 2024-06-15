@@ -167,7 +167,9 @@ namespace Ex03.ConsoleUI
                         m_systemLogic.CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType.ElectricMotorcycle, plateNumber);
                     }
                     m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate);
-                    m_systemLogic.SetMotorcycleInputParameters((Motorcycle)vehicleToAddOrUpdate, Motorcycle.eLicenseType.B1, cc);
+                    m_systemLogic.SetMotorcycleInputParameters((Motorcycle)vehicleToAddOrUpdate,
+                       (Motorcycle.eLicenseType)Enum.Parse(typeof(Motorcycle.eLicenseType), licenceType, true),
+                        cc);
                 }
 
                 if (vehicleType == "truck")
