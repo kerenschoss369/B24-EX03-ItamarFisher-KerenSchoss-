@@ -69,5 +69,12 @@ namespace Ex03.GarageLogic
                 return m_WheelsList;
             }
         }
+        public EnergySourceManager energySourceManager
+        {
+            get
+            {
+                return m_EnergySourceManager;
+            }
+        }
     }
 }

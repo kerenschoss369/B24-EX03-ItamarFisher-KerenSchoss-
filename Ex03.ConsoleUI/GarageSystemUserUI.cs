@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using static Ex03.ConsoleUI.GarageSystemUserUI;
 using static Ex03.GarageLogic.GarageOpenIssue;
 
+
 namespace Ex03.ConsoleUI
 {
     internal class GarageSystemUserUI
@@ -84,7 +85,7 @@ namespace Ex03.ConsoleUI
             string vehicleType, carColor, licenceType, ownerName, ownerPhoneNumber, energyType, WheelsSetUpOptionInput, doorsAmount;
             float fuelType, existingAirPressure, cargoVolume;
             int cc;
-            bool isValidWheelsSetUpOptionInput= false;
+            bool isValidWheelsSetUpOptionInput = false;
 
             plateNumber = getValidatePlateNumberFromUser();
             if (m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate))
@@ -122,11 +123,11 @@ namespace Ex03.ConsoleUI
                     Console.Write("Wheels set up: \n" +
                     "press 1 to add wheels one by one or 2 ot add all in once\n" +
                     "Your input here:");
-                    WheelsSetUpOptionInput=Console.ReadLine();
+                    WheelsSetUpOptionInput = Console.ReadLine();
 
-                    if (WheelsSetUpOptionInput=="1"|| WheelsSetUpOptionInput=="2")
+                    if (WheelsSetUpOptionInput == "1" || WheelsSetUpOptionInput == "2")
                     {
-                        isValidWheelsSetUpOptionInput=true;
+                        isValidWheelsSetUpOptionInput = true;
                     }
                 }
                 while (!isValidWheelsSetUpOptionInput);
@@ -264,7 +265,7 @@ namespace Ex03.ConsoleUI
             {
                 Console.Write("Please enter amount of energy to add: ");
                 string input = Console.ReadLine();
-
+                 
                 if (float.TryParse(input, out energyToAdd))
                 {
                     isValidInput = true;
@@ -317,26 +318,31 @@ namespace Ex03.ConsoleUI
 
         private GarageOpenIssue.eVehicleState getStateToChangeToFromUser()
         {
-            GarageOpenIssue.eVehicleState stateToChangeTo;
+            GarageOpenIssue.eVehicleState stateToChangeTo = eVehicleState.Fixed;
             bool isValidState = false;
 
             do
             {
-                Console.Write("Please enter the state to change to (InMaintenance, Fixed, PaidFor): ");
-                string input = Console.ReadLine();
-
-                if (Enum.TryParse(input, true, out stateToChangeTo) && Enum.IsDefined(typeof(GarageOpenIssue.eVehicleState), stateToChangeTo))
+                Console.WriteLine("Please select the state to change to:");
+                foreach (eVehicleState state in Enum.GetValues(typeof(eVehicleState)))
                 {
-                    isValidState = true;
+                    Console.WriteLine($"Press {(int)state} for {state.ToString()}");
+                }
 
+                string input = Console.ReadLine();
+                if (eVehicleState.TryParse(input , out stateToChangeTo))
+                {
+                    
+                    isValidState = true;
                 }
                 else
                 {
-                    Console.WriteLine("Invalid input. Please enter a valid state.");
+                    Console.WriteLine("Invalid input. Please enter a valid number corresponding to the state.");
                 }
-
             }
             while (!isValidState);
+
+            Console.WriteLine($"State changed to: {stateToChangeTo}");
 
             return stateToChangeTo;
         }
@@ -349,7 +355,6 @@ namespace Ex03.ConsoleUI
             bool isPlateNumberHasOpenIssue = false;
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToChangeStateTo);
-            stateToChangeTo = getStateToChangeToFromUser();
             do
             {
                 if (m_systemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out issueToChangeStateTo))
@@ -363,7 +368,8 @@ namespace Ex03.ConsoleUI
                 }
             }
             while (!isPlateNumberHasOpenIssue);
-
+            Console.WriteLine("Current vehicle state is: " + issueToChangeStateTo.vehicleState);
+            stateToChangeTo = getStateToChangeToFromUser();
             m_systemLogic.changeVehicleState(issueToChangeStateTo, stateToChangeTo);
         }
 
@@ -374,11 +380,13 @@ namespace Ex03.ConsoleUI
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToFlateTiresTo);
             m_systemLogic.FillAllWheelsAirPressureToMax(vehicleToFlateTiresTo);
+            Console.WriteLine("The air pressure in your wheels got filled to the max");
 
         }
 
         private void displayAllPlateNumbersAndFilter()
         {
+            int stateChosenByUserIntegered = -1;
             string stateChosenByUser;
             eVehicleState stateToFilterBy;
             List<string> vehicleToPrint;
@@ -386,16 +394,25 @@ namespace Ex03.ConsoleUI
 
             do
             {
-                Console.Write("\nPlease select the requested state to filter the plate numbers by,\n"
-                + "to view all the existing vehicles in the garage Please type \"all\"\n" +
-                "Your Input: ");
+                foreach (eVehicleState state in Enum.GetValues(typeof(eVehicleState)))
+                {
+                    Console.WriteLine($"Press {(int)state} for {state.ToString()}");
+                }
+
+                Console.WriteLine($"Press {Enum.GetValues(typeof(eVehicleState)).Length} for all");
                 stateChosenByUser = Console.ReadLine();
             }
-            while ((!(string.Equals(stateChosenByUser, "all", StringComparison.OrdinalIgnoreCase))) || (Enum.TryParse(stateChosenByUser, true, out stateToFilterBy) && Enum.IsDefined(typeof(eVehicleState), stateToFilterBy)));
+            while ((!int.TryParse(stateChosenByUser, out stateChosenByUserIntegered)) && (stateChosenByUserIntegered >= 0 &&
+            stateChosenByUserIntegered <= Enum.GetValues(typeof(eVehicleState)).Length));
 
-            if (!(string.Equals(stateChosenByUser, "all", StringComparison.OrdinalIgnoreCase)))
+            if (stateChosenByUserIntegered == Enum.GetValues(typeof(eVehicleState)).Length)
             {
                 fetchAllVehicles = false;
+                stateToFilterBy = eVehicleState.InMaintenance;
+            }
+            else
+            {
+                eVehicleState.TryParse(stateChosenByUser, out stateToFilterBy);
             }
             vehicleToPrint = m_systemLogic.FilterVehiclesPlateNumbersByRequestedState(stateToFilterBy, !fetchAllVehicles);
 
