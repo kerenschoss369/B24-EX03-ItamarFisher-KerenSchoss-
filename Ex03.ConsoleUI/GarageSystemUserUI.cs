@@ -81,9 +81,10 @@ namespace Ex03.ConsoleUI
             GarageOpenIssue issueToAddOrUpdate = null;
             string plateNumber;
             GarageOpenIssue.eVehicleState stateToChangeTo;
-            string vehicleType, carColor, licenceType, ownerName, ownerPhoneNumber, energyType;
+            string vehicleType, carColor, licenceType, ownerName, ownerPhoneNumber, energyType, WheelsSetUpOptionInput, doorsAmount;
             float fuelType, existingAirPressure, cargoVolume;
             int cc;
+            bool isValidWheelsSetUpOptionInput= false;
 
             plateNumber = getValidatePlateNumberFromUser();
             if (m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate))
@@ -113,6 +114,25 @@ namespace Ex03.ConsoleUI
                 Console.Write("gas or electric: ");
                 energyType = Console.ReadLine();
 
+                Console.Write("doors amount in word and not a number: ");
+                doorsAmount = Console.ReadLine();
+
+                do
+                {
+                    Console.Write("Wheels set up: \n" +
+                    "press 1 to add wheels one by one or 2 ot add all in once\n" +
+                    "Your input here:");
+                    WheelsSetUpOptionInput=Console.ReadLine();
+
+                    if (WheelsSetUpOptionInput=="1"|| WheelsSetUpOptionInput=="2")
+                    {
+                        isValidWheelsSetUpOptionInput=true;
+                    }
+                }
+                while (!isValidWheelsSetUpOptionInput);
+
+                //complete here
+
                 if (vehicleType == "car")
                 {
                     Console.Write("car colour: ");
@@ -126,15 +146,17 @@ namespace Ex03.ConsoleUI
                         m_systemLogic.CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType.ElectricCar, plateNumber);
                     }
                     m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate);
-                    m_systemLogic.SetCarInputParameters((Car)vehicleToAddOrUpdate, Car.eCarColor.Black, Car.eCarDoorsAmount.Four);
+                    m_systemLogic.SetCarInputParameters((Car)vehicleToAddOrUpdate,
+                        (Car.eCarColor)Enum.Parse(typeof(Car.eCarColor), carColor, true),
+                        (Car.eCarDoorsAmount)Enum.Parse(typeof(Car.eCarDoorsAmount), doorsAmount, true));
 
                 }
 
                 if (vehicleType == "motorcycle")
                 {
-                    Console.WriteLine(" סוג רישיון אם אופנוע");
+                    Console.WriteLine("licence type: ");
                     licenceType = Console.ReadLine();
-                    Console.WriteLine(" נפח מנוע אם אופנוע");
+                    Console.WriteLine("cc: ");
                     cc = int.Parse(Console.ReadLine());
                     if (energyType == "gas")
                     {
@@ -150,7 +172,7 @@ namespace Ex03.ConsoleUI
 
                 if (vehicleType == "truck")
                 {
-                    Console.WriteLine(" cargo volume");
+                    Console.WriteLine("cargo volume: ");
                     cargoVolume = float.Parse(Console.ReadLine());
                     m_systemLogic.CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType.Truck, plateNumber);
                     m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate);
