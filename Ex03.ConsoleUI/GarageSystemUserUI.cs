@@ -108,7 +108,7 @@ namespace Ex03.ConsoleUI
             int engineCapacityInCc;
             bool isCarryingHazardousMaterials;
 
-            Console.WriteLine("\nLet's beggin with adding the new car by getting the requested details:");
+            Console.WriteLine("\nLet's begin with adding the new car by getting the requested details:");
             vehicleType = getVehicleTypeFromUser();
             m_systemLogic.CreateNewVehicleAndAddToVehicleList(vehicleType, i_PlateNumber);
             m_systemLogic.getVehicleUsingPlateNumberIfExist(i_PlateNumber, out vehicleToAdd);
@@ -181,11 +181,18 @@ namespace Ex03.ConsoleUI
             do
             {
                 Console.Write("Air pressure: ");
-                airPressureInput = float.Parse(Console.ReadLine());
-                if (airPressureInput > i_wheel.maxAirPressureDefinedByManufacturer)
+                if(!float.TryParse(Console.ReadLine(), out airPressureInput))
                 {
-                    Console.WriteLine("Invalid input. The pressure should not be higher than the maximum that has been defined by the manufacturer");
+                    Console.WriteLine("Invalid input, input isn't a float");
                 }
+                else
+                {
+                    if (airPressureInput > i_wheel.maxAirPressureDefinedByManufacturer)
+                    {
+                        Console.WriteLine("Invalid input. The pressure should not be higher than the maximum that has been defined by the manufacturer");
+                    }
+                }
+                
             }
             while (airPressureInput > i_wheel.maxAirPressureDefinedByManufacturer);
             o_ValidateAirPressure = airPressureInput;
@@ -223,10 +230,16 @@ namespace Ex03.ConsoleUI
             do
             {
                 Console.Write("\nExisting energy amount (fuel amount or hours left in the battery): ");
-                existingEnergyAmount = float.Parse(Console.ReadLine());
-                if (existingEnergyAmount > i_VehicleToUpdate.energySourceManager.maxEnergySourceAmount)
+                if(!float.TryParse(Console.ReadLine(), out existingEnergyAmount))
                 {
-                    Console.WriteLine("Invalid input.The existing energy amount should not be higher than the maximum that has been defined by the manufacturer");
+                    Console.WriteLine("Ivalid input, input isn't a float");
+                }
+                else
+                {
+                    if (existingEnergyAmount > i_VehicleToUpdate.energySourceManager.maxEnergySourceAmount)
+                    {
+                        Console.WriteLine("Invalid input.The existing energy amount should not be higher than the maximum that has been defined by the manufacturer");
+                    }
                 }
             }
             while (existingEnergyAmount > i_VehicleToUpdate.energySourceManager.maxEnergySourceAmount);
@@ -382,7 +395,7 @@ namespace Ex03.ConsoleUI
         {
             return Enum.TryParse(i_CarColorFromUser, true, out o_CarColor) && Enum.IsDefined(typeof(eCarColor), o_CarColor);
         }
-        private eVehicleType getVehicleTypeFromUser()
+        private eVehicleType getVehicleTypeFromUser()// not good not generic
         {
             eVehicleType vehicleType;
             string vehicleTypeFromUser;
@@ -420,7 +433,7 @@ namespace Ex03.ConsoleUI
                 "Congratulations! Your personal details has been added successfully.\n" +
                 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
-        private string getValidatePhoneNumberFromUser()
+        private string getValidatePhoneNumberFromUser()// not good
         {
             string phoneNumber;
             do
@@ -689,7 +702,7 @@ namespace Ex03.ConsoleUI
             bool isPlateNumberHasOpenIssue = false;
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToDisplayDetailsOf);
-            stateToChangeTo = getStateToChangeToFromUser();
+
             do
             {
                 if (m_systemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out openIssueToDisplayDetailsOf))
