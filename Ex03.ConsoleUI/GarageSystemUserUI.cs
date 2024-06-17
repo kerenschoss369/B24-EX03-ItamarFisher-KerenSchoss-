@@ -353,12 +353,12 @@ namespace Ex03.ConsoleUI
             string carDoorsAmountFromUser;
             do
             {
-                Console.Write("\nChoose the car doors amount:\n" +
-                    "2. Two\n" +
-                    "3. Three\n" +
-                    "4. Four\n" +
-                    "5. Five\n" +
-                    "Your choice: ");
+                Console.Write("\nChoose the car doors amount:\n");
+                foreach (eCarDoorsAmount amount in Enum.GetValues(typeof(eCarDoorsAmount)))
+                {
+                    Console.Write($"{(int)amount}. {amount.ToString()}\n");
+                }
+                Console.Write("Your choice: ");
                 carDoorsAmountFromUser = Console.ReadLine();
             }
             while (!m_SystemLogic.isValidCarDoorsAmountAndConvertToECarDoorsAmount(carDoorsAmountFromUser, out carDoorsAmount));
@@ -371,12 +371,12 @@ namespace Ex03.ConsoleUI
             string carColorFromUser;
             do
             {
-                Console.Write("\nChoose the car color:\n" +
-                    "1. Yellow\n" +
-                    "2. White\n" +
-                    "3. Red\n" +
-                    "4. Black\n" +
-                    "Your choise: ");
+                Console.WriteLine("\nChoose the car color:\n");
+                foreach (eCarColor color in Enum.GetValues(typeof(eCarColor)))
+                {
+                    Console.WriteLine($"{(int)color}. {color.ToString()}");
+                }
+                Console.Write("Your choise: ");
                 carColorFromUser = Console.ReadLine();
             }
             while (!m_SystemLogic.isValidCarColorAndConvertToECarColor(carColorFromUser, out carColor));
@@ -389,13 +389,12 @@ namespace Ex03.ConsoleUI
             string vehicleTypeFromUser;
             do
             {
-                Console.Write("\nChoose the vehicle type:\n" +
-                    "1. Gasoline motorcycle\n" +
-                    "2. Electric motorcycle\n" +
-                    "3. Gasoline car\n" +
-                    "4.Electric car\n" +
-                    "5. Truck\n" +
-                    "Your choise: ");
+                Console.WriteLine("\nChoose the vehicle type:\n");
+                foreach (eVehicleType type in Enum.GetValues(typeof(eVehicleType)))
+                {
+                    Console.WriteLine($"{(int)type}. {type.ToString()}");
+                }
+                Console.Write("Your choise: ");
                 vehicleTypeFromUser = Console.ReadLine();
             }
             while (!(m_SystemLogic.isValidVehicleTypeAndConvertToEVehicleType(vehicleTypeFromUser, out vehicleType)));
