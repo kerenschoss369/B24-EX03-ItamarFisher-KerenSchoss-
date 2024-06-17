@@ -12,6 +12,9 @@ namespace Ex03.GarageLogic
         private int m_EngineDisplacementInCc;
         private const int k_NumberOfWheels = 2;
         private const float k_WheelsMaxAirPressure = 33;
+
+        private const string K_LicenseType = "License type";
+        private const string k_EngineDisplacementInCc = "Engine displacement in cc";
         public Motorcycle(EnergySourceManager i_EnergySourceManager, float i_MaxEnergySourceAmount,
             GasolineEnergySourceManager.eFuelType i_FuelType, ref List<Tuple<string, object>>  o_AdditionalVehicleInformation)
             :base(k_NumberOfWheels, k_WheelsMaxAirPressure, i_EnergySourceManager, i_MaxEnergySourceAmount, i_FuelType, ref o_AdditionalVehicleInformation)
@@ -26,25 +29,25 @@ namespace Ex03.GarageLogic
         }
         private void addAdditionalInformationIntoList(ref List<Tuple<string, object>> o_AdditionalVehicleInformation)
         {
-            Tuple<string, object> licenseType = new Tuple<string, object>("License Type", m_LicenseType);
-            Tuple<string, object> engineDisplacementInCc = new Tuple<string, object>("Engine Displacement In Cc", m_EngineDisplacementInCc);
+            Tuple<string, object> licenseType = new Tuple<string, object>(K_LicenseType, m_LicenseType);
+            Tuple<string, object> engineDisplacementInCc = new Tuple<string, object>(k_EngineDisplacementInCc, m_EngineDisplacementInCc);
 
             o_AdditionalVehicleInformation.Add(licenseType);
             o_AdditionalVehicleInformation.Add(engineDisplacementInCc);
         }
         public override void setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation)
         {
-            /* foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
+            foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
              {
-                 if (tuple.Item1 == "Car color")
+                 if (tuple.Item1 == K_LicenseType)
                  {
-                     Enum.TryParse((string)tuple.Item2, out m_CarColor);
+                     Enum.TryParse((string)tuple.Item2, out m_LicenseType);
                  }
-                 if (tuple.Item1 == "Amount of Car Doors")
+                 if (tuple.Item1 == k_EngineDisplacementInCc)
                  {
-                     Enum.TryParse((string)tuple.Item2, out m_CarDoorsAmount);
+                     Enum.TryParse((string)tuple.Item2, out m_EngineDisplacementInCc);
                  }
-             }*/
+             }
         }
         public enum eLicenseType
         {
