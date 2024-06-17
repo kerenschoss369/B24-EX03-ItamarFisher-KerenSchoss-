@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using static Ex03.GarageLogic.Car;
+using static Ex03.GarageLogic.GasolineEnergySourceManager;
 using static Ex03.GarageLogic.Motorcycle;
 using static Ex03.GarageLogic.VehicleFactory;
 
@@ -21,7 +22,7 @@ namespace Ex03.GarageLogic
         {
             get { return garageSystemFactory; }
         }
-        public void setAdditionalInfoParams(ref Vehicle i_vehicle, List<Tuple<string,object>> o_additionalInfoParams)
+        public void setAdditionalInfoParams(ref Vehicle i_vehicle, List<Tuple<string, object>> o_additionalInfoParams)
         {
             i_vehicle.setBaseAdditionalInformationFromList(o_additionalInfoParams);
             i_vehicle.setAdditionalInformationFromList(o_additionalInfoParams);
@@ -96,7 +97,6 @@ namespace Ex03.GarageLogic
                     vehicleExists = true;
                 }
             }
-
             return vehicleExists;
         }
         public bool getOpenIssueUsingPlateNumberIfExist(string i_PlateNumber, out GarageOpenIssue o_GarageOpenIssue)
@@ -116,8 +116,23 @@ namespace Ex03.GarageLogic
         }
         public bool CheckIfVehicleIsGasPowered(Vehicle i_Vehicle)
         {
-
-            return (i_Vehicle.m_EnergySourceManager is GasolineEnergySourceManager);
+            bool isGasPowered = true;
+            if (!(i_Vehicle.m_EnergySourceManager is GasolineEnergySourceManager))
+            {
+                isGasPowered = false;
+                throw new ArgumentException(i_Vehicle.plateNumber);
+            }
+            return isGasPowered;
+        }
+        public bool CheckIfVehicleIsElectricPowered(Vehicle i_Vehicle)
+        {
+            bool isElectricPowered = true;
+            if (!(i_Vehicle.m_EnergySourceManager is ElectricEnergySourceManager))
+            {
+                isElectricPowered = false;
+                throw new ArgumentException(i_Vehicle.plateNumber);
+            }
+            return isElectricPowered;
         }
 
         /* private string getFuelTypeForGasVehicleAsString(Vehicle i_Vehicle) // prob not needed
@@ -154,7 +169,6 @@ namespace Ex03.GarageLogic
             float littersFilled;
 
             gasolineEnergySourceManagar.RefuelVehicleUntillFullOrLitersToAdd(i_AmountOfLittersToFill, fuelType, out littersFilled);
-
             return littersFilled;
         }
         public bool SetWheelManufacturerAndWheelAirPressure(ref Wheel io_Wheel, string i_ManufacturerName, float i_WheelCurrentAirPressure)
@@ -177,10 +191,10 @@ namespace Ex03.GarageLogic
 
             for (int i = 0; i < i_PhoneNumber.Length; i++)
             {
-                if (i==0)
+                if (i == 0)
                 {
-                    if (i_PhoneNumber[i]!= '0')
-                        isValidatePhoneNumber=false;
+                    if (i_PhoneNumber[i] != '0')
+                        isValidatePhoneNumber = false;
                 }
                 if (i == 1)
                 {
@@ -259,6 +273,43 @@ namespace Ex03.GarageLogic
         {
             return Enum.TryParse(i_LicenseTypeFromUser, true, out o_LicenseType) && Enum.IsDefined(typeof(eLicenseType), o_LicenseType);
         }
+
+        public bool isValidFuelTypeAndConvertToEVehicleType(string i_FuelTypeFromUser, out GasolineEnergySourceManager.eFuelType o_FuelType)
+        {
+            bool isValidFuelType = false;
+            if (Enum.TryParse<eFuelType>(i_FuelTypeFromUser, true, out o_FuelType))
+            {
+                isValidFuelType = true;
+            }
+            else
+            {
+                throw new FormatException("This is not a type of fuel.");
+            }
+            return isValidFuelType;
+        }
+
+        public bool isFuelTypeCorrectForCar(GasolineEnergySourceManager.eFuelType i_FuelType, Vehicle i_VehicleToRefuel)
+        {
+            bool isValidFuelType = true;
+            if (i_FuelType != ((GasolineEnergySourceManager)i_VehicleToRefuel.energySourceManager).fuelType)
+            {
+                isValidFuelType = false;
+                throw new ArgumentException("This is not the correct fuel for the vehicle.");
+            }
+            return isValidFuelType;
+        }
+
+        public bool isLittersToAddCorrectForCar(float i_LittersToAdd, Vehicle i_VehicleToRefuel)
+        {
+            bool isValidLittersToAdd = true;
+            if ((i_LittersToAdd+i_VehicleToRefuel.energySourceManager.currentEnergySourceAmount) > i_VehicleToRefuel.energySourceManager.maxEnergySourceAmount)
+            {
+                isValidLittersToAdd = false;
+                throw new ValueOutOfRangeException(i_LittersToAdd, 0f, (i_VehicleToRefuel.energySourceManager.maxEnergySourceAmount - i_VehicleToRefuel.energySourceManager.currentEnergySourceAmount));
+            }
+            return isValidLittersToAdd;
+        }
+
 
     }
 }

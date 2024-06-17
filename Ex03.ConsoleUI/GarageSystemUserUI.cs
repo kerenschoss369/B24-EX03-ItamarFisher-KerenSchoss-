@@ -114,10 +114,10 @@ namespace Ex03.ConsoleUI
                 getOpenIssueDetailsFromUserAndAddToGarage(plateNumber);
             }
         }
-        private void fillAddtionalInfoFromUserInput(ref List<Tuple<string,object>> o_AdditionalInfoList)//maybe in logic??????
+        private void fillAddtionalInfoFromUserInput(ref List<Tuple<string, object>> o_AdditionalInfoList)//maybe in logic??????
         {
-            List<Tuple<string, object>> newTuplesList = new List <Tuple<string, object>>();
-            foreach (Tuple<string,object> tuple in o_AdditionalInfoList)
+            List<Tuple<string, object>> newTuplesList = new List<Tuple<string, object>>();
+            foreach (Tuple<string, object> tuple in o_AdditionalInfoList)
             {
                 Console.WriteLine("Please enter " + tuple.Item1 + ":");
                 Tuple<string, object> newTuple = new Tuple<string, object>(tuple.Item1, Console.ReadLine());
@@ -466,21 +466,23 @@ namespace Ex03.ConsoleUI
         private GasolineEnergySourceManager.eFuelType getFuelTypeFromUser()
         {
             string fuelTypeInput;
-            GasolineEnergySourceManager.eFuelType fuelType;
+            GasolineEnergySourceManager.eFuelType fuelType = GasolineEnergySourceManager.eFuelType.Soler;
             bool isValidFuelType = false;
 
             do
             {
-                Console.Write("Please enter the fuel type (Soler, Octan95, Octan96, Octan98): ");
-                fuelTypeInput = Console.ReadLine();
-
-                if (Enum.TryParse(fuelTypeInput, true, out fuelType) && Enum.IsDefined(typeof(GasolineEnergySourceManager.eFuelType), fuelType))
+                try
                 {
-                    isValidFuelType = true;
+                    Console.Write("Please enter the fuel type (Soler, Octan95, Octan96, Octan98): ");
+                    fuelTypeInput = Console.ReadLine();
+                    if (m_SystemLogic.isValidFuelTypeAndConvertToEVehicleType(fuelTypeInput, out fuelType))
+                    {
+                        isValidFuelType = true;
+                    }
                 }
-                else
+                catch (FormatException e)
                 {
-                    Console.WriteLine("Invalid fuel type. Please try again.");
+                    Console.WriteLine(e.Message);
                 }
 
             }
@@ -515,20 +517,45 @@ namespace Ex03.ConsoleUI
         {
             Vehicle vehicleToRefuel;
             string plateNumber;
-            GasolineEnergySourceManager.eFuelType fuelType;
-            float litersToAdd;
+            GasolineEnergySourceManager.eFuelType fuelType = GasolineEnergySourceManager.eFuelType.Octan98;
+            float litersToAdd=0f;
+            bool isValidFuelType=false, isValidLittersToAdd=false;
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToRefuel);
-            fuelType = getFuelTypeFromUser();
-            litersToAdd = getEnergyAmountToAddFromUser();
+
+            while (!isValidFuelType)
+            {
+                try
+                {
+                    fuelType = getFuelTypeFromUser();
+                    isValidFuelType = m_SystemLogic.isFuelTypeCorrectForCar(fuelType, vehicleToRefuel);
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            while (!isValidLittersToAdd)
+            {
+                try
+                {
+                    litersToAdd = getEnergyAmountToAddFromUser();
+                    isValidLittersToAdd = m_SystemLogic.isLittersToAddCorrectForCar(litersToAdd, vehicleToRefuel);
+                }
+                catch (ValueOutOfRangeException ex_outOfRange)
+                {
+                    Console.WriteLine(ex_outOfRange.Message);
+                }
+            }
+            
             if (m_SystemLogic.CheckIfVehicleIsGasPowered(vehicleToRefuel))
             {
                 m_SystemLogic.addFuelToVehicle(vehicleToRefuel, litersToAdd, fuelType);
             }
-            else
+            /*else
             {
                 Console.WriteLine("Cannot refuel an electric powered car.");
-            }
+            }*/
         }
         private void chargeElectricVehicle()
         {
@@ -538,14 +565,14 @@ namespace Ex03.ConsoleUI
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToCharge);
             hoursToAdd = getEnergyAmountToAddFromUser();
-            if (m_SystemLogic.CheckIfVehicleIsGasPowered(vehicleToCharge))
-            {
-                Console.WriteLine("Cannot refuel a gasoline powered car.");
-            }
-            else
+            if (m_SystemLogic.CheckIfVehicleIsElectricPowered(vehicleToCharge))
             {
                 m_SystemLogic.chargeBatteryToVehicle(vehicleToCharge, hoursToAdd);
             }
+            /*else
+            {
+                Console.WriteLine("Cannot refuel a gasoline powered car.");
+            }*/
         }
 
         private GarageOpenIssue.eVehicleState getStateToChangeToFromUser()
