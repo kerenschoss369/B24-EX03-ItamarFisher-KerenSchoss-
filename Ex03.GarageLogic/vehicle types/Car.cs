@@ -39,16 +39,16 @@ namespace Ex03.GarageLogic
         }
         public override void setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation)
         {
-            foreach(Tuple<string,object> tuple in i_AdditionalVehicleInformation)
+            foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
             {
-                if(tuple.Item1 == k_CarColor)
+                if ((tuple.Item1 == k_CarColor) && (tuple.Item1 == k_DoorsAmount))
                 {
-                    Enum.TryParse((string)tuple.Item2, out m_CarColor);
+                    if (!(Enum.TryParse<eCarColor>((string)tuple.Item2, out m_CarColor) &&
+                    (Enum.TryParse<eCarDoorsAmount>((string)tuple.Item2, out m_CarDoorsAmount))))
+                    {
+                        throw new FormatException("Could not Parse the input.");
+                    }
                 }
-                if(tuple.Item1 == k_DoorsAmount)
-                {
-                    Enum.TryParse((string)tuple.Item2, out m_CarDoorsAmount);
-                }    
             }
         }
 

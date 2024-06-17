@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Ex03.GarageLogic.Car;
 
 namespace Ex03.GarageLogic
 {
@@ -39,15 +40,15 @@ namespace Ex03.GarageLogic
         {
             foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
              {
-                 if (tuple.Item1 == K_LicenseType)
-                 {
-                     Enum.TryParse((string)tuple.Item2, out m_LicenseType);
-                 }
-                 if (tuple.Item1 == k_EngineDisplacementInCc)
-                 {
-                     Enum.TryParse((string)tuple.Item2, out m_EngineDisplacementInCc);
-                 }
-             }
+                if ((tuple.Item1 == K_LicenseType) && (tuple.Item1 == k_EngineDisplacementInCc))
+                {
+                    if (!(Enum.TryParse<eLicenseType>((string)tuple.Item2, out m_LicenseType) &&
+                    (int.TryParse((string)tuple.Item2, out m_EngineDisplacementInCc))))
+                    {
+                        throw new FormatException("Could not Parse the input.");
+                    }
+                }
+            }
         }
         public enum eLicenseType
         {

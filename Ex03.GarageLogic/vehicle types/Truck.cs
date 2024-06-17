@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Ex03.GarageLogic.Car;
+using static Ex03.GarageLogic.Motorcycle;
 
 namespace Ex03.GarageLogic
 {
@@ -35,13 +36,13 @@ namespace Ex03.GarageLogic
         {
             foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
             {
-                if (tuple.Item1 == k_IsCarryingHazardousMaterials)
+                if ((tuple.Item1 == k_IsCarryingHazardousMaterials) && (tuple.Item1 == k_CargoVolume))
                 {
-                    Enum.TryParse((string)tuple.Item2, out m_IsCarryingHazardousMaterials);
-                }
-                if (tuple.Item1 == k_CargoVolume)
-                {
-                    Enum.TryParse((string)tuple.Item2, out m_CargoVolume);
+                    if (!(bool.TryParse((string)tuple.Item2, out m_IsCarryingHazardousMaterials) &&
+                    (float.TryParse((string)tuple.Item2, out m_CargoVolume))))
+                    {
+                        throw new FormatException("Could not Parse the input.");
+                    }
                 }
             }
         }
