@@ -114,34 +114,33 @@ namespace Ex03.ConsoleUI
                 getOpenIssueDetailsFromUserAndAddToGarage(plateNumber);
             }
         }
-        private void fillEzPz(ref List<Tuple<string,object>> ezpz)
+        private void fillAddtionalInfoFromUserInput(ref List<Tuple<string,object>> o_AdditionalInfoList)//maybe in logic??????
         {
             List<Tuple<string, object>> newTuplesList = new List <Tuple<string, object>>();
-            foreach (Tuple<string,object> tuple in ezpz)
+            foreach (Tuple<string,object> tuple in o_AdditionalInfoList)
             {
-                Console.WriteLine("Please enter: " + tuple.Item1);
+                Console.WriteLine("Please enter:\n" + tuple.Item1);
                 Tuple<string, object> newTuple = new Tuple<string, object>(tuple.Item1, Console.ReadLine());
                 newTuplesList.Add(newTuple);
             }
-            ezpz.Clear();
-            ezpz = newTuplesList;
+            o_AdditionalInfoList.Clear();
+            o_AdditionalInfoList = newTuplesList;
         }
         private void getCarDetailsFromUserAndAddToGarage(string i_PlateNumber, Vehicle vehicleToAdd)
         {
 
             eVehicleType vehicleType;
             string wheelsSetUpOptionInput;
-            List<Tuple<string, object>> ezpz;
+            List<Tuple<string, object>> additionalInfoList;
 
             Console.WriteLine("\nLet's begin with adding the new car by getting the requested details:");
             vehicleType = getVehicleTypeFromUser();
             m_SystemLogic.CreateNewVehicleAndAddToVehicleList(vehicleType, i_PlateNumber);
 
-        
             m_SystemLogic.getVehicleUsingPlateNumberIfExist(i_PlateNumber, out vehicleToAdd);
-            m_SystemLogic.GetAdditionalInfo(eVehicleType.GasolineCar, out ezpz);
-            fillEzPz(ref ezpz);
-            m_SystemLogic.setAdditionalInfoParams(ref vehicleToAdd, ezpz);
+            m_SystemLogic.GetAdditionalInfo(eVehicleType.GasolineCar, out additionalInfoList);
+            fillAddtionalInfoFromUserInput(ref additionalInfoList);
+            m_SystemLogic.setAdditionalInfoParams(ref vehicleToAdd, additionalInfoList);
             wheelsSetUpOptionInput = getWheelsSetUpOptioneFromUser();
             setWheelsCondition(wheelsSetUpOptionInput, vehicleToAdd);
 

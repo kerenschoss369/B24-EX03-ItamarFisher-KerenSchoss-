@@ -41,11 +41,9 @@ namespace Ex03.GarageLogic
         private void addAdditionalInformationIntoList(ref List<Tuple<string, object>> o_AdditionalVehicleInformation)
         {
             Tuple<string, object> modelName = new Tuple<string, object>("Model name", m_ModelName);
-            Tuple<string, object> plateNumber = new Tuple<string, object>("Plate number", m_PlateNumber);
             Tuple<string, object> energyLeft = new Tuple<string, object>("Energy left", m_PercentageOfEnergyLeft);
 
             o_AdditionalVehicleInformation.Add(modelName);
-            o_AdditionalVehicleInformation.Add(plateNumber);
             o_AdditionalVehicleInformation.Add(energyLeft);
         }
         public abstract void setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation);
