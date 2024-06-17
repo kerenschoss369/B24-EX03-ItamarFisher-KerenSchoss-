@@ -152,6 +152,7 @@ namespace Ex03.ConsoleUI
         {
             int wheelIndex = 1;
             float validateAirPressure;
+            string manufacturerName;
 
             if (i_WheelsSetUpOptionInput == "1")
             {
@@ -159,6 +160,8 @@ namespace Ex03.ConsoleUI
                 {
                     Console.Write("\nwheel no.{0} - ", wheelIndex);
                     setWheelCurrentAirPressure(wheel, out validateAirPressure);
+                    Console.WriteLine("Please enter wheel's manufacturer");
+                    wheel.manufacturerName = Console.ReadLine();
                     wheel.currentAirPressure = validateAirPressure;
                     wheelIndex++;
                 }
@@ -166,9 +169,12 @@ namespace Ex03.ConsoleUI
             else if (i_WheelsSetUpOptionInput == "2")
             {
                 setWheelCurrentAirPressure(i_VehicleToAdd.wheelsList[0], out validateAirPressure);
+                Console.WriteLine("Please enter wheel's manufacturer");
+                manufacturerName = Console.ReadLine();
                 foreach (Wheel wheel in i_VehicleToAdd.wheelsList)
                 {
                     wheel.currentAirPressure = validateAirPressure;
+                    wheel.manufacturerName = manufacturerName;
                 }
             }
             else
@@ -767,13 +773,13 @@ namespace Ex03.ConsoleUI
 
         private void printVehicleDetails(Vehicle i_VehicleToDisplayDetailsOf, GarageOpenIssue i_OpenIssueToDisplayDetailsOf)
         {
+            Console.WriteLine(i_OpenIssueToDisplayDetailsOf.ToString());   
             Console.WriteLine(i_VehicleToDisplayDetailsOf.ToString());
             Console.WriteLine("Wheels Info:");
             foreach (var wheel in i_VehicleToDisplayDetailsOf.wheelsList)
             {
                 Console.WriteLine(string.Format("Manufacturer: {0}, Current Air Pressure: {1}, Max Air Pressure: {2}", wheel.manufacturerName, wheel.currentAirPressure, wheel.maxAirPressureDefinedByManufacturer));
             }
-
         }
     }
 }

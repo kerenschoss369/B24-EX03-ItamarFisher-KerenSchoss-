@@ -109,14 +109,26 @@ namespace Ex03.GarageLogic
         }
         public override string ToString()
         {
+            string energyType;
+            GasolineEnergySourceManager gasolineEnergySourceManager;
+            if(energySourceManager is ElectricEnergySourceManager)
+            {
+                energyType = "Electricity";
+            }
+            else
+            {
+                gasolineEnergySourceManager = (GasolineEnergySourceManager)energySourceManager;
+                energyType = gasolineEnergySourceManager.fuelType.ToString();
+            }
 
         string vehicleString = string.Format(
            @"
 Car model: {0}
 Plate number is: {1}
-Percentage of energy left is: %{2}
-Amount of energy left is: {3}
-", m_ModelName, m_PlateNumber, m_PercentageOfEnergyLeft, m_EnergySourceManager.currentEnergySourceAmount);
+Energy source is: {2}
+Percentage of energy left is: %{3}
+Amount of energy left is: {4}
+", m_ModelName, m_PlateNumber, energyType, m_PercentageOfEnergyLeft, m_EnergySourceManager.currentEnergySourceAmount);
 
             return vehicleString;
         }

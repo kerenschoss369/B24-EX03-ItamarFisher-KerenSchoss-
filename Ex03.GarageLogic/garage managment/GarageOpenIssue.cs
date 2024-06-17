@@ -65,6 +65,17 @@ namespace Ex03.GarageLogic
                 return m_VehiclePlateNumber;
             }
         }
+        public override string ToString()
+        {
+        string vehicleString = string.Format(
+               @"
+Car Owner's name is: {0}
+Owner's phone number is: {1}
+Vehicle state is: {2}
+", r_VehicleOwnerName, r_OwnerPhoneNumber, m_VehicleState.ToString());
+
+            return vehicleString;
+        }
 
     }
 
