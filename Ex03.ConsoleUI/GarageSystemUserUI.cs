@@ -97,6 +97,18 @@ namespace Ex03.ConsoleUI
                 getOpenIssueDetailsFromUserAndAddToGarage(plateNumber);
             }
         }
+        private void fillEzPz(ref List<Tuple<string,object>> ezpz)
+        {
+            List<Tuple<string, object>> newTuplesList = new List <Tuple<string, object>>();
+            foreach (Tuple<string,object> tuple in ezpz)
+            {
+                Console.WriteLine("Please enter: " + tuple.Item1);
+                Tuple<string, object> newTuple = new Tuple<string, object>(tuple.Item1, Console.ReadLine());
+                newTuplesList.Add(newTuple);
+            }
+            ezpz.Clear();
+            ezpz = newTuplesList;
+        }
         private void getCarDetailsFromUserAndAddToGarage(string i_PlateNumber, Vehicle vehicleToAdd)
         {
             eCarColor carColor;
@@ -111,6 +123,18 @@ namespace Ex03.ConsoleUI
             Console.WriteLine("\nLet's begin with adding the new car by getting the requested details:");
             vehicleType = getVehicleTypeFromUser();
             m_systemLogic.CreateNewVehicleAndAddToVehicleList(vehicleType, i_PlateNumber);
+
+            VehicleFactory blah = m_systemLogic.GarageSystemFactory; // ssussssyyyyyy bakakakakakakakak
+            List<Tuple<string,object>> ezpz = blah.GetAdditionalInfo(eVehicleType.GasolineCar);
+            Vehicle vehicle;
+            m_systemLogic.getVehicleUsingPlateNumberIfExist("123-12-123", out vehicle);
+            Console.WriteLine("here is interesting");
+            fillEzPz(ref ezpz);
+            //Fill ezpz
+            m_systemLogic.setAdditionalInfoParams(ref vehicle, ezpz);
+            Console.WriteLine("here is interesting");
+
+
             m_systemLogic.getVehicleUsingPlateNumberIfExist(i_PlateNumber, out vehicleToAdd);
             wheelsSetUpOptionInput = getWheelsSetUpOptioneFromUser();
             setWheelsCondition(wheelsSetUpOptionInput, vehicleToAdd);
@@ -232,7 +256,7 @@ namespace Ex03.ConsoleUI
                 Console.Write("\nExisting energy amount (fuel amount or hours left in the battery): ");
                 if(!float.TryParse(Console.ReadLine(), out existingEnergyAmount))
                 {
-                    Console.WriteLine("Ivalid input, input isn't a float");
+                    Console.WriteLine("Ivalid input, input isn't a number");
                 }
                 else
                 {
@@ -548,7 +572,7 @@ namespace Ex03.ConsoleUI
             }
             else
             {
-                Console.WriteLine("Cannot refuel an electric powerd car.");
+                Console.WriteLine("Cannot refuel an electric powered car.");
             }
         }
         private void chargeElectricVehicle()
@@ -561,7 +585,7 @@ namespace Ex03.ConsoleUI
             hoursToAdd = getEnergyAmountToAddFromUser();
             if (m_systemLogic.CheckIfVehicleIsGasPowered(vehicleToCharge))
             {
-                Console.WriteLine("Cannot refuel a gasoline powerd car.");
+                Console.WriteLine("Cannot refuel a gasoline powered car.");
             }
             else
             {

@@ -8,8 +8,8 @@ namespace Ex03.GarageLogic
 {
     public class ElectricEnergySourceManager : EnergySourceManager
     {
-        public ElectricEnergySourceManager(float i_MaxEnergySourceAmount)
-            : base(i_MaxEnergySourceAmount)
+        public ElectricEnergySourceManager(float i_MaxEnergySourceAmount, ref List<Tuple<string, object>> o_AdditionalVehicleInformation)
+            : base(i_MaxEnergySourceAmount, ref o_AdditionalVehicleInformation)
         {
         }
         public float ChargeBatteryUntillFullOrHoursToAdd(float i_HoursToAdd)

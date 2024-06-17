@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Ex03.GarageLogic.Car;
 
 namespace Ex03.GarageLogic
 {
@@ -15,9 +16,31 @@ namespace Ex03.GarageLogic
         private const GasolineEnergySourceManager.eFuelType k_FuelType = GasolineEnergySourceManager.eFuelType.Soler;
         private const float k_TankFuelCapacity = 120;
         private GasolineEnergySourceManager m_TruckGasolineEnergyManagaer;
-        public Truck()
-            : base(k_NumberOfWheels, k_WheelsMaxAirPressure, new GasolineEnergySourceManager(k_TankFuelCapacity, k_FuelType), k_TankFuelCapacity, k_FuelType)//Maybe 2 ctors could go along better
+        public Truck(ref List<Tuple<string, object>> o_AdditionalVehicleInformation)
+            : base(k_NumberOfWheels, k_WheelsMaxAirPressure, new GasolineEnergySourceManager(k_TankFuelCapacity, k_FuelType, ref o_AdditionalVehicleInformation),
+                  k_TankFuelCapacity, k_FuelType, ref o_AdditionalVehicleInformation)
         {
+            Tuple<string, object> cargoVolume = new Tuple<string, object>("Cargo Volume", m_CargoVolume);
+            Tuple<string, object> isCarryingHazardousMaterials =
+                new Tuple<string, object>("yes or no if your truck carrying hazardous materials", m_IsCarryingHazardousMaterials);
+
+            o_AdditionalVehicleInformation.Add(cargoVolume);
+            o_AdditionalVehicleInformation.Add(isCarryingHazardousMaterials);
+        }
+
+        public override void setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation)
+        {
+           /* foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
+            {
+                if (tuple.Item1 == "Car color")
+                {
+                    Enum.TryParse((string)tuple.Item2, out m_CarColor);
+                }
+                if (tuple.Item1 == "Amount of Car Doors")
+                {
+                    Enum.TryParse((string)tuple.Item2, out m_CarDoorsAmount);
+                }
+            }*/
         }
         public float cargoVolume
         {
