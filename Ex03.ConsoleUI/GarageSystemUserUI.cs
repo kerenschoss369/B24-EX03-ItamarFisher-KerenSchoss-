@@ -1,6 +1,7 @@
 ﻿using Ex03.GarageLogic;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Runtime.ConstrainedExecution;
@@ -26,7 +27,8 @@ namespace Ex03.ConsoleUI
             InflateVehicleTires,
             RefuelGasVehicle,
             ChargeElectricVehicle,
-            DisplayVehicleDetails
+            DisplayVehicleDetails,
+            Exit
         }
 
         private Ex03.GarageLogic.GarageSystemLogic m_systemLogic = new GarageSystemLogic();
@@ -35,46 +37,61 @@ namespace Ex03.ConsoleUI
             int userChoiceOfAction;
             while (true)
             {
-                Console.Write("\n--------------------------------------------------------------------------\n\n" +
-                    "Please select an action:\n\n" +
-                    "1. Add a new vehicle to the garage\n" +
-                    "2. Display list of license numbers of vehicles in the garage and filter them by condition\n" +
-                    "3. Change the status of a vehicle in the garage\n" +
-                    "4. fill tires of vehicle in the garage\n" +
-                    "5. Refuel a gasoline-powered vehicle in the garage\n" +
-                    "6. Charge an electric vehicle in the garage\n" +
-                    "7. Display vehicle details by license number\n\n" +
-                    "--------------------------------------------------------------------------\n\n" +
-                    "Type your selection here: ");
-
-                while (!int.TryParse(Console.ReadLine(), out userChoiceOfAction) || (userChoiceOfAction < 1) || (userChoiceOfAction > 7)) //FIX INVALID VALUES MAYBE WITH ERRORS
+                try
                 {
-                    Console.Write("Invalid input. Please make sure that you enter a number between 1 and 7.");
+                    Console.Write("\n--------------------------------------------------------------------------\n\n" +
+                        "Please select an action:\n\n" +
+                        "1. Add a new vehicle to the garage\n" +
+                        "2. Display list of license numbers of vehicles in the garage and filter them by condition\n" +
+                        "3. Change the status of a vehicle in the garage\n" +
+                        "4. fill tires of vehicle in the garage\n" +
+                        "5. Refuel a gasoline-powered vehicle in the garage\n" +
+                        "6. Charge an electric vehicle in the garage\n" +
+                        "7. Display vehicle details by license number\n" +
+                        "8. Exit\n\n" +
+                        "--------------------------------------------------------------------------\n\n" +
+                        "Type your selection here: ");
+
+                    while (!int.TryParse(Console.ReadLine(), out userChoiceOfAction) || (userChoiceOfAction < 1) || (userChoiceOfAction > 7)) //FIX INVALID VALUES MAYBE WITH ERRORS
+                    {
+                        Console.Write("Invalid input. Please make sure that you enter a number between 1 and 7.");
+                    }
+
+                    switch ((eGarageMenuOptions)userChoiceOfAction)
+                    {
+                        case eGarageMenuOptions.AddNewVehicle:
+                            addNewVehicleToTheGarage();
+                            break;
+                        case eGarageMenuOptions.DisplayAllPlateNumbersAndFilter:
+                            displayAllPlateNumbersAndFilter();
+                            break;
+                        case eGarageMenuOptions.ChangeVehicleStatus:
+                            changeVehicleStatus();
+                            break;
+                        case eGarageMenuOptions.InflateVehicleTires:
+                            inflateVehicleTires();
+                            break;
+                        case eGarageMenuOptions.RefuelGasVehicle:
+                            refuelGasVehicle();
+                            break;
+                        case eGarageMenuOptions.ChargeElectricVehicle:
+                            chargeElectricVehicle();
+                            break;
+                        case eGarageMenuOptions.DisplayVehicleDetails:
+                            displayVehicleDetails();
+                            break;
+                        case eGarageMenuOptions.Exit:
+                            return;
+                            break;
+                    }
                 }
-
-                switch ((eGarageMenuOptions)userChoiceOfAction)
+                catch (ArgumentException ex)
                 {
-                    case eGarageMenuOptions.AddNewVehicle:
-                        addNewVehicleToTheGarage();
-                        break;
-                    case eGarageMenuOptions.DisplayAllPlateNumbersAndFilter:
-                        displayAllPlateNumbersAndFilter();
-                        break;
-                    case eGarageMenuOptions.ChangeVehicleStatus:
-                        changeVehicleStatus();
-                        break;
-                    case eGarageMenuOptions.InflateVehicleTires:
-                        inflateVehicleTires();
-                        break;
-                    case eGarageMenuOptions.RefuelGasVehicle:
-                        refuelGasVehicle();
-                        break;
-                    case eGarageMenuOptions.ChargeElectricVehicle:
-                        chargeElectricVehicle();
-                        break;
-                    case eGarageMenuOptions.DisplayVehicleDetails:
-                        displayVehicleDetails();
-                        break;
+                    Console.WriteLine(ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An unexpected error occurred: {ex.Message}");
                 }
             }
         }
@@ -181,20 +198,20 @@ namespace Ex03.ConsoleUI
             do
             {
                 Console.Write("Air pressure: ");
-                if(!float.TryParse(Console.ReadLine(), out airPressureInput))
+                if (!float.TryParse(Console.ReadLine(), out airPressureInput))
                 {
                     Console.WriteLine("Invalid input, input isn't a float");
                 }
                 else
                 {
-                    if (airPressureInput > i_wheel.maxAirPressureDefinedByManufacturer)
+                    if (!(m_systemLogic.IsAirPressureLowerOrEqualToMaxAirPressure(airPressureInput, i_wheel)))
                     {
                         Console.WriteLine("Invalid input. The pressure should not be higher than the maximum that has been defined by the manufacturer");
                     }
                 }
-                
+
             }
-            while (airPressureInput > i_wheel.maxAirPressureDefinedByManufacturer);
+            while (!(m_systemLogic.IsAirPressureLowerOrEqualToMaxAirPressure(airPressureInput, i_wheel)));
             o_ValidateAirPressure = airPressureInput;
         }
 
@@ -230,19 +247,19 @@ namespace Ex03.ConsoleUI
             do
             {
                 Console.Write("\nExisting energy amount (fuel amount or hours left in the battery): ");
-                if(!float.TryParse(Console.ReadLine(), out existingEnergyAmount))
+                if (!float.TryParse(Console.ReadLine(), out existingEnergyAmount))
                 {
                     Console.WriteLine("Ivalid input, input isn't a float");
                 }
                 else
                 {
-                    if (existingEnergyAmount > i_VehicleToUpdate.energySourceManager.maxEnergySourceAmount)
+                    if (!(m_systemLogic.IsEnergyAmountLowerOrEqualToMaxEnergyAmount(existingEnergyAmount, i_VehicleToUpdate)))
                     {
                         Console.WriteLine("Invalid input.The existing energy amount should not be higher than the maximum that has been defined by the manufacturer");
                     }
                 }
             }
-            while (existingEnergyAmount > i_VehicleToUpdate.energySourceManager.maxEnergySourceAmount);
+            while (!(m_systemLogic.IsEnergyAmountLowerOrEqualToMaxEnergyAmount(existingEnergyAmount, i_VehicleToUpdate)));
 
             i_VehicleToUpdate.energySourceManager.currentEnergySourceAmount = existingEnergyAmount;
         }
@@ -331,24 +348,19 @@ namespace Ex03.ConsoleUI
             string licenseTypeFromUser;
             do
             {
-                Console.Write("\nChoose the license type:\n" +
-                    "1. A\n" +
-                    "2. A1\n" +
-                    "3. AA\n" +
-                    "4. B1\n" +
-                    "Your choice: ");
+                Console.Write("\nChoose the license type:\n");
+                foreach (eLicenseType type in Enum.GetValues(typeof(eLicenseType)))
+                {
+                    Console.Write($"{(int)type}. {type.ToString()}\n");
+                }
+                Console.Write("Your choice: ");
+
                 licenseTypeFromUser = Console.ReadLine();
             }
-            while (!isValidLicenseTypeAndConvertToELicenseType(licenseTypeFromUser, out licenseType));
+            while (!m_systemLogic.isValidLicenseTypeAndConvertToELicenseType(licenseTypeFromUser, out licenseType));
 
             return licenseType;
         }
-
-        private bool isValidLicenseTypeAndConvertToELicenseType(string i_LicenseTypeFromUser, out eLicenseType o_LicenseType)
-        {
-            return Enum.TryParse(i_LicenseTypeFromUser, true, out o_LicenseType) && Enum.IsDefined(typeof(eLicenseType), o_LicenseType);
-        }
-
         private eCarDoorsAmount getCarDoorsAmountFromUser()
         {
             eCarDoorsAmount carDoorsAmount;
@@ -363,14 +375,9 @@ namespace Ex03.ConsoleUI
                     "Your choice: ");
                 carDoorsAmountFromUser = Console.ReadLine();
             }
-            while (!isValidCarDoorsAmountAndConvertToECarDoorsAmount(carDoorsAmountFromUser, out carDoorsAmount));
+            while (!m_systemLogic.isValidCarDoorsAmountAndConvertToECarDoorsAmount(carDoorsAmountFromUser, out carDoorsAmount));
 
             return carDoorsAmount;
-        }
-
-        private bool isValidCarDoorsAmountAndConvertToECarDoorsAmount(string i_CarDoorsAmountFromUser, out eCarDoorsAmount o_CarDoorsAmount)
-        {
-            return Enum.TryParse(i_CarDoorsAmountFromUser, true, out o_CarDoorsAmount) && Enum.IsDefined(typeof(eCarDoorsAmount), o_CarDoorsAmount);
         }
         private eCarColor getCarColorFromUser()
         {
@@ -386,14 +393,9 @@ namespace Ex03.ConsoleUI
                     "Your choise: ");
                 carColorFromUser = Console.ReadLine();
             }
-            while (!isValidCarColorAndConvertToECarColor(carColorFromUser, out carColor));
+            while (!m_systemLogic.isValidCarColorAndConvertToECarColor(carColorFromUser, out carColor));
 
             return carColor;
-        }
-
-        private bool isValidCarColorAndConvertToECarColor(string i_CarColorFromUser, out eCarColor o_CarColor)
-        {
-            return Enum.TryParse(i_CarColorFromUser, true, out o_CarColor) && Enum.IsDefined(typeof(eCarColor), o_CarColor);
         }
         private eVehicleType getVehicleTypeFromUser()// not good not generic
         {
@@ -410,17 +412,10 @@ namespace Ex03.ConsoleUI
                     "Your choise: ");
                 vehicleTypeFromUser = Console.ReadLine();
             }
-            while (!isValidVehicleTypeAndConvertToEVehicleType(vehicleTypeFromUser, out vehicleType));
+            while (!(m_systemLogic.isValidVehicleTypeAndConvertToEVehicleType(vehicleTypeFromUser, out vehicleType)));
 
             return vehicleType;
         }
-
-        private bool isValidVehicleTypeAndConvertToEVehicleType(string i_VehicleTypeFromUser, out eVehicleType o_VehicleType)
-        {
-
-            return Enum.TryParse(i_VehicleTypeFromUser, true, out o_VehicleType) && Enum.IsDefined(typeof(eVehicleType), o_VehicleType);
-        }
-
         private void getOpenIssueDetailsFromUserAndAddToGarage(string i_PlateNumber)
         {
             string ownerName, ownerPhoneNumber;
@@ -683,7 +678,7 @@ namespace Ex03.ConsoleUI
             else
             {
                 Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-                    "List of plate numbers:\n"+
+                    "List of plate numbers:\n" +
                     "----------------------\n");
                 foreach (string plateNumber in i_VehicleToPrint)
                 {

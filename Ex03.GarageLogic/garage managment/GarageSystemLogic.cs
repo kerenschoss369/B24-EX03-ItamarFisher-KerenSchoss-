@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using static Ex03.GarageLogic.Car;
+using static Ex03.GarageLogic.Motorcycle;
 using static Ex03.GarageLogic.VehicleFactory;
 
 namespace Ex03.GarageLogic
@@ -213,6 +216,32 @@ namespace Ex03.GarageLogic
             }
 
             return isValidatePlateNumber;
+        }
+
+        public bool IsAirPressureLowerOrEqualToMaxAirPressure(float i_AirPressure, Wheel i_CheckedWheel)
+        {
+            return (i_AirPressure <= i_CheckedWheel.maxAirPressureDefinedByManufacturer);
+        }
+
+        public bool IsEnergyAmountLowerOrEqualToMaxEnergyAmount(float i_EnergyAmount, Vehicle i_VehicleToUpdate)
+        {
+            return (i_EnergyAmount <= i_VehicleToUpdate.energySourceManager.maxEnergySourceAmount);
+        }
+        public bool isValidCarDoorsAmountAndConvertToECarDoorsAmount(string i_CarDoorsAmountFromUser, out eCarDoorsAmount o_CarDoorsAmount)
+        {
+            return Enum.TryParse(i_CarDoorsAmountFromUser, true, out o_CarDoorsAmount) && Enum.IsDefined(typeof(eCarDoorsAmount), o_CarDoorsAmount);
+        }
+        public bool isValidCarColorAndConvertToECarColor(string i_CarColorFromUser, out eCarColor o_CarColor)
+        {
+            return Enum.TryParse(i_CarColorFromUser, true, out o_CarColor) && Enum.IsDefined(typeof(eCarColor), o_CarColor);
+        }
+        public bool isValidVehicleTypeAndConvertToEVehicleType(string i_VehicleTypeFromUser, out eVehicleType o_VehicleType)
+        {
+            return Enum.TryParse(i_VehicleTypeFromUser, true, out o_VehicleType) && Enum.IsDefined(typeof(eVehicleType), o_VehicleType);
+        }
+        public bool isValidLicenseTypeAndConvertToELicenseType(string i_LicenseTypeFromUser, out eLicenseType o_LicenseType)
+        {
+            return Enum.TryParse(i_LicenseTypeFromUser, true, out o_LicenseType) && Enum.IsDefined(typeof(eLicenseType), o_LicenseType);
         }
 
     }
