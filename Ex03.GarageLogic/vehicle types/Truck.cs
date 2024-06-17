@@ -16,13 +16,16 @@ namespace Ex03.GarageLogic
         private const GasolineEnergySourceManager.eFuelType k_FuelType = GasolineEnergySourceManager.eFuelType.Soler;
         private const float k_TankFuelCapacity = 120;
         private GasolineEnergySourceManager m_TruckGasolineEnergyManagaer;
+
+        private const string k_IsCarryingHazardousMaterials = "Is carrying hazardous materials";
+        private const string k_CargoVolume = "Cargo volume";
         public Truck(ref List<Tuple<string, object>> o_AdditionalVehicleInformation)
             : base(k_NumberOfWheels, k_WheelsMaxAirPressure, new GasolineEnergySourceManager(k_TankFuelCapacity, k_FuelType, ref o_AdditionalVehicleInformation),
                   k_TankFuelCapacity, k_FuelType, ref o_AdditionalVehicleInformation)
         {
-            Tuple<string, object> cargoVolume = new Tuple<string, object>("Cargo Volume", m_CargoVolume);
+            Tuple<string, object> cargoVolume = new Tuple<string, object>(k_CargoVolume, m_CargoVolume);
             Tuple<string, object> isCarryingHazardousMaterials =
-                new Tuple<string, object>("yes or no if your truck carrying hazardous materials", m_IsCarryingHazardousMaterials);
+                new Tuple<string, object>(k_IsCarryingHazardousMaterials, m_IsCarryingHazardousMaterials);
 
             o_AdditionalVehicleInformation.Add(cargoVolume);
             o_AdditionalVehicleInformation.Add(isCarryingHazardousMaterials);
@@ -30,17 +33,17 @@ namespace Ex03.GarageLogic
 
         public override void setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation)
         {
-           /* foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
+            foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
             {
-                if (tuple.Item1 == "Car color")
+                if (tuple.Item1 == k_IsCarryingHazardousMaterials)
                 {
-                    Enum.TryParse((string)tuple.Item2, out m_CarColor);
+                    Enum.TryParse((string)tuple.Item2, out m_IsCarryingHazardousMaterials);
                 }
-                if (tuple.Item1 == "Amount of Car Doors")
+                if (tuple.Item1 == k_CargoVolume)
                 {
-                    Enum.TryParse((string)tuple.Item2, out m_CarDoorsAmount);
+                    Enum.TryParse((string)tuple.Item2, out m_CargoVolume);
                 }
-            }*/
+            }
         }
         public float cargoVolume
         {

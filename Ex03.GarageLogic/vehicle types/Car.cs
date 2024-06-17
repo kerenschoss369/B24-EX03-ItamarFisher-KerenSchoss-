@@ -8,14 +8,15 @@ using static Ex03.GarageLogic.Motorcycle;
 
 namespace Ex03.GarageLogic
 {
-   
     public class Car : Vehicle
     {
         private eCarColor m_CarColor;
         private eCarDoorsAmount m_CarDoorsAmount;
         private const int k_NumberOfWheels = 5;
         private const float k_WheelsMaxAirPressure = 31;
+
         private const string k_CarColor = "Car color";
+        private const string k_DoorsAmount = "Amount of Car Doors";
         public Car(EnergySourceManager i_EnergySourceManager, float i_MaxEnergySourceAmount, GasolineEnergySourceManager.eFuelType i_FuelType,
             ref List<Tuple<string, object>> o_AdditionalVehicleInformation)
             : base(k_NumberOfWheels, k_WheelsMaxAirPressure, i_EnergySourceManager, i_MaxEnergySourceAmount,
@@ -31,7 +32,7 @@ namespace Ex03.GarageLogic
         private void addAdditionalInformationIntoList(ref List<Tuple<string, object>> o_AdditionalVehicleInformation)
         {
             Tuple<string, object> carColor = new Tuple<string, object>(k_CarColor, m_CarColor);
-            Tuple<string, object> carDoorAmount = new Tuple<string, object>("Amount of Car Doors", m_CarDoorsAmount);
+            Tuple<string, object> carDoorAmount = new Tuple<string, object>(k_DoorsAmount, m_CarDoorsAmount);
 
             o_AdditionalVehicleInformation.Add(carColor);
             o_AdditionalVehicleInformation.Add(carDoorAmount);
@@ -40,11 +41,11 @@ namespace Ex03.GarageLogic
         {
             foreach(Tuple<string,object> tuple in i_AdditionalVehicleInformation)
             {
-                if(tuple.Item1 == "Car color")
+                if(tuple.Item1 == k_CarColor)
                 {
                     Enum.TryParse((string)tuple.Item2, out m_CarColor);
                 }
-                if(tuple.Item1 == "Amount of Car Doors")
+                if(tuple.Item1 == k_DoorsAmount)
                 {
                     Enum.TryParse((string)tuple.Item2, out m_CarDoorsAmount);
                 }    
