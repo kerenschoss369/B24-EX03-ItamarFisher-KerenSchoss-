@@ -33,6 +33,11 @@ namespace Ex03.GarageLogic
             m_VehicleList.Add(vehicle);
 
         }
+        public void GetAdditionalInfo(eVehicleType i_VehicleType, out List<Tuple<string, object>> o_AdditionalInfoTuplesList)
+        {
+            o_AdditionalInfoTuplesList = garageSystemFactory.GetAdditionalInfo(i_VehicleType);
+        }
+
         public void AddNewOpenIssue(string i_OwnerName, string i_OwnerPhoneNumber, GarageOpenIssue.eVehicleState i_VehicleState, string i_VehiclePlateNumber)
         {
             GarageOpenIssue issue = new GarageOpenIssue(i_OwnerName, i_OwnerPhoneNumber, i_VehicleState, i_VehiclePlateNumber);

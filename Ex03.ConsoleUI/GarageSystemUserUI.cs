@@ -31,7 +31,7 @@ namespace Ex03.ConsoleUI
             Exit
         }
 
-        private Ex03.GarageLogic.GarageSystemLogic m_systemLogic = new GarageSystemLogic();
+        private Ex03.GarageLogic.GarageSystemLogic m_SystemLogic = new GarageSystemLogic();
         public void printMenu()
         {
             int userChoiceOfAction;
@@ -102,11 +102,11 @@ namespace Ex03.ConsoleUI
             string plateNumber;
 
             plateNumber = getValidatePlateNumberFromUser();
-            if (m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate))
+            if (m_SystemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate))
             {
                 Console.WriteLine("Car has been already in the garage. the state will be changed to in maintenance.");
-                m_systemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out issueToAddOrUpdate);
-                m_systemLogic.changeVehicleState(issueToAddOrUpdate, GarageOpenIssue.eVehicleState.InMaintenance);
+                m_SystemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out issueToAddOrUpdate);
+                m_SystemLogic.changeVehicleState(issueToAddOrUpdate, GarageOpenIssue.eVehicleState.InMaintenance);
             }
             else
             {
@@ -128,59 +128,22 @@ namespace Ex03.ConsoleUI
         }
         private void getCarDetailsFromUserAndAddToGarage(string i_PlateNumber, Vehicle vehicleToAdd)
         {
-            eCarColor carColor;
-            eCarDoorsAmount doorsAmount;
+
             eVehicleType vehicleType;
-            eLicenseType licenceType;
             string wheelsSetUpOptionInput;
-            float energyAmount, existingAirPressure, cargoVolume;
-            int engineCapacityInCc;
-            bool isCarryingHazardousMaterials;
+            List<Tuple<string, object>> ezpz;
 
             Console.WriteLine("\nLet's begin with adding the new car by getting the requested details:");
             vehicleType = getVehicleTypeFromUser();
-            m_systemLogic.CreateNewVehicleAndAddToVehicleList(vehicleType, i_PlateNumber);
+            m_SystemLogic.CreateNewVehicleAndAddToVehicleList(vehicleType, i_PlateNumber);
 
-            VehicleFactory blah = m_systemLogic.GarageSystemFactory; // ssussssyyyyyy bakakakakakakakak
-            List<Tuple<string,object>> ezpz = blah.GetAdditionalInfo(eVehicleType.GasolineCar);
-            Vehicle vehicle;
-            m_systemLogic.getVehicleUsingPlateNumberIfExist("123-12-123", out vehicle);
-            Console.WriteLine("here is interesting");
+        
+            m_SystemLogic.getVehicleUsingPlateNumberIfExist(i_PlateNumber, out vehicleToAdd);
+            m_SystemLogic.GetAdditionalInfo(eVehicleType.GasolineCar, out ezpz);
             fillEzPz(ref ezpz);
-            //Fill ezpz
-            m_systemLogic.setAdditionalInfoParams(ref vehicle, ezpz);
-            Console.WriteLine("here is interesting");
-
-
-            m_systemLogic.getVehicleUsingPlateNumberIfExist(i_PlateNumber, out vehicleToAdd);
+            m_SystemLogic.setAdditionalInfoParams(ref vehicleToAdd, ezpz);
             wheelsSetUpOptionInput = getWheelsSetUpOptioneFromUser();
             setWheelsCondition(wheelsSetUpOptionInput, vehicleToAdd);
-            setExsitingEnergyAmountFromUserInput(vehicleToAdd);
-
-            switch (vehicleType)
-            {
-                case eVehicleType.GasolineCar:
-                case eVehicleType.ElectricCar:
-                    carColor = getCarColorFromUser();
-                    doorsAmount = getCarDoorsAmountFromUser();
-                    m_systemLogic.SetCarInputParameters((Car)vehicleToAdd, carColor, doorsAmount);
-                    break;
-
-                case eVehicleType.GasolineMotorcycle:
-                case eVehicleType.ElectricMotorcycle:
-                    licenceType = getLicenseTypeFromUser();
-                    engineCapacityInCc = getEngineCapacityInCcFromUser();
-                    m_systemLogic.SetMotorcycleInputParameters((Motorcycle)vehicleToAdd, licenceType, engineCapacityInCc);
-                    break;
-
-                case eVehicleType.Truck:
-                    isCarryingHazardousMaterials = getIsCarryingHazardousMaterialsFromUser();
-                    cargoVolume = getCargoVolumeFromUser();
-                    m_systemLogic.SetTruckcycleInputParameters((Truck)vehicleToAdd, cargoVolume, isCarryingHazardousMaterials);
-                    break;
-                default:
-                    break;
-            }
 
             Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
         "Congratulations! Your car has been added successfully to the garage.\n" +
@@ -228,14 +191,14 @@ namespace Ex03.ConsoleUI
                 }
                 else
                 {
-                    if (!(m_systemLogic.IsAirPressureLowerOrEqualToMaxAirPressure(airPressureInput, i_wheel)))
+                    if (!(m_SystemLogic.IsAirPressureLowerOrEqualToMaxAirPressure(airPressureInput, i_wheel)))
                     {
                         Console.WriteLine("Invalid input. The pressure should not be higher than the maximum that has been defined by the manufacturer");
                     }
                 }
 
             }
-            while (!(m_systemLogic.IsAirPressureLowerOrEqualToMaxAirPressure(airPressureInput, i_wheel)));
+            while (!(m_SystemLogic.IsAirPressureLowerOrEqualToMaxAirPressure(airPressureInput, i_wheel)));
             o_ValidateAirPressure = airPressureInput;
         }
 
@@ -265,7 +228,6 @@ namespace Ex03.ConsoleUI
         }
         private void setExsitingEnergyAmountFromUserInput(Vehicle i_VehicleToUpdate)
         {
-            string existingEnergyAmountFromUser;
             float existingEnergyAmount;
 
             do
@@ -277,13 +239,13 @@ namespace Ex03.ConsoleUI
                 }
                 else
                 {
-                    if (!(m_systemLogic.IsEnergyAmountLowerOrEqualToMaxEnergyAmount(existingEnergyAmount, i_VehicleToUpdate)))
+                    if (!(m_SystemLogic.IsEnergyAmountLowerOrEqualToMaxEnergyAmount(existingEnergyAmount, i_VehicleToUpdate)))
                     {
                         Console.WriteLine("Invalid input.The existing energy amount should not be higher than the maximum that has been defined by the manufacturer");
                     }
                 }
             }
-            while (!(m_systemLogic.IsEnergyAmountLowerOrEqualToMaxEnergyAmount(existingEnergyAmount, i_VehicleToUpdate)));
+            while (!(m_SystemLogic.IsEnergyAmountLowerOrEqualToMaxEnergyAmount(existingEnergyAmount, i_VehicleToUpdate)));
 
             i_VehicleToUpdate.energySourceManager.currentEnergySourceAmount = existingEnergyAmount;
         }
@@ -381,7 +343,7 @@ namespace Ex03.ConsoleUI
 
                 licenseTypeFromUser = Console.ReadLine();
             }
-            while (!m_systemLogic.isValidLicenseTypeAndConvertToELicenseType(licenseTypeFromUser, out licenseType));
+            while (!m_SystemLogic.isValidLicenseTypeAndConvertToELicenseType(licenseTypeFromUser, out licenseType));
 
             return licenseType;
         }
@@ -399,7 +361,7 @@ namespace Ex03.ConsoleUI
                     "Your choice: ");
                 carDoorsAmountFromUser = Console.ReadLine();
             }
-            while (!m_systemLogic.isValidCarDoorsAmountAndConvertToECarDoorsAmount(carDoorsAmountFromUser, out carDoorsAmount));
+            while (!m_SystemLogic.isValidCarDoorsAmountAndConvertToECarDoorsAmount(carDoorsAmountFromUser, out carDoorsAmount));
 
             return carDoorsAmount;
         }
@@ -417,7 +379,7 @@ namespace Ex03.ConsoleUI
                     "Your choise: ");
                 carColorFromUser = Console.ReadLine();
             }
-            while (!m_systemLogic.isValidCarColorAndConvertToECarColor(carColorFromUser, out carColor));
+            while (!m_SystemLogic.isValidCarColorAndConvertToECarColor(carColorFromUser, out carColor));
 
             return carColor;
         }
@@ -436,7 +398,7 @@ namespace Ex03.ConsoleUI
                     "Your choise: ");
                 vehicleTypeFromUser = Console.ReadLine();
             }
-            while (!(m_systemLogic.isValidVehicleTypeAndConvertToEVehicleType(vehicleTypeFromUser, out vehicleType)));
+            while (!(m_SystemLogic.isValidVehicleTypeAndConvertToEVehicleType(vehicleTypeFromUser, out vehicleType)));
 
             return vehicleType;
         }
@@ -447,7 +409,7 @@ namespace Ex03.ConsoleUI
             Console.Write("Owner's full name: ");
             ownerName = Console.ReadLine();
             ownerPhoneNumber = getValidatePhoneNumberFromUser();
-            m_systemLogic.AddNewOpenIssue(ownerName, ownerPhoneNumber, GarageOpenIssue.eVehicleState.InMaintenance, i_PlateNumber);
+            m_SystemLogic.AddNewOpenIssue(ownerName, ownerPhoneNumber, GarageOpenIssue.eVehicleState.InMaintenance, i_PlateNumber);
             Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
                 "Congratulations! Your personal details has been added successfully.\n" +
                 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -460,7 +422,7 @@ namespace Ex03.ConsoleUI
                 Console.Write("Owner's phone number (format should be XXX-XXXXXXX): ");
                 phoneNumber = Console.ReadLine();
             }
-            while (!(m_systemLogic.ValidatePhoneNumber(phoneNumber)));
+            while (!(m_SystemLogic.ValidatePhoneNumber(phoneNumber)));
 
             return phoneNumber;
         }
@@ -473,7 +435,7 @@ namespace Ex03.ConsoleUI
             {
                 Console.Write("\nPlease enter plate number in the requested format (xxx-xx-xxx), should contain numbers only. \nYour input:");
                 plateNumber = Console.ReadLine();
-                if (m_systemLogic.validatePlateNumber(plateNumber))
+                if (m_SystemLogic.validatePlateNumber(plateNumber))
                 {
                     isValidPlateNumber = true;
                 }
@@ -496,7 +458,7 @@ namespace Ex03.ConsoleUI
             while (!isPlateNumberBelongsToExistingCar)
             {
                 plateNumber = getValidatePlateNumberFromUser();
-                if (m_systemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out o_WantedVehicle))
+                if (m_SystemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out o_WantedVehicle))
                 {
                     isPlateNumberBelongsToExistingCar = true;
                 }
@@ -561,9 +523,9 @@ namespace Ex03.ConsoleUI
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToRefuel);
             fuelType = getFuelTypeFromUser();
             litersToAdd = getEnergyAmountToAddFromUser();
-            if (m_systemLogic.CheckIfVehicleIsGasPowered(vehicleToRefuel))
+            if (m_SystemLogic.CheckIfVehicleIsGasPowered(vehicleToRefuel))
             {
-                m_systemLogic.addFuelToVehicle(vehicleToRefuel, litersToAdd, fuelType);
+                m_SystemLogic.addFuelToVehicle(vehicleToRefuel, litersToAdd, fuelType);
             }
             else
             {
@@ -578,13 +540,13 @@ namespace Ex03.ConsoleUI
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToCharge);
             hoursToAdd = getEnergyAmountToAddFromUser();
-            if (m_systemLogic.CheckIfVehicleIsGasPowered(vehicleToCharge))
+            if (m_SystemLogic.CheckIfVehicleIsGasPowered(vehicleToCharge))
             {
                 Console.WriteLine("Cannot refuel a gasoline powered car.");
             }
             else
             {
-                m_systemLogic.chargeBatteryToVehicle(vehicleToCharge, hoursToAdd);
+                m_SystemLogic.chargeBatteryToVehicle(vehicleToCharge, hoursToAdd);
             }
         }
 
@@ -629,7 +591,7 @@ namespace Ex03.ConsoleUI
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToChangeStateTo);
             do
             {
-                if (m_systemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out issueToChangeStateTo))
+                if (m_SystemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out issueToChangeStateTo))
                 {
                     isPlateNumberHasOpenIssue = true;
                 }
@@ -642,7 +604,7 @@ namespace Ex03.ConsoleUI
             while (!isPlateNumberHasOpenIssue);
             Console.WriteLine("Current vehicle state is: " + issueToChangeStateTo.vehicleState);
             stateToChangeTo = getStateToChangeToFromUser();
-            m_systemLogic.changeVehicleState(issueToChangeStateTo, stateToChangeTo);
+            m_SystemLogic.changeVehicleState(issueToChangeStateTo, stateToChangeTo);
         }
 
         private void inflateVehicleTires()
@@ -651,7 +613,7 @@ namespace Ex03.ConsoleUI
             string plateNumber;
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToFlateTiresTo);
-            m_systemLogic.FillAllWheelsAirPressureToMax(vehicleToFlateTiresTo);
+            m_SystemLogic.FillAllWheelsAirPressureToMax(vehicleToFlateTiresTo);
             Console.WriteLine("The air pressure in your wheels got filled to the max");
 
         }
@@ -686,7 +648,7 @@ namespace Ex03.ConsoleUI
             {
                 eVehicleState.TryParse(stateChosenByUser, out stateToFilterBy);
             }
-            vehicleToPrint = m_systemLogic.FilterVehiclesPlateNumbersByRequestedState(stateToFilterBy, !fetchAllVehicles);
+            vehicleToPrint = m_SystemLogic.FilterVehiclesPlateNumbersByRequestedState(stateToFilterBy, !fetchAllVehicles);
 
             printPlateNumbersList(vehicleToPrint);
         }
@@ -724,7 +686,7 @@ namespace Ex03.ConsoleUI
 
             do
             {
-                if (m_systemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out openIssueToDisplayDetailsOf))
+                if (m_SystemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out openIssueToDisplayDetailsOf))
                 {
                     isPlateNumberHasOpenIssue = true;
                 }
