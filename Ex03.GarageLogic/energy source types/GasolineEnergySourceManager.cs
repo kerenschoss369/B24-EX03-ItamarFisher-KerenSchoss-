@@ -20,8 +20,8 @@ namespace Ex03.GarageLogic
             Octan98
         }
 
-        public GasolineEnergySourceManager(float i_MaxEnergySourceAmount, eFuelType i_FuelType)
-            : base(i_MaxEnergySourceAmount)
+        public GasolineEnergySourceManager(float i_MaxEnergySourceAmount, eFuelType i_FuelType, ref List<Tuple<string, object>> o_AdditionalVehicleInformation)
+            : base(i_MaxEnergySourceAmount, ref o_AdditionalVehicleInformation)
         {
             r_FuelType = i_FuelType;
         }

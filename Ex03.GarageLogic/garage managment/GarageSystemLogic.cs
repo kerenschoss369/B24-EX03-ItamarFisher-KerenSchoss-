@@ -17,6 +17,15 @@ namespace Ex03.GarageLogic
         List<Vehicle> m_VehicleList = new List<Vehicle>();
         VehicleFactory garageSystemFactory = new VehicleFactory();
 
+        public VehicleFactory GarageSystemFactory// sussy baka
+        {
+            get { return garageSystemFactory; }
+        }
+        public void setAdditionalInfoParams(ref Vehicle i_vehicle, List<Tuple<string,object>> o_additionalInfoParams)
+        {
+            i_vehicle.setBaseAdditionalInformationFromList(o_additionalInfoParams);
+            i_vehicle.setAdditionalInformationFromList(o_additionalInfoParams);
+        }
         public void CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType i_VehicleType, string i_VehiclePlateNumber)
         {
             Vehicle vehicle = garageSystemFactory.CreateVehicle(i_VehicleType);
