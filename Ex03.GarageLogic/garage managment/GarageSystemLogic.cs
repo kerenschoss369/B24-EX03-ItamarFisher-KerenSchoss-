@@ -158,7 +158,7 @@ namespace Ex03.GarageLogic
         {
             ElectricEnergySourceManager electricEnergySourceManagar = (ElectricEnergySourceManager)i_Vehicle.m_EnergySourceManager;
             float hoursCharged = electricEnergySourceManagar.ChargeBatteryUntillFullOrHoursToAdd(i_AmountOfEnergyToAdd);
-            i_Vehicle.percentageOfEnergyLeft = (float)(i_Vehicle.m_EnergySourceManager.maxEnergySourceAmount / i_Vehicle.m_EnergySourceManager.currentEnergySourceAmount);
+            i_Vehicle.percentageOfEnergyLeft = (float)(i_Vehicle.m_EnergySourceManager.currentEnergySourceAmount / i_Vehicle.m_EnergySourceManager.maxEnergySourceAmount);
             i_Vehicle.percentageOfEnergyLeft = i_Vehicle.percentageOfEnergyLeft * 100;
 
             return hoursCharged;
@@ -169,6 +169,8 @@ namespace Ex03.GarageLogic
             float littersFilled;
 
             gasolineEnergySourceManagar.RefuelVehicleUntillFullOrLitersToAdd(i_AmountOfLittersToFill, fuelType, out littersFilled);
+            i_Vehicle.percentageOfEnergyLeft = (float)(i_Vehicle.m_EnergySourceManager.currentEnergySourceAmount / i_Vehicle.m_EnergySourceManager.maxEnergySourceAmount);
+            i_Vehicle.percentageOfEnergyLeft = i_Vehicle.percentageOfEnergyLeft * 100;
             return littersFilled;
         }
         public bool SetWheelManufacturerAndWheelAirPressure(ref Wheel io_Wheel, string i_ManufacturerName, float i_WheelCurrentAirPressure)

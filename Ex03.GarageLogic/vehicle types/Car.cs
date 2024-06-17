@@ -41,12 +41,18 @@ namespace Ex03.GarageLogic
         {
             foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
             {
-                if ((tuple.Item1 == k_CarColor) && (tuple.Item1 == k_DoorsAmount))
+                if (tuple.Item1 == k_CarColor)
                 {
-                    if (!(Enum.TryParse<eCarColor>((string)tuple.Item2, out m_CarColor) &&
-                    (Enum.TryParse<eCarDoorsAmount>((string)tuple.Item2, out m_CarDoorsAmount))))
+                    if (!Enum.TryParse<eCarColor>(tuple.Item2.ToString(), out m_CarColor))
                     {
-                        throw new FormatException("Could not Parse the input.");
+                        throw new FormatException("Could not parse the car color.");
+                    }
+                }
+                if (tuple.Item1 == k_DoorsAmount)
+                {
+                    if (!Enum.TryParse<eCarDoorsAmount>(tuple.Item2.ToString(), out m_CarDoorsAmount))
+                    {
+                        throw new FormatException("Could not parse the number of doors.");
                     }
                 }
             }

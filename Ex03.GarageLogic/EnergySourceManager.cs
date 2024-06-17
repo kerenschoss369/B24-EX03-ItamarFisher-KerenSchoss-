@@ -25,7 +25,7 @@ namespace Ex03.GarageLogic
             {
                 if (tuple.Item1 == "Current Energy Source Amount")
                 {
-                    Enum.TryParse((string)tuple.Item2, out m_CurrentEnergySourceAmount);
+                    float.TryParse((string)tuple.Item2, out m_CurrentEnergySourceAmount);
                 }
             }
         }

@@ -40,13 +40,21 @@ namespace Ex03.GarageLogic
         {
             foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
             {
-                if ((tuple.Item1 == K_LicenseType) && (tuple.Item1 == k_EngineDisplacementInCc))
+                if (tuple.Item1 == K_LicenseType)
                 {
-                    if (!(Enum.TryParse<eLicenseType>((string)tuple.Item2, out m_LicenseType) &&
-                    (int.TryParse((string)tuple.Item2, out m_EngineDisplacementInCc))))
+                    if (Enum.TryParse<eLicenseType>((string)tuple.Item2, out m_LicenseType) == false)
                     {
                         throw new FormatException("Could not Parse the input.");
                     }
+                }
+                if(tuple.Item1 == k_EngineDisplacementInCc)
+                {
+                    if(int.TryParse((string)tuple.Item2, out m_EngineDisplacementInCc) == false)
+                    {
+                        throw new FormatException("Could not Parse the input.");
+
+                    }
+
                 }
             }
         }

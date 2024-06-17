@@ -55,6 +55,10 @@ namespace Ex03.GarageLogic
                     m_ModelName = (string)tuple.Item2;
                 }
             }
+            m_EnergySourceManager.SetAdditionalInformationFromList(i_AdditionalVehicleInformation);
+            percentageOfEnergyLeft = (float)(m_EnergySourceManager.currentEnergySourceAmount / m_EnergySourceManager.maxEnergySourceAmount);
+            percentageOfEnergyLeft = percentageOfEnergyLeft * 100;
+
         }
         public string modelName
         {
