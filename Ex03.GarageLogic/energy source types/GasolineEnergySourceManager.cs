@@ -25,6 +25,7 @@ namespace Ex03.GarageLogic
         {
             r_FuelType = i_FuelType;
         }
+
         public bool RefuelVehicleUntillFullOrLitersToAdd(float i_LitersToAdd, eFuelType i_FuelType, out float o_AmountOfFuelFilled)
         {
             bool isRefuel = i_FuelType == r_FuelType;

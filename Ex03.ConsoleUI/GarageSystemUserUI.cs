@@ -119,7 +119,7 @@ namespace Ex03.ConsoleUI
             List<Tuple<string, object>> newTuplesList = new List <Tuple<string, object>>();
             foreach (Tuple<string,object> tuple in o_AdditionalInfoList)
             {
-                Console.WriteLine("Please enter:\n" + tuple.Item1);
+                Console.WriteLine("Please enter " + tuple.Item1 + ":");
                 Tuple<string, object> newTuple = new Tuple<string, object>(tuple.Item1, Console.ReadLine());
                 newTuplesList.Add(newTuple);
             }
@@ -138,7 +138,7 @@ namespace Ex03.ConsoleUI
             m_SystemLogic.CreateNewVehicleAndAddToVehicleList(vehicleType, i_PlateNumber);
 
             m_SystemLogic.getVehicleUsingPlateNumberIfExist(i_PlateNumber, out vehicleToAdd);
-            m_SystemLogic.GetAdditionalInfo(eVehicleType.GasolineCar, out additionalInfoList);
+            m_SystemLogic.GetAdditionalInfo(vehicleType, out additionalInfoList);
             fillAddtionalInfoFromUserInput(ref additionalInfoList);
             m_SystemLogic.setAdditionalInfoParams(ref vehicleToAdd, additionalInfoList);
             wheelsSetUpOptionInput = getWheelsSetUpOptioneFromUser();
@@ -375,7 +375,7 @@ namespace Ex03.ConsoleUI
                 {
                     Console.WriteLine($"{(int)color}. {color.ToString()}");
                 }
-                Console.Write("Your choise: ");
+                Console.Write("Your choice: ");
                 carColorFromUser = Console.ReadLine();
             }
             while (!m_SystemLogic.isValidCarColorAndConvertToECarColor(carColorFromUser, out carColor));
@@ -393,7 +393,7 @@ namespace Ex03.ConsoleUI
                 {
                     Console.WriteLine($"{(int)type}. {type.ToString()}");
                 }
-                Console.Write("Your choise: ");
+                Console.Write("Your choice: ");
                 vehicleTypeFromUser = Console.ReadLine();
             }
             while (!(m_SystemLogic.isValidVehicleTypeAndConvertToEVehicleType(vehicleTypeFromUser, out vehicleType)));
@@ -701,28 +701,7 @@ namespace Ex03.ConsoleUI
 
         private void printVehicleDetails(Vehicle i_VehicleToDisplayDetailsOf, GarageOpenIssue i_OpenIssueToDisplayDetailsOf)
         {
-            Console.WriteLine(string.Format("Plate Number: {0}", i_VehicleToDisplayDetailsOf.plateNumber));
-            Console.WriteLine(string.Format("Model Name: {0}", i_VehicleToDisplayDetailsOf.modelName));
-            Console.WriteLine(string.Format("Owner Name: {0}", i_OpenIssueToDisplayDetailsOf.vehicleOwnerName));
-            Console.WriteLine(string.Format("Owner Phone Number: {0}", i_OpenIssueToDisplayDetailsOf.vehiclePhoneNumber));
-            Console.WriteLine(string.Format("Energy Percentage Left: {0}%", i_VehicleToDisplayDetailsOf.percentageOfEnergyLeft));
-
-            if (i_VehicleToDisplayDetailsOf is Car car)
-            {
-                Console.WriteLine(string.Format("Car Color: {0}", car.carColor));
-                Console.WriteLine(string.Format("Number of Doors: {0}", car.carDoorsAmount));
-            }
-            else if (i_VehicleToDisplayDetailsOf is Motorcycle motorcycle)
-            {
-                Console.WriteLine(string.Format("License Type: {0}", motorcycle.licenseType));
-                Console.WriteLine(string.Format("Engine Displacement (cc): {0}", motorcycle.engineDisplacementInCc));
-            }
-            else if (i_VehicleToDisplayDetailsOf is Truck truck)
-            {
-                Console.WriteLine(string.Format("Cargo Volume: {0}", truck.cargoVolume));
-                Console.WriteLine(string.Format("Carrying Hazardous Materials: {0}", truck.isCarryingHazardousMaterials));
-            }
-
+            Console.WriteLine(i_VehicleToDisplayDetailsOf.ToString());
             Console.WriteLine("Wheels Info:");
             foreach (var wheel in i_VehicleToDisplayDetailsOf.wheelsList)
             {

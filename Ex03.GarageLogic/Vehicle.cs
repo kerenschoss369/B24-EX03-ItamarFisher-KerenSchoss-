@@ -23,7 +23,7 @@ namespace Ex03.GarageLogic
             {
                 m_WheelsList.Add(new Wheel(i_MaxAirPressure));
             }
-
+            addAdditionalInformationIntoList(ref o_AdditionalVehicleInformation);
             m_EnergySourceManager = new ElectricEnergySourceManager(i_MaxEnergySourceAmount, ref o_AdditionalVehicleInformation);
         }
         internal Vehicle(int i_NumberOfWheels, float i_MaxAirPressure, EnergySourceManager i_EnergySourceManager, float i_MaxEnergySourceAmount,
@@ -41,10 +41,8 @@ namespace Ex03.GarageLogic
         private void addAdditionalInformationIntoList(ref List<Tuple<string, object>> o_AdditionalVehicleInformation)
         {
             Tuple<string, object> modelName = new Tuple<string, object>("Model name", m_ModelName);
-            Tuple<string, object> energyLeft = new Tuple<string, object>("Energy left", m_PercentageOfEnergyLeft);
 
             o_AdditionalVehicleInformation.Add(modelName);
-            o_AdditionalVehicleInformation.Add(energyLeft);
         }
         public abstract void setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation);
         public void setBaseAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation)
@@ -55,14 +53,6 @@ namespace Ex03.GarageLogic
                 if (tuple.Item1 == "Model name")
                 {
                     m_ModelName = (string)tuple.Item2;
-                }
-                if (tuple.Item1 == "Plate number")
-                {
-                    m_PlateNumber = (string)tuple.Item2;
-                }
-                if (tuple.Item1 == "Energy left")
-                {
-                    float.TryParse(tuple.Item2.ToString(), out m_PercentageOfEnergyLeft);
                 }
             }
         }
@@ -112,6 +102,19 @@ namespace Ex03.GarageLogic
             {
                 return m_EnergySourceManager;
             }
+        }
+        public override string ToString()
+        {
+
+        string vehicleString = string.Format(
+           @"
+Car model: {0}
+Plate number is: {1}
+Percentage of energy left is: %{2}
+Amount of energy left is: {3}
+", m_ModelName, m_PlateNumber, m_PercentageOfEnergyLeft, m_EnergySourceManager.currentEnergySourceAmount);
+
+            return vehicleString;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Ex03.GarageLogic.Car;
+using static Ex03.GarageLogic.Motorcycle;
 
 namespace Ex03.GarageLogic
 {
@@ -15,17 +16,15 @@ namespace Ex03.GarageLogic
         private const float k_WheelsMaxAirPressure = 28;
         private const GasolineEnergySourceManager.eFuelType k_FuelType = GasolineEnergySourceManager.eFuelType.Soler;
         private const float k_TankFuelCapacity = 120;
-        private GasolineEnergySourceManager m_TruckGasolineEnergyManagaer;
-
         private const string k_IsCarryingHazardousMaterials = "Is carrying hazardous materials";
         private const string k_CargoVolume = "Cargo volume";
-        public Truck(ref List<Tuple<string, object>> o_AdditionalVehicleInformation)
-            : base(k_NumberOfWheels, k_WheelsMaxAirPressure, new GasolineEnergySourceManager(k_TankFuelCapacity, k_FuelType, ref o_AdditionalVehicleInformation),
+        public Truck(EnergySourceManager i_EnergySourceManager, ref List<Tuple<string, object>> o_AdditionalVehicleInformation)
+            : base(k_NumberOfWheels, k_WheelsMaxAirPressure, i_EnergySourceManager,
                   k_TankFuelCapacity, k_FuelType, ref o_AdditionalVehicleInformation)
         {
             Tuple<string, object> cargoVolume = new Tuple<string, object>(k_CargoVolume, m_CargoVolume);
             Tuple<string, object> isCarryingHazardousMaterials =
-                new Tuple<string, object>(k_IsCarryingHazardousMaterials, m_IsCarryingHazardousMaterials);
+               new Tuple<string, object>(k_IsCarryingHazardousMaterials, m_IsCarryingHazardousMaterials);
 
             o_AdditionalVehicleInformation.Add(cargoVolume);
             o_AdditionalVehicleInformation.Add(isCarryingHazardousMaterials);
@@ -35,13 +34,13 @@ namespace Ex03.GarageLogic
         {
             foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
             {
-                if (tuple.Item1 == k_IsCarryingHazardousMaterials)
+                if ((tuple.Item1 == k_IsCarryingHazardousMaterials) && (tuple.Item1 == k_CargoVolume))
                 {
-                    Enum.TryParse((string)tuple.Item2, out m_IsCarryingHazardousMaterials);
-                }
-                if (tuple.Item1 == k_CargoVolume)
-                {
-                    Enum.TryParse((string)tuple.Item2, out m_CargoVolume);
+                    if (!(bool.TryParse((string)tuple.Item2, out m_IsCarryingHazardousMaterials) &&
+                    (float.TryParse((string)tuple.Item2, out m_CargoVolume))))
+                    {
+                        throw new FormatException("Could not Parse the input.");
+                    }
                 }
             }
         }
@@ -67,6 +66,29 @@ namespace Ex03.GarageLogic
             {
                 m_IsCarryingHazardousMaterials = value;
             }
+        }
+        public override string ToString()
+        {
+            string carryingHazardouMaterials;
+            if (m_IsCarryingHazardousMaterials == true)
+            {
+                carryingHazardouMaterials = "Truck is carrying hazardous materials";
+            }
+            else
+            {
+                carryingHazardouMaterials = "Truck isn't carrying hazardous materials";
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            string carString = string.Format(@"
+Motorcycle License type is: {0}
+Enginge displacement in cc is: {1}
+", m_CargoVolume.ToString(), carryingHazardouMaterials);
+            stringBuilder.Append(base.ToString());
+            stringBuilder.Append(carString);
+
+            return stringBuilder.ToString();
+
+
         }
     }
 }

@@ -50,7 +50,7 @@ namespace Ex03.GarageLogic
                     vehicle = new Car(electricEnergySourceManager, (float)3.5, ref additionalVehicleInformation);
                     break;
                 case eVehicleType.Truck:
-                    vehicle = new Truck(ref additionalVehicleInformation);
+                    vehicle = new Truck(gasolineEnergySourceManager, ref additionalVehicleInformation);
                     break;
                 default://execption shel keren ;d:D:D:D:D:D:D:D:D
                     throw new ArgumentException("Unknown vehicle type");
