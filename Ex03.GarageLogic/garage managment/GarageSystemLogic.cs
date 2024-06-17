@@ -111,6 +111,10 @@ namespace Ex03.GarageLogic
                     vehicleExists = true;
                 }
             }
+            if (!vehicleExists)
+            {
+                throw new ArgumentException("This is no open issue with plate number: " + i_PlateNumber);
+            }
 
             return vehicleExists;
         }

@@ -24,7 +24,7 @@ namespace Ex03.GarageLogic
             if (m_CurrentAirPressure + i_AirToAdd > r_MaxAirPressureDefinedByManufacturer)
             {
                 isIncreasedWheelAirPressure = !isIncreasedWheelAirPressure;
-                //throw new ValueOutOfRangeException(i_AirToAdd, 0f, r_MaxAirPressureDefinedByManufacturer - m_CurrentAirPressure);
+                throw new ValueOutOfRangeException(i_AirToAdd, 0f, r_MaxAirPressureDefinedByManufacturer - m_CurrentAirPressure);
             }
             else
             {

@@ -44,7 +44,7 @@ namespace Ex03.ConsoleUI
                         "1. Add a new vehicle to the garage\n" +
                         "2. Display list of license numbers of vehicles in the garage and filter them by condition\n" +
                         "3. Change the status of a vehicle in the garage\n" +
-                        "4. fill tires of vehicle in the garage\n" +
+                        "4. Fill tires of vehicle in the garage\n" +
                         "5. Refuel a gasoline-powered vehicle in the garage\n" +
                         "6. Charge an electric vehicle in the garage\n" +
                         "7. Display vehicle details by license number\n" +
@@ -515,7 +515,7 @@ namespace Ex03.ConsoleUI
         }
         private void refuelGasVehicle()
         {
-            Vehicle vehicleToRefuel=null;
+            Vehicle vehicleToRefuel = null;
             string plateNumber;
             GasolineEnergySourceManager.eFuelType fuelType = GasolineEnergySourceManager.eFuelType.Octan98;
             float litersToAdd = 0f;
@@ -561,28 +561,47 @@ namespace Ex03.ConsoleUI
                 }
 
             }
-
-            //if (m_SystemLogic.CheckIfVehicleIsGasPowered(vehicleToRefuel))
-            //{
             m_SystemLogic.addFuelToVehicle(vehicleToRefuel, litersToAdd, fuelType);
-            //}
+
         }
         private void chargeElectricVehicle()
         {
-            Vehicle vehicleToCharge;
+            Vehicle vehicleToCharge = null;
             string plateNumber;
-            float hoursToAdd;
+            float hoursToAdd = 0;
+            bool isValidHoursToAdd = false, isValidVehicleType = false;
 
-            plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToCharge);
-            hoursToAdd = getEnergyAmountToAddFromUser();
-            if (m_SystemLogic.CheckIfVehicleIsElectricPowered(vehicleToCharge))
+
+            while (!isValidVehicleType)
             {
-                m_SystemLogic.chargeBatteryToVehicle(vehicleToCharge, hoursToAdd);
+                try
+                {
+                    plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToCharge);
+                    if (m_SystemLogic.CheckIfVehicleIsElectricPowered(vehicleToCharge))
+                    {
+                        isValidVehicleType = true;
+                    }
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
-            /*else
+            while (!isValidHoursToAdd)
             {
-                Console.WriteLine("Cannot refuel a gasoline powered car.");
-            }*/
+                try
+                {
+                    hoursToAdd = getEnergyAmountToAddFromUser();
+                    isValidHoursToAdd = m_SystemLogic.isLittersToAddCorrectForCar(hoursToAdd, vehicleToCharge);
+                }
+                catch (ValueOutOfRangeException ex_outOfRange)
+                {
+                    Console.WriteLine(ex_outOfRange.Message);
+                }
+
+            }
+            m_SystemLogic.chargeBatteryToVehicle(vehicleToCharge, hoursToAdd);
+
         }
 
         private GarageOpenIssue.eVehicleState getStateToChangeToFromUser()
@@ -618,15 +637,25 @@ namespace Ex03.ConsoleUI
         private void changeVehicleStatus()
         {
             Vehicle vehicleToChangeStateTo;
-            GarageOpenIssue issueToChangeStateTo;
+            GarageOpenIssue issueToChangeStateTo=null;
             string plateNumber;
             GarageOpenIssue.eVehicleState stateToChangeTo;
             bool isPlateNumberHasOpenIssue = false;
 
+            //argument ex
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToChangeStateTo);
-            do
+
+            while (!isPlateNumberHasOpenIssue)
             {
-                if (m_SystemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out issueToChangeStateTo))
+                try
+                {
+                    isPlateNumberHasOpenIssue = (m_SystemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out issueToChangeStateTo));
+                }
+                catch(ArgumentException e)
+                {
+                    Console.WriteLine(e.Message);   
+                }
+                /*if (m_SystemLogic.getOpenIssueUsingPlateNumberIfExist(plateNumber, out issueToChangeStateTo))
                 {
                     isPlateNumberHasOpenIssue = true;
                 }
@@ -634,9 +663,9 @@ namespace Ex03.ConsoleUI
                 {
                     Console.WriteLine("Sorry, this plate Number does not have an open issue in our garage. \nPlease enter a valid state.");
                     plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToChangeStateTo);
-                }
+                }*/
             }
-            while (!isPlateNumberHasOpenIssue);
+
             Console.WriteLine("Current vehicle state is: " + issueToChangeStateTo.vehicleState);
             stateToChangeTo = getStateToChangeToFromUser();
             m_SystemLogic.changeVehicleState(issueToChangeStateTo, stateToChangeTo);
@@ -649,7 +678,7 @@ namespace Ex03.ConsoleUI
 
             plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToFlateTiresTo);
             m_SystemLogic.FillAllWheelsAirPressureToMax(vehicleToFlateTiresTo);
-            Console.WriteLine("The air pressure in your wheels got filled to the max");
+            Console.WriteLine("The air pressure in your wheels got filled to the max!");
 
         }
 
