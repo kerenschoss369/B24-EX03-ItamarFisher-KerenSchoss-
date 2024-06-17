@@ -34,12 +34,18 @@ namespace Ex03.GarageLogic
         {
             foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
             {
-                if ((tuple.Item1 == k_IsCarryingHazardousMaterials) && (tuple.Item1 == k_CargoVolume))
+                if (tuple.Item1 == k_IsCarryingHazardousMaterials)
                 {
-                    if (!(bool.TryParse((string)tuple.Item2, out m_IsCarryingHazardousMaterials) &&
-                    (float.TryParse((string)tuple.Item2, out m_CargoVolume))))
+                    if (!bool.TryParse(tuple.Item2.ToString(), out m_IsCarryingHazardousMaterials))
                     {
-                        throw new FormatException("Could not Parse the input.");
+                        throw new FormatException("Could not parse the hazardous materials flag.");
+                    }
+                }
+                if (tuple.Item1 == k_CargoVolume)
+                {
+                    if (!float.TryParse(tuple.Item2.ToString(), out m_CargoVolume))
+                    {
+                        throw new FormatException("Could not parse the cargo volume.");
                     }
                 }
             }
