@@ -107,6 +107,12 @@ namespace Ex03.GarageLogic
                 return k_WheelsMaxAirPressure;
             }
         }
-
+        public override string ToString()
+        {
+            return string.Format(@"
+Car color is: {0}
+The number of doors is: {1}
+", m_CarColor.ToString(), m_CarDoorsAmount,);
+        }
     }
 }

@@ -19,9 +19,9 @@ namespace Ex03.GarageLogic
         }
         public List<Tuple<string,object>> GetAdditionalInfo(eVehicleType i_VehicleType)
         {
-            List<Tuple<string, object>> blah;
-             m_VehicleTypeAdditionalNonDefaultParameters.TryGetValue(i_VehicleType, out blah);
-            return blah;
+            List<Tuple<string, object>> additionalInformationList;
+             m_VehicleTypeAdditionalNonDefaultParameters.TryGetValue(i_VehicleType, out additionalInformationList);
+            return additionalInformationList;
         }
         public Vehicle CreateVehicle(eVehicleType i_VehicleType)
         {
