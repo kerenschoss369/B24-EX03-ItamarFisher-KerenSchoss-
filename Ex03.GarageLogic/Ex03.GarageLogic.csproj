@@ -42,6 +42,7 @@
     <Compile Include="garage managment\GarageOpenIssue.cs" />
     <Compile Include="garage managment\GarageSystemFactory.cs" />
     <Compile Include="garage managment\GarageSystemLogic.cs" />
+    <Compile Include="ValueOutOfRangeException.cs" />
     <Compile Include="vehicle types\Car.cs" />
     <Compile Include="energy source types\ElectricEnergySourceManager.cs" />
     <Compile Include="EnergySourceManager.cs" />
