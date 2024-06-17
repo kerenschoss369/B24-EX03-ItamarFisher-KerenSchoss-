@@ -120,7 +120,7 @@ namespace Ex03.GarageLogic
             if (!(i_Vehicle.m_EnergySourceManager is GasolineEnergySourceManager))
             {
                 isGasPowered = false;
-                throw new ArgumentException(i_Vehicle.plateNumber);
+                throw new ArgumentException(i_Vehicle.plateNumber + " is electric powered.");
             }
             return isGasPowered;
         }
@@ -130,7 +130,7 @@ namespace Ex03.GarageLogic
             if (!(i_Vehicle.m_EnergySourceManager is ElectricEnergySourceManager))
             {
                 isElectricPowered = false;
-                throw new ArgumentException(i_Vehicle.plateNumber);
+                throw new ArgumentException(i_Vehicle.plateNumber + " is gas powered.");
             }
             return isElectricPowered;
         }
@@ -304,7 +304,7 @@ namespace Ex03.GarageLogic
         public bool isLittersToAddCorrectForCar(float i_LittersToAdd, Vehicle i_VehicleToRefuel)
         {
             bool isValidLittersToAdd = true;
-            if ((i_LittersToAdd+i_VehicleToRefuel.energySourceManager.currentEnergySourceAmount) > i_VehicleToRefuel.energySourceManager.maxEnergySourceAmount)
+            if ((i_LittersToAdd + i_VehicleToRefuel.energySourceManager.currentEnergySourceAmount) > i_VehicleToRefuel.energySourceManager.maxEnergySourceAmount)
             {
                 isValidLittersToAdd = false;
                 throw new ValueOutOfRangeException(i_LittersToAdd, 0f, (i_VehicleToRefuel.energySourceManager.maxEnergySourceAmount - i_VehicleToRefuel.energySourceManager.currentEnergySourceAmount));

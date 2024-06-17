@@ -29,7 +29,11 @@ namespace Ex03.GarageLogic
         public bool RefuelVehicleUntillFullOrLitersToAdd(float i_LitersToAdd, eFuelType i_FuelType, out float o_AmountOfFuelFilled)
         {
             bool isRefuel = (i_FuelType == r_FuelType);
-            o_AmountOfFuelFilled = r_MaxEnergySourceAmount - i_LitersToAdd;
+            o_AmountOfFuelFilled =  i_LitersToAdd;
+            if(o_AmountOfFuelFilled>  r_MaxEnergySourceAmount)
+            {
+                o_AmountOfFuelFilled = o_AmountOfFuelFilled - r_MaxEnergySourceAmount;
+            }
             m_CurrentEnergySourceAmount += o_AmountOfFuelFilled;
 
             return isRefuel;

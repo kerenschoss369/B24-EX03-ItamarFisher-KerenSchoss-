@@ -521,14 +521,27 @@ namespace Ex03.ConsoleUI
         }
         private void refuelGasVehicle()
         {
-            Vehicle vehicleToRefuel;
+            Vehicle vehicleToRefuel=null;
             string plateNumber;
             GasolineEnergySourceManager.eFuelType fuelType = GasolineEnergySourceManager.eFuelType.Octan98;
-            float litersToAdd=0f;
-            bool isValidFuelType=false, isValidLittersToAdd=false;
+            float litersToAdd = 0f;
+            bool isValidFuelType = false, isValidLittersToAdd = false, isValidVehicleType = false;
 
-            plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToRefuel);
-
+            while (!isValidVehicleType)
+            {
+                try
+                {
+                    plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToRefuel);
+                    if (m_SystemLogic.CheckIfVehicleIsGasPowered(vehicleToRefuel))
+                    {
+                        isValidVehicleType = true;
+                    }
+                }
+                catch (ArgumentException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
             while (!isValidFuelType)
             {
                 try
@@ -552,16 +565,13 @@ namespace Ex03.ConsoleUI
                 {
                     Console.WriteLine(ex_outOfRange.Message);
                 }
+
             }
-            
-            if (m_SystemLogic.CheckIfVehicleIsGasPowered(vehicleToRefuel))
-            {
-                m_SystemLogic.addFuelToVehicle(vehicleToRefuel, litersToAdd, fuelType);
-            }
-            /*else
-            {
-                Console.WriteLine("Cannot refuel an electric powered car.");
-            }*/
+
+            //if (m_SystemLogic.CheckIfVehicleIsGasPowered(vehicleToRefuel))
+            //{
+            m_SystemLogic.addFuelToVehicle(vehicleToRefuel, litersToAdd, fuelType);
+            //}
         }
         private void chargeElectricVehicle()
         {
