@@ -548,22 +548,36 @@ namespace Ex03.ConsoleUI
         private void displayAllPlateNumbersAndFilter()
         {
             int stateChosenByUserIntegered = -1;
-            string stateChosenByUser;
+            string stateChosenByUser = "";
             eVehicleState stateToFilterBy;
             List<string> vehicleToPrint;
             bool notFetchAllVehicles = true;
+            bool isValidFilter = false;
 
-            do
+            //get a state from the user
+
+            while (!isValidFilter)
             {
-                foreach (eVehicleState state in Enum.GetValues(typeof(eVehicleState)))
+                try
                 {
-                    Console.WriteLine($"Press {(int)state} for {state.ToString()}");
+                    foreach (eVehicleState state in Enum.GetValues(typeof(eVehicleState)))
+                    {
+                        Console.Write($"\nPress {(int)state} for {state.ToString()}");
+                    }
+                    Console.WriteLine($"Press {Enum.GetValues(typeof(eVehicleState)).Length} for all");
+                    Console.Write("Your choise: ");
+                    stateChosenByUser = Console.ReadLine();
+                    isValidFilter = (!m_SystemLogic.CheckIfValidFilter(stateChosenByUser, out stateChosenByUserIntegered, 0, Enum.GetValues(typeof(eVehicleState)).Length));
                 }
-                Console.WriteLine($"Press {Enum.GetValues(typeof(eVehicleState)).Length} for all");
-                Console.Write("Your choise: ");
-                stateChosenByUser = Console.ReadLine();
+                catch (ValueOutOfRangeException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                catch (FormatException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
-            while ((!int.TryParse(stateChosenByUser, out stateChosenByUserIntegered)) && (stateChosenByUserIntegered >= 0 && stateChosenByUserIntegered <= Enum.GetValues(typeof(eVehicleState)).Length));
 
             if (stateChosenByUserIntegered == Enum.GetValues(typeof(eVehicleState)).Length)
             {
