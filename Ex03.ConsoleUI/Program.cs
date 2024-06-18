@@ -11,7 +11,7 @@ namespace Ex03.ConsoleUI
         public static void Main(string[] args)// The Main method must be static
         {
             GarageSystemUserUI garageSystemUserUI = new GarageSystemUserUI();
-            garageSystemUserUI.printMenu();
+            garageSystemUserUI.printMenuAndGetSelectionFromUser();
 
         }
     }

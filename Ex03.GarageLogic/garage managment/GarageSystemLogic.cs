@@ -20,10 +20,15 @@ namespace Ex03.GarageLogic
         VehicleFactory garageSystemFactory = new VehicleFactory();
 
 
-        public void setAdditionalInfoParams(ref Vehicle i_vehicle, List<Tuple<string, object>> o_additionalInfoParams)
+        public bool setAdditionalInfoParams(ref Vehicle i_vehicle, List<Tuple<string, object>> o_additionalInfoParams )
         {
-            i_vehicle.setBaseAdditionalInformationFromList(o_additionalInfoParams);
-            i_vehicle.setAdditionalInformationFromList(o_additionalInfoParams);
+            bool isValidCarDetails=true;
+            i_vehicle.setBaseAdditionalInformationFromList(o_additionalInfoParams,out isValidCarDetails);
+            if (isValidCarDetails)
+            {
+                isValidCarDetails = i_vehicle.setAdditionalInformationFromList(o_additionalInfoParams);
+            }
+            return isValidCarDetails;
         }
         public void CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType i_VehicleType, string i_VehiclePlateNumber)
         {
@@ -254,7 +259,15 @@ namespace Ex03.GarageLogic
 
         public bool IsAirPressureLowerOrEqualToMaxAirPressure(float i_AirPressure, Wheel i_CheckedWheel)
         {
-            return (i_AirPressure <= i_CheckedWheel.maxAirPressureDefinedByManufacturer);
+            bool isAirPressureLowerOrEqualToMax = true;
+
+            if (!(i_AirPressure <= i_CheckedWheel.maxAirPressureDefinedByManufacturer))
+            {
+                isAirPressureLowerOrEqualToMax=false;
+                throw new ValueOutOfRangeException(i_AirPressure, 0f, i_CheckedWheel.maxAirPressureDefinedByManufacturer);
+            }
+
+            return isAirPressureLowerOrEqualToMax;
         }
 
         public bool IsEnergyAmountLowerOrEqualToMaxEnergyAmount(float i_EnergyAmount, Vehicle i_VehicleToUpdate)
@@ -271,7 +284,16 @@ namespace Ex03.GarageLogic
         }
         public bool isValidVehicleTypeAndConvertToEVehicleType(string i_VehicleTypeFromUser, out eVehicleType o_VehicleType)
         {
-            return Enum.TryParse(i_VehicleTypeFromUser, true, out o_VehicleType) && Enum.IsDefined(typeof(eVehicleType), o_VehicleType);
+            bool isValidVehicleType = false;
+            if ((Enum.TryParse(i_VehicleTypeFromUser, true, out o_VehicleType)) && (Enum.IsDefined(typeof(eVehicleType), o_VehicleType)))
+            {
+                isValidVehicleType = true;
+            }
+            else
+            {
+                throw new FormatException("Couldnt Parse the input: [" + i_VehicleTypeFromUser + "] to eVehicleType");
+            }
+            return isValidVehicleType;
         }
         public bool isValidLicenseTypeAndConvertToELicenseType(string i_LicenseTypeFromUser, out eLicenseType o_LicenseType)
         {

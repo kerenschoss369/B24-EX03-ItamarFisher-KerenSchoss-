@@ -32,66 +32,59 @@ namespace Ex03.ConsoleUI
         }
 
         private Ex03.GarageLogic.GarageSystemLogic m_SystemLogic = new GarageSystemLogic();
-        public void printMenu()
+
+        public void printMenuMessage()
+        {
+            Console.Write("\n--------------------------------------------------------------------------\n\n" +
+                    "Please select an action:\n\n" +
+                    "1. Add a new vehicle to the garage\n" +
+                    "2. Display list of license numbers of vehicles in the garage and filter them by condition\n" +
+                    "3. Change the status of a vehicle in the garage\n" +
+                    "4. Fill tires of vehicle in the garage\n" +
+                    "5. Refuel a gasoline-powered vehicle in the garage\n" +
+                    "6. Charge an electric vehicle in the garage\n" +
+                    "7. Display vehicle details by license number\n" +
+                    "8. Exit\n\n" +
+                    "--------------------------------------------------------------------------\n\n" +
+                    "Type your selection here: ");
+        }
+        public void printMenuAndGetSelectionFromUser()
         {
             int userChoiceOfAction;
             while (true)
             {
-                try
+                printMenuMessage();
+                while (!int.TryParse(Console.ReadLine(), out userChoiceOfAction) || (userChoiceOfAction < 1) || (userChoiceOfAction > 8)) //FIX INVALID VALUES MAYBE WITH ERRORS
                 {
-                    Console.Write("\n--------------------------------------------------------------------------\n\n" +
-                        "Please select an action:\n\n" +
-                        "1. Add a new vehicle to the garage\n" +
-                        "2. Display list of license numbers of vehicles in the garage and filter them by condition\n" +
-                        "3. Change the status of a vehicle in the garage\n" +
-                        "4. Fill tires of vehicle in the garage\n" +
-                        "5. Refuel a gasoline-powered vehicle in the garage\n" +
-                        "6. Charge an electric vehicle in the garage\n" +
-                        "7. Display vehicle details by license number\n" +
-                        "8. Exit\n\n" +
-                        "--------------------------------------------------------------------------\n\n" +
-                        "Type your selection here: ");
-
-                    while (!int.TryParse(Console.ReadLine(), out userChoiceOfAction) || (userChoiceOfAction < 1) || (userChoiceOfAction > 7)) //FIX INVALID VALUES MAYBE WITH ERRORS
-                    {
-                        Console.Write("Invalid input. Please make sure that you enter a number between 1 and 7.");
-                    }
-
-                    switch ((eGarageMenuOptions)userChoiceOfAction)
-                    {
-                        case eGarageMenuOptions.AddNewVehicle:
-                            addNewVehicleToTheGarage();
-                            break;
-                        case eGarageMenuOptions.DisplayAllPlateNumbersAndFilter:
-                            displayAllPlateNumbersAndFilter();
-                            break;
-                        case eGarageMenuOptions.ChangeVehicleStatus:
-                            changeVehicleStatus();
-                            break;
-                        case eGarageMenuOptions.InflateVehicleTires:
-                            inflateVehicleTires();
-                            break;
-                        case eGarageMenuOptions.RefuelGasVehicle:
-                            refuelGasVehicle();
-                            break;
-                        case eGarageMenuOptions.ChargeElectricVehicle:
-                            chargeElectricVehicle();
-                            break;
-                        case eGarageMenuOptions.DisplayVehicleDetails:
-                            displayVehicleDetails();
-                            break;
-                        case eGarageMenuOptions.Exit:
-                            return;
-                            break;
-                    }
+                    Console.WriteLine("Invalid input. Please make sure that you enter a number between 1 and 8.");
+                    printMenuMessage();
                 }
-                catch (ArgumentException ex)
+                switch ((eGarageMenuOptions)userChoiceOfAction)
                 {
-                    Console.WriteLine(ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+                    case eGarageMenuOptions.AddNewVehicle:
+                        addNewVehicleToTheGarage();
+                        break;
+                    case eGarageMenuOptions.DisplayAllPlateNumbersAndFilter:
+                        displayAllPlateNumbersAndFilter();
+                        break;
+                    case eGarageMenuOptions.ChangeVehicleStatus:
+                        changeVehicleStatus();
+                        break;
+                    case eGarageMenuOptions.InflateVehicleTires:
+                        inflateVehicleTires();
+                        break;
+                    case eGarageMenuOptions.RefuelGasVehicle:
+                        refuelGasVehicle();
+                        break;
+                    case eGarageMenuOptions.ChargeElectricVehicle:
+                        chargeElectricVehicle();
+                        break;
+                    case eGarageMenuOptions.DisplayVehicleDetails:
+                        displayVehicleDetails();
+                        break;
+                    case eGarageMenuOptions.Exit:
+                        return;
+                        break;
                 }
             }
         }
@@ -100,6 +93,7 @@ namespace Ex03.ConsoleUI
             Vehicle vehicleToAddOrUpdate;
             GarageOpenIssue issueToAddOrUpdate = null;
             string plateNumber;
+            bool isValidVehicledEntered = true;
 
             plateNumber = getValidatePlateNumberFromUser();
             if (m_SystemLogic.getVehicleUsingPlateNumberIfExist(plateNumber, out vehicleToAddOrUpdate))
@@ -110,8 +104,11 @@ namespace Ex03.ConsoleUI
             }
             else
             {
-                getCarDetailsFromUserAndAddToGarage(plateNumber, vehicleToAddOrUpdate);
-                getOpenIssueDetailsFromUserAndAddToGarage(plateNumber);
+                getCarDetailsFromUserAndAddToGarage(plateNumber, vehicleToAddOrUpdate, out isValidVehicledEntered);
+                if (isValidVehicledEntered)
+                {
+                    getOpenIssueDetailsFromUserAndAddToGarage(plateNumber);
+                }
             }
         }
         private void fillAddtionalInfoFromUserInput(ref List<Tuple<string, object>> o_AdditionalInfoList)//maybe in logic??????
@@ -126,27 +123,52 @@ namespace Ex03.ConsoleUI
             o_AdditionalInfoList.Clear();
             o_AdditionalInfoList = newTuplesList;
         }
-        private void getCarDetailsFromUserAndAddToGarage(string i_PlateNumber, Vehicle vehicleToAdd)
+        private void getCarDetailsFromUserAndAddToGarage(string i_PlateNumber, Vehicle vehicleToAdd, out bool o_IsValidCarEnterd)
         {
-
+            o_IsValidCarEnterd = false;
             eVehicleType vehicleType;
             string wheelsSetUpOptionInput;
             List<Tuple<string, object>> additionalInfoList;
+            bool isValidCarDetails = false, isValidWheelsDetails = false;
 
             Console.WriteLine("\nLet's begin with adding the new car by getting the requested details:");
             vehicleType = getVehicleTypeFromUser();
+
             m_SystemLogic.CreateNewVehicleAndAddToVehicleList(vehicleType, i_PlateNumber);
-
             m_SystemLogic.getVehicleUsingPlateNumberIfExist(i_PlateNumber, out vehicleToAdd);
-            m_SystemLogic.GetAdditionalInfo(vehicleType, out additionalInfoList);
-            fillAddtionalInfoFromUserInput(ref additionalInfoList);
-            m_SystemLogic.setAdditionalInfoParams(ref vehicleToAdd, additionalInfoList);
-            wheelsSetUpOptionInput = getWheelsSetUpOptioneFromUser();
-            setWheelsCondition(wheelsSetUpOptionInput, vehicleToAdd);
+            m_SystemLogic.GetAdditionalInfo(vehicleType, out additionalInfoList);//what props
 
-            Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-        "Congratulations! Your car has been added successfully to the garage.\n" +
-        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            while (!isValidCarDetails)
+            {
+                try
+                {
+                    fillAddtionalInfoFromUserInput(ref additionalInfoList);
+                    isValidCarDetails = m_SystemLogic.setAdditionalInfoParams(ref vehicleToAdd, additionalInfoList);
+                }
+                catch (FormatException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            while (!isValidWheelsDetails)
+            {
+                try
+                {
+                    wheelsSetUpOptionInput = getWheelsSetUpOptioneFromUser();
+                    setWheelsCondition(wheelsSetUpOptionInput, vehicleToAdd);
+                    Console.WriteLine("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+                        "Congratulations! Your car has been added successfully to the garage.\n" +
+                        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                    isValidWheelsDetails = true;
+                    o_IsValidCarEnterd = true;
+                }
+                catch (ValueOutOfRangeException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+            //here
         }
         private void setWheelsCondition(string i_WheelsSetUpOptionInput, Vehicle i_VehicleToAdd)
         {
@@ -185,9 +207,10 @@ namespace Ex03.ConsoleUI
 
         private void setWheelCurrentAirPressure(Wheel i_wheel, out float o_ValidateAirPressure)
         {
-            float airPressureInput;
+            float airPressureInput = 0f;
+            bool isValidAirPressure = false;
 
-            do
+            while (!isValidAirPressure)
             {
                 Console.Write("Air pressure: ");
                 if (!float.TryParse(Console.ReadLine(), out airPressureInput))
@@ -201,9 +224,8 @@ namespace Ex03.ConsoleUI
                         Console.WriteLine("Invalid input. The pressure should not be higher than the maximum that has been defined by the manufacturer");
                     }
                 }
-
+                isValidAirPressure = m_SystemLogic.IsAirPressureLowerOrEqualToMaxAirPressure(airPressureInput, i_wheel);
             }
-            while (!(m_SystemLogic.IsAirPressureLowerOrEqualToMaxAirPressure(airPressureInput, i_wheel)));
             o_ValidateAirPressure = airPressureInput;
         }
 
@@ -257,19 +279,28 @@ namespace Ex03.ConsoleUI
 
         private eVehicleType getVehicleTypeFromUser()
         {
-            eVehicleType vehicleType;
+            eVehicleType vehicleType = eVehicleType.ElectricMotorcycle;
             string vehicleTypeFromUser;
-            do
+            bool isValidVehicleType = false;
+
+            while (!isValidVehicleType)
             {
-                Console.WriteLine("\nChoose the vehicle type:\n");
-                foreach (eVehicleType type in Enum.GetValues(typeof(eVehicleType)))
+                try
                 {
-                    Console.WriteLine($"{(int)type}. {type.ToString()}");
+                    Console.WriteLine("\nChoose the vehicle type:\n");
+                    foreach (eVehicleType type in Enum.GetValues(typeof(eVehicleType)))
+                    {
+                        Console.WriteLine($"{(int)type}. {type.ToString()}");
+                    }
+                    Console.Write("Your choice: ");
+                    vehicleTypeFromUser = Console.ReadLine();
+                    isValidVehicleType = (m_SystemLogic.isValidVehicleTypeAndConvertToEVehicleType(vehicleTypeFromUser, out vehicleType));
                 }
-                Console.Write("Your choice: ");
-                vehicleTypeFromUser = Console.ReadLine();
+                catch (FormatException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
-            while (!(m_SystemLogic.isValidVehicleTypeAndConvertToEVehicleType(vehicleTypeFromUser, out vehicleType)));
 
             return vehicleType;
         }
@@ -302,20 +333,21 @@ namespace Ex03.ConsoleUI
             bool isValidPlateNumber = false;
             string plateNumber = "";
 
-            do
+            while (!isValidPlateNumber)
             {
+
                 Console.Write("\nPlease enter plate number in the requested format (xxx-xx-xxx), should contain numbers only. \nYour input:");
                 plateNumber = Console.ReadLine();
                 if (m_SystemLogic.validatePlateNumber(plateNumber))
                 {
                     isValidPlateNumber = true;
                 }
+
                 else
                 {
                     Console.WriteLine("Invalid plate number. Please try again.");
                 }
             }
-            while (!isValidPlateNumber);
 
             return plateNumber;
         }
@@ -394,47 +426,47 @@ namespace Ex03.ConsoleUI
             float litersToAdd = 0f;
             bool isValidFuelType = false, isValidLittersToAdd = false, isValidVehicleType = false;
 
-            while (!isValidVehicleType)
+            try
             {
-                try
+                plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToRefuel);
+                if (m_SystemLogic.CheckIfVehicleIsGasPowered(vehicleToRefuel))
                 {
-                    plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToRefuel);
-                    if (m_SystemLogic.CheckIfVehicleIsGasPowered(vehicleToRefuel))
+                    isValidVehicleType = true;
+                }
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            if (isValidVehicleType)
+            {
+                while (!isValidFuelType)
+                {
+                    try
                     {
-                        isValidVehicleType = true;
+                        fuelType = getFuelTypeFromUser();
+                        isValidFuelType = m_SystemLogic.isFuelTypeCorrectForCar(fuelType, vehicleToRefuel);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        Console.WriteLine(e.Message);
                     }
                 }
-                catch (ArgumentException e)
+                while (!isValidLittersToAdd)
                 {
-                    Console.WriteLine(e.Message);
-                }
-            }
-            while (!isValidFuelType)
-            {
-                try
-                {
-                    fuelType = getFuelTypeFromUser();
-                    isValidFuelType = m_SystemLogic.isFuelTypeCorrectForCar(fuelType, vehicleToRefuel);
-                }
-                catch (ArgumentException e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
-            while (!isValidLittersToAdd)
-            {
-                try
-                {
-                    litersToAdd = getEnergyAmountToAddFromUser();
-                    isValidLittersToAdd = m_SystemLogic.isLittersToAddCorrectForCar(litersToAdd, vehicleToRefuel);
-                }
-                catch (ValueOutOfRangeException ex_outOfRange)
-                {
-                    Console.WriteLine(ex_outOfRange.Message);
-                }
+                    try
+                    {
+                        litersToAdd = getEnergyAmountToAddFromUser();
+                        isValidLittersToAdd = m_SystemLogic.isLittersToAddCorrectForCar(litersToAdd, vehicleToRefuel);
+                    }
+                    catch (ValueOutOfRangeException ex_outOfRange)
+                    {
+                        Console.WriteLine(ex_outOfRange.Message);
+                    }
 
+                }
+                m_SystemLogic.addFuelToVehicle(vehicleToRefuel, litersToAdd, fuelType);
             }
-            m_SystemLogic.addFuelToVehicle(vehicleToRefuel, litersToAdd, fuelType);
 
         }
         private void chargeElectricVehicle()
@@ -444,37 +476,35 @@ namespace Ex03.ConsoleUI
             float hoursToAdd = 0;
             bool isValidHoursToAdd = false, isValidVehicleType = false;
 
-
-            while (!isValidVehicleType)
+            try
             {
-                try
+                plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToCharge);
+                if (m_SystemLogic.CheckIfVehicleIsElectricPowered(vehicleToCharge))
                 {
-                    plateNumber = getPlateNumberFromUserAndTheMatchingVehicle(out vehicleToCharge);
-                    if (m_SystemLogic.CheckIfVehicleIsElectricPowered(vehicleToCharge))
+                    isValidVehicleType = true;
+                }
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            if (isValidVehicleType)
+            {
+                while (!isValidHoursToAdd)
+                {
+                    try
                     {
-                        isValidVehicleType = true;
+                        hoursToAdd = getEnergyAmountToAddFromUser();
+                        isValidHoursToAdd = m_SystemLogic.isLittersToAddCorrectForCar(hoursToAdd, vehicleToCharge);
                     }
-                }
-                catch (ArgumentException e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
-            while (!isValidHoursToAdd)
-            {
-                try
-                {
-                    hoursToAdd = getEnergyAmountToAddFromUser();
-                    isValidHoursToAdd = m_SystemLogic.isLittersToAddCorrectForCar(hoursToAdd, vehicleToCharge);
-                }
-                catch (ValueOutOfRangeException ex_outOfRange)
-                {
-                    Console.WriteLine(ex_outOfRange.Message);
-                }
+                    catch (ValueOutOfRangeException ex_outOfRange)
+                    {
+                        Console.WriteLine(ex_outOfRange.Message);
+                    }
 
+                }
+                m_SystemLogic.chargeBatteryToVehicle(vehicleToCharge, hoursToAdd);
             }
-            m_SystemLogic.chargeBatteryToVehicle(vehicleToCharge, hoursToAdd);
-
         }
 
         private GarageOpenIssue.eVehicleState getStateToChangeToFromUser()
