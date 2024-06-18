@@ -255,7 +255,7 @@ namespace Ex03.ConsoleUI
             i_VehicleToUpdate.energySourceManager.currentEnergySourceAmount = existingEnergyAmount;
         }
 
-        private eVehicleType getVehicleTypeFromUser()// not good not generic
+        private eVehicleType getVehicleTypeFromUser()
         {
             eVehicleType vehicleType;
             string vehicleTypeFromUser;
@@ -285,7 +285,7 @@ namespace Ex03.ConsoleUI
                 "Congratulations! Your personal details has been added successfully.\n" +
                 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
-        private string getValidatePhoneNumberFromUser()// not good
+        private string getValidatePhoneNumberFromUser()
         {
             string phoneNumber;
             do
