@@ -276,6 +276,19 @@ namespace Ex03.GarageLogic
         {
             return Enum.TryParse(i_LicenseTypeFromUser, true, out o_LicenseType) && Enum.IsDefined(typeof(eLicenseType), o_LicenseType);
         }
+        public bool isValidVehicleStateAndConvertToEVehicleState(string i_VehicleStateFromUser, out GarageOpenIssue.eVehicleState o_VehicleState)
+        {
+            bool isValidVehicleState = false;
+            if (Enum.TryParse(i_VehicleStateFromUser, true, out o_VehicleState) && Enum.IsDefined(typeof(GarageOpenIssue.eVehicleState), o_VehicleState))
+            {
+                isValidVehicleState = true;
+            }
+            else
+            {
+                throw new FormatException("Couldnt Parse the input: [" + i_VehicleStateFromUser + "] to eVehicleState");
+            }
+            return isValidVehicleState;
+        }
 
         public bool isValidFuelTypeAndConvertToEVehicleType(string i_FuelTypeFromUser, out GasolineEnergySourceManager.eFuelType o_FuelType)
         {
