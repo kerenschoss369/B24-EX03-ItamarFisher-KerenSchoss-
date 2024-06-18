@@ -37,25 +37,30 @@ namespace Ex03.GarageLogic
             o_AdditionalVehicleInformation.Add(carColor);
             o_AdditionalVehicleInformation.Add(carDoorAmount);
         }
-        public override void setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation)
+        public override bool setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation)
         {
+            bool isValidCarDetails = true;
             foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
             {
                 if (tuple.Item1 == k_CarColor)
                 {
                     if (!Enum.TryParse<eCarColor>(tuple.Item2.ToString(), out m_CarColor))
                     {
-                        throw new FormatException("Could not parse the car color.");
+                        isValidCarDetails = false;
+                        throw new FormatException("Error: Could not parse the car color. Car color should be eCarColor (Yellow/Red/White/Black).");
                     }
                 }
                 if (tuple.Item1 == k_DoorsAmount)
                 {
                     if (!Enum.TryParse<eCarDoorsAmount>(tuple.Item2.ToString(), out m_CarDoorsAmount))
                     {
-                        throw new FormatException("Could not parse the number of doors.");
+                        isValidCarDetails = false;
+                        throw new FormatException("Error: Could not parse the number of doors. Doors amount should be eCarDoorsAmount (Two/Three/Four/Five/2/3/4/5).");
                     }
                 }
             }
+
+            return isValidCarDetails;
         }
 
         public enum eCarColor

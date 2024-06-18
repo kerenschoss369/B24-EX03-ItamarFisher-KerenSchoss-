@@ -30,25 +30,31 @@ namespace Ex03.GarageLogic
             o_AdditionalVehicleInformation.Add(isCarryingHazardousMaterials);
         }
 
-        public override void setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation)
+        public override bool setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation)
         {
+            bool isValidTruckDetails = true;
+
             foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
             {
                 if (tuple.Item1 == k_IsCarryingHazardousMaterials)
                 {
                     if (!bool.TryParse(tuple.Item2.ToString(), out m_IsCarryingHazardousMaterials))
                     {
-                        throw new FormatException("Could not parse the hazardous materials flag.");
+                        isValidTruckDetails = false;
+                        throw new FormatException("Error: Could not parse the hazardous materials flag. Hazardous materials flag should be a bool (true/false), it is not case sensitive. ");
                     }
                 }
                 if (tuple.Item1 == k_CargoVolume)
                 {
                     if (!float.TryParse(tuple.Item2.ToString(), out m_CargoVolume))
                     {
-                        throw new FormatException("Could not parse the cargo volume.");
+                        isValidTruckDetails = false;
+                        throw new FormatException("Error: Could not parse the cargo volume. Cargo volume should be an float number.");
                     }
                 }
             }
+
+            return isValidTruckDetails;
         }
         public float cargoVolume
         {

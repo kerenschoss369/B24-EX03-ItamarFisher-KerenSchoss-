@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using static Ex03.GarageLogic.Car;
+using static Ex03.GarageLogic.GarageOpenIssue;
 using static Ex03.GarageLogic.GasolineEnergySourceManager;
 using static Ex03.GarageLogic.Motorcycle;
 using static Ex03.GarageLogic.VehicleFactory;
@@ -18,10 +19,16 @@ namespace Ex03.GarageLogic
         List<Vehicle> m_VehicleList = new List<Vehicle>();
         VehicleFactory garageSystemFactory = new VehicleFactory();
 
-        public void setAdditionalInfoParams(ref Vehicle i_vehicle, List<Tuple<string, object>> o_additionalInfoParams)
+
+        public bool setAdditionalInfoParams(ref Vehicle i_vehicle, List<Tuple<string, object>> o_additionalInfoParams )
         {
-            i_vehicle.setBaseAdditionalInformationFromList(o_additionalInfoParams);
-            i_vehicle.setAdditionalInformationFromList(o_additionalInfoParams);
+            bool isValidCarDetails=true;
+            i_vehicle.setBaseAdditionalInformationFromList(o_additionalInfoParams,out isValidCarDetails);
+            if (isValidCarDetails)
+            {
+                isValidCarDetails = i_vehicle.setAdditionalInformationFromList(o_additionalInfoParams);
+            }
+            return isValidCarDetails;
         }
         public void CreateNewVehicleAndAddToVehicleList(VehicleFactory.eVehicleType i_VehicleType, string i_VehiclePlateNumber)
         {
@@ -229,7 +236,15 @@ namespace Ex03.GarageLogic
 
         public bool IsAirPressureLowerOrEqualToMaxAirPressure(float i_AirPressure, Wheel i_CheckedWheel)
         {
-            return (i_AirPressure <= i_CheckedWheel.maxAirPressureDefinedByManufacturer);
+            bool isAirPressureLowerOrEqualToMax = true;
+
+            if (!(i_AirPressure <= i_CheckedWheel.maxAirPressureDefinedByManufacturer))
+            {
+                isAirPressureLowerOrEqualToMax=false;
+                throw new ValueOutOfRangeException(i_AirPressure, 0f, i_CheckedWheel.maxAirPressureDefinedByManufacturer);
+            }
+
+            return isAirPressureLowerOrEqualToMax;
         }
 
         public bool IsEnergyAmountLowerOrEqualToMaxEnergyAmount(float i_EnergyAmount, Vehicle i_VehicleToUpdate)
@@ -246,7 +261,16 @@ namespace Ex03.GarageLogic
         }
         public bool isValidVehicleTypeAndConvertToEVehicleType(string i_VehicleTypeFromUser, out eVehicleType o_VehicleType)
         {
-            return Enum.TryParse(i_VehicleTypeFromUser, true, out o_VehicleType) && Enum.IsDefined(typeof(eVehicleType), o_VehicleType);
+            bool isValidVehicleType = false;
+            if ((Enum.TryParse(i_VehicleTypeFromUser, true, out o_VehicleType)) && (Enum.IsDefined(typeof(eVehicleType), o_VehicleType)))
+            {
+                isValidVehicleType = true;
+            }
+            else
+            {
+                throw new FormatException("Couldnt Parse the input: [" + i_VehicleTypeFromUser + "] to eVehicleType");
+            }
+            return isValidVehicleType;
         }
         public bool isValidLicenseTypeAndConvertToELicenseType(string i_LicenseTypeFromUser, out eLicenseType o_LicenseType)
         {
@@ -264,6 +288,30 @@ namespace Ex03.GarageLogic
                 throw new FormatException("Couldnt Parse the input: [" + i_VehicleStateFromUser + "] to eVehicleState");
             }
             return isValidVehicleState;
+        }
+
+        public bool CheckIfValidFilter(string i_StateChosenByUser, out int i_StateChosenByUserIntegered, int i_Min, int i_Max)
+        {
+            bool isValidInput = false;
+
+            if (int.TryParse(i_StateChosenByUser, out i_StateChosenByUserIntegered))
+            {
+                if (((i_StateChosenByUserIntegered >= i_Min) && (i_StateChosenByUserIntegered <= i_Max)))
+                {
+                    isValidInput = true;
+                }
+                else
+                {
+                    throw new ValueOutOfRangeException((float)i_StateChosenByUserIntegered, (float)i_Min, (float)i_Max);
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Choose a value that is a state from the enum or 'all'.");
+            }
+
+            return isValidInput;
+
         }
 
         public bool isValidFuelTypeAndConvertToEVehicleType(string i_FuelTypeFromUser, out GasolineEnergySourceManager.eFuelType o_FuelType)

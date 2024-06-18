@@ -44,10 +44,10 @@ namespace Ex03.GarageLogic
 
             o_AdditionalVehicleInformation.Add(modelName);
         }
-        public abstract void setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation);
-        public void setBaseAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation)
+        public abstract bool setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation);
+        public void setBaseAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation, out bool o_IsValidBaseVehicleDetails)
         {
-            
+            o_IsValidBaseVehicleDetails = true;
             foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
             {
                 if (tuple.Item1 == "Model name")
@@ -55,10 +55,9 @@ namespace Ex03.GarageLogic
                     m_ModelName = (string)tuple.Item2;
                 }
             }
-            m_EnergySourceManager.SetAdditionalInformationFromList(i_AdditionalVehicleInformation);
+            m_EnergySourceManager.SetAdditionalInformationFromList(i_AdditionalVehicleInformation, out o_IsValidBaseVehicleDetails);
             percentageOfEnergyLeft = (float)(m_EnergySourceManager.currentEnergySourceAmount / m_EnergySourceManager.maxEnergySourceAmount);
             percentageOfEnergyLeft = percentageOfEnergyLeft * 100;
-
         }
         public string modelName
         {
@@ -88,14 +87,14 @@ namespace Ex03.GarageLogic
             }
             set
             {
-                m_PercentageOfEnergyLeft= value;
+                m_PercentageOfEnergyLeft = value;
             }
 
         }
 
         public List<Wheel> wheelsList
         {
-            get 
+            get
             {
                 return m_WheelsList;
             }
@@ -111,7 +110,7 @@ namespace Ex03.GarageLogic
         {
             string energyType;
             GasolineEnergySourceManager gasolineEnergySourceManager;
-            if(energySourceManager is ElectricEnergySourceManager)
+            if (energySourceManager is ElectricEnergySourceManager)
             {
                 energyType = "Electricity";
             }
@@ -121,8 +120,8 @@ namespace Ex03.GarageLogic
                 energyType = gasolineEnergySourceManager.fuelType.ToString();
             }
 
-        string vehicleString = string.Format(
-           @"
+            string vehicleString = string.Format(
+               @"
 Car model: {0}
 Plate number is: {1}
 Energy source is: {2}

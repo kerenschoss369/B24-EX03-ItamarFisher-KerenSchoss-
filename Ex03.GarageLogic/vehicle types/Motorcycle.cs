@@ -36,27 +36,32 @@ namespace Ex03.GarageLogic
             o_AdditionalVehicleInformation.Add(licenseType);
             o_AdditionalVehicleInformation.Add(engineDisplacementInCc);
         }
-        public override void setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation)
+        public override bool setAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation)
         {
+            bool isValidMotorcycleDetails = true;
+
             foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
             {
                 if (tuple.Item1 == K_LicenseType)
                 {
                     if (Enum.TryParse<eLicenseType>((string)tuple.Item2, out m_LicenseType) == false)
                     {
-                        throw new FormatException("Could not Parse the input.");
+                        isValidMotorcycleDetails = false;
+                        throw new FormatException("Error: Could not Parse the input. License type should be eLicenseType (A/A1/AA/B1).");
                     }
                 }
                 if(tuple.Item1 == k_EngineDisplacementInCc)
                 {
                     if(int.TryParse((string)tuple.Item2, out m_EngineDisplacementInCc) == false)
                     {
-                        throw new FormatException("Could not Parse the input.");
-
+                        isValidMotorcycleDetails= false;
+                        throw new FormatException("Error: Could not Parse the input. Engine displacement should be an int number.");
                     }
 
                 }
             }
+
+            return isValidMotorcycleDetails;
         }
         public enum eLicenseType
         {

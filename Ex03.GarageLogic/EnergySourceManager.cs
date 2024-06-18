@@ -19,13 +19,18 @@ namespace Ex03.GarageLogic
             Tuple<string, object> currentEnergySourceAmount = new Tuple<string, object>("Current Energy Source Amount", m_CurrentEnergySourceAmount);
             o_AdditionalVehicleInformation.Add(currentEnergySourceAmount);
         }
-        public void SetAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation)
+        public void SetAdditionalInformationFromList(List<Tuple<string, object>> i_AdditionalVehicleInformation, out bool o_IsValidEnergySourceDetails)
         {
+            o_IsValidEnergySourceDetails=true;
             foreach (Tuple<string, object> tuple in i_AdditionalVehicleInformation)
             {
                 if (tuple.Item1 == "Current Energy Source Amount")
                 {
-                    float.TryParse((string)tuple.Item2, out m_CurrentEnergySourceAmount);
+                    if (!(float.TryParse((string)tuple.Item2, out m_CurrentEnergySourceAmount)))
+                    {
+                        o_IsValidEnergySourceDetails = false;
+                        throw new FormatException("Error: Current Energy Source Amount should be a float number\n");
+                    }
                 }
             }
         }
