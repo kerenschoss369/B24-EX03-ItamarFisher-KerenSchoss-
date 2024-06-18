@@ -18,7 +18,6 @@ namespace Ex03.GarageLogic
         List<Vehicle> m_VehicleList = new List<Vehicle>();
         VehicleFactory garageSystemFactory = new VehicleFactory();
 
-     
         public void setAdditionalInfoParams(ref Vehicle i_vehicle, List<Tuple<string, object>> o_additionalInfoParams)
         {
             i_vehicle.setBaseAdditionalInformationFromList(o_additionalInfoParams);
@@ -43,23 +42,6 @@ namespace Ex03.GarageLogic
 
         }
 
-        public void SetCarInputParameters(Car io_Car, Car.eCarColor i_CarColor, Car.eCarDoorsAmount i_CarDoorsAmount)
-        {
-            io_Car.carColor = i_CarColor;
-            io_Car.carDoorsAmount = i_CarDoorsAmount;
-        }
-
-        public void SetMotorcycleInputParameters(Motorcycle io_Motorcycle, Motorcycle.eLicenseType i_LicenseType, int i_EngineDisplacementCc)
-        {
-            io_Motorcycle.licenseType = i_LicenseType;
-            io_Motorcycle.engineDisplacementInCc = i_EngineDisplacementCc;
-        }
-
-        public void SetTruckcycleInputParameters(Truck io_Truck, float i_CargoVolume, bool i_IsCarryingHazardousMaterials)
-        {
-            io_Truck.cargoVolume = i_CargoVolume;
-            io_Truck.isCarryingHazardousMaterials = i_IsCarryingHazardousMaterials;
-        }
         public List<String> FilterVehiclesPlateNumbersByRequestedState(GarageOpenIssue.eVehicleState i_VehicleStateFilter, bool i_FetchAllVehicles)
         {
             List<String> filteredPlateNumberList = new List<String>();
@@ -136,12 +118,6 @@ namespace Ex03.GarageLogic
             return isElectricPowered;
         }
 
-        /* private string getFuelTypeForGasVehicleAsString(Vehicle i_Vehicle) // prob not needed
-         {
-             GasolineEnergySourceManager gasolineEnergySourceManager = (GasolineEnergySourceManager)i_Vehicle.m_EnergySourceManager;
-             eFuelType fuelType = gasolineEnergySourceManager.fuelType;
-             return fuelType.ToString();
-         }*/
         public void changeVehicleState(GarageOpenIssue i_OpenIssue, GarageOpenIssue.eVehicleState i_NewVehicleState)
         {
             i_OpenIssue.vehicleState = i_NewVehicleState;
